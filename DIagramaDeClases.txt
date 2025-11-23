@@ -1,0 +1,103 @@
+@startuml
+
+' Configuración de estilo
+skinparam classAttributeIconSize 0
+skinparam class {
+    BackgroundColor White
+    ArrowColor #2C3E50
+    BorderColor #2C3E50
+}
+
+class Usuario <<Supabase Auth>> {
+    + id: UUID
+    + email: String
+}
+
+class Perfil {
+    + id: UUID
+    + usuario_id: UUID
+    + nombre_completo: String
+    + rol: String
+    + es_activo: Boolean
+    -- Auditoría --
+    + created_at: DateTime
+    + created_by: UUID
+    + updated_at: DateTime
+    + updated_by: UUID
+}
+
+class Categoria {
+    + id: UUID
+    + nombre: String
+    + descripcion: Text
+    + es_activa: Boolean
+    -- Auditoría --
+    + created_at: DateTime
+    + created_by: UUID
+    + updated_at: DateTime
+    + updated_by: UUID
+}
+
+class Servicio {
+    + id: UUID
+    + proveedor_id: UUID
+    + categoria_id: UUID
+    + nombre: String
+    + descripcion: Text
+    + telefono: String
+    + direccion: String
+    + estado: Boolean
+    + es_activo: Boolean
+    -- Auditoría --
+    + created_at: DateTime
+    + created_by: UUID
+    + updated_at: DateTime
+    + updated_by: UUID
+}
+
+
+class Resena {
+    + id: UUID
+    + servicio_id: UUID
+    + autor_id: UUID
+    + calificacion: Integer (1-5)
+    + comentario: Text
+    + es_activo: Boolean
+    -- Auditoría --
+    + created_at: DateTime
+    + created_by: UUID
+    + updated_at: DateTime
+    + updated_by: UUID
+}
+
+class SolicitudPresupuesto {
+    + id: UUID
+    + cliente_id: UUID
+    + categoria_id: UUID
+    + mensaje: Text
+    + estado: EstadoSolicitud
+    + es_activo: Boolean
+    -- Auditoría --
+    + created_at: DateTime
+    + created_by: UUID
+    + updated_at: DateTime
+    + updated_by: UUID
+}
+
+enum EstadoSolicitud {
++  ACEPTADO
++  PENDIENTE
++  VENCIDO
++  FINALIZADO
+}
+
+' Relaciones
+Usuario "1" -- "1" Perfil : tiene >
+Perfil "1" -- "0..*" Servicio : publica (Proveedor) >
+Categoria "1" -- "0..*" Servicio : clasifica >
+Servicio "1" -- "0..*" Resena : recibe >
+Perfil "1" -- "0..*" Resena : escribe (Autor) >
+Perfil "1" -- "0..*" SolicitudPresupuesto : solicita (Cliente) >
+Categoria "1" -- "0..*" SolicitudPresupuesto: tiene
+
+@enduml
