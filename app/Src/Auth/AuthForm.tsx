@@ -22,10 +22,7 @@ export default function AuthForm() {
 
     if (isLogin) {
       // Lógica de Iniciar Sesión
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
+      const { error } = await supabase.auth.signInWithPassword({email,password,})
       if (error) setError(error.message)
       else router.push('/') // Redirigir al inicio si sale bien
 
