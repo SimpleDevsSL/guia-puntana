@@ -159,7 +159,7 @@ export default function Home() {
              <Image src="/logo_venado.png" alt="Logo" fill className="object-contain" />
           </div>
           <p className="text-gray-400 text-sm">
-            &copy; {new Date().getFullYear()} Guía Puntana. Hecho con ❤️ en San Luis.
+            &copy; {new Date().getFullYear()} SimpleDevs. Guía Puntana. Hecho con ❤️ en San Luis.
           </p>
         </div>
       </footer>
