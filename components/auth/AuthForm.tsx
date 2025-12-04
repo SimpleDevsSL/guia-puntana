@@ -12,7 +12,7 @@ const authSchema = z.object({
     .email({ message: "Por favor, introduce un correo electrónico válido." }),
   password: z
     .string()
-    .min(6, { message: "La contraseña debe tener al menos 6 caracteres." }),
+    .min(8, { message: "La contraseña debe tener al menos 8 caracteres." }),
 });
 
 type AuthFormData = z.infer<typeof authSchema>;
