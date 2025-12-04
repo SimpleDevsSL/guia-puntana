@@ -30,7 +30,7 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="flex-grow pt-16">
+      <main className="grow pt-16">
         
         {/* --- Hero Section --- */}
         <section className="relative py-20 lg:py-32 overflow-hidden">
@@ -53,7 +53,7 @@ export default function Home() {
             </h1>
             
             <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-              Desde plomeros en Juana Koslay hasta diseñadores en el Eva Perón. 
+              Desde plomeros en Juana Koslay hasta diseñadores en Merlo. 
               La herramienta definitiva para encontrar, contratar y trabajar.
             </p>
 
@@ -63,12 +63,6 @@ export default function Home() {
                 className="w-full sm:w-auto px-8 py-4 bg-orange-600 text-white rounded-xl font-bold text-lg hover:bg-orange-700 hover:shadow-orange-500/25 hover:shadow-xl transition-all transform hover:-translate-y-1"
               >
                 Comenzar ahora
-              </Link>
-              <Link 
-                href="/login" 
-                className="w-full sm:w-auto px-8 py-4 bg-white text-gray-700 border border-gray-200 rounded-xl font-bold text-lg hover:bg-gray-50 transition-colors"
-              >
-                Soy profesional
               </Link>
             </div>
           </div>
@@ -89,9 +83,9 @@ export default function Home() {
                 <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                   <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
-                <h3 className="text-xl font-bold mb-3">Búsqueda Geolocalizada</h3>
+                <h3 className="text-xl font-bold mb-3">Búsqueda localizada</h3>
                 <p className="text-gray-600 leading-relaxed">
-                  Filtrá por zona, ciudad o barrio. Encontrá servicios cerca de tu ubicación actual en tiempo real.
+                  Filtrá por localidad o barrio. Encontrá servicios cerca de tu ubicación.
                 </p>
               </div>
 
@@ -102,7 +96,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-bold mb-3">Perfiles Detallados</h3>
                 <p className="text-gray-600 leading-relaxed">
-                  Mirá fotos de trabajos anteriores, leé descripciones y consultá horarios de atención antes de contactar.
+                  Mirá trabajos anteriores, leé descripciones y consultá horarios de atención antes de contactar.
                 </p>
               </div>
 
