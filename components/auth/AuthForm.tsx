@@ -82,31 +82,13 @@ export default function AuthForm() {
 
     try {
       const { email, password } = formData;
-      if (isLogin) {
-        // 1. Iniciar sesión
-        const {
-          data: { user },
-          error,
-        } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-
-        if (user) {
-          // 2. Verificar perfil (Lógica del cliente)
-          const { data: profile } = await supabase
-            .from("perfiles")
-            .select("id")
-            .eq("usuario_id", user.id)
-            .single();
-
-          // 3. Redirigir
-          if (profile) {
-            router.push("/");
-          } else {
-            router.push("/completar-perfil");
-          }
-          router.refresh();
-        }
-      } else {
+    if (isLogin) {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+    // El Middleware interceptará esto si falta el perfil.
+      router.push("/"); 
+      router.refresh();
+    } else {
         // Registro
         const { error } = await supabase.auth.signUp({
           email,
