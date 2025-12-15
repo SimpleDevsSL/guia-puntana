@@ -45,7 +45,9 @@ class Servicio {
     + nombre: String
     + descripcion: Text
     + telefono: String
+    + localidad: String
     + direccion: String
+    + barrio: String
     + estado: Boolean
     + es_activo: Boolean
     -- Auditoría --
