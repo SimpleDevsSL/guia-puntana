@@ -22,8 +22,7 @@ export default function ProfileForm() {
   } = useProfileForm();
 
   return (
-    <div className="w-full max-w-3xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200 my-8">
-      {/* Header con Naranja Corporativo */}
+    <div className="w-full max-w-3xl mx-auto bg-white dark:bg-gray-900 rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800 my-8 transition-colors duration-300">
       <div className="bg-orange-600 p-8 text-center">
         <h2 className="text-3xl font-bold text-white">
           ¡Te damos la bienvenida!
@@ -52,7 +51,7 @@ export default function ProfileForm() {
         )}
 
         {generalError && (
-          <div className="p-4 bg-red-50 border-l-4 border-red-500 text-red-700 text-sm rounded-r-md">
+          <div className="p-4 bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 text-red-700 dark:text-red-300 text-sm rounded-r-md">
             <p className="font-bold">Error</p>
             <p>{generalError}</p>
           </div>
@@ -63,8 +62,8 @@ export default function ProfileForm() {
           disabled={loading || !userId}
           className={`w-full py-4 px-6 rounded-xl font-bold text-white text-lg shadow-md transition-all transform hover:-translate-y-0.5 ${
             loading
-              ? "bg-gray-400 cursor-wait"
-              : "bg-linear-to-r from-orange-500 to-orange-700 hover:from-orange-600 hover:to-orange-800 hover:shadow-orange-500/25"
+              ? "bg-gray-400 dark:bg-gray-600 cursor-wait"
+              : "bg-gradient-to-r from-orange-500 to-orange-700 hover:from-orange-600 hover:to-orange-800 hover:shadow-orange-500/25"
           }`}
         >
           {loading ? "Guardando..." : "Finalizar Perfil"}

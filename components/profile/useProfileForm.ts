@@ -189,7 +189,7 @@ export function useProfileForm() {
         if (sError) throw sError;
       }
 
-      router.push("/");
+      router.push("/feed");
       router.refresh();
     } catch (err: any) {
       setGeneralError(err.message || "Error al guardar.");

@@ -1,11 +1,10 @@
 import Link from "next/link";
-import { Header } from "@/components/feed/Header"; 
+import { Header } from "@/components/feed/Header";
 
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col font-sans">
-      
-      <Header /> 
+      <Header />
 
       <main className="grow pt-16">
         <section className="relative py-20 lg:py-32 overflow-hidden">
@@ -48,10 +47,6 @@ export default function Home() {
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
                 Todo lo que necesitás en un solo lugar
               </h2>
-              <p className="text-gray-500 dark:text-gray-400">
-                Una vez dentro, tendrás acceso a herramientas simples y
-                potentes.
-              </p>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -72,7 +67,9 @@ export default function Home() {
                     ></path>
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold mb-3 dark:text-white">Búsqueda localizada</h3>
+                <h3 className="text-xl font-bold mb-3 dark:text-white">
+                  Búsqueda localizada
+                </h3>
                 <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                   Filtrá por localidad o barrio. Encontrá servicios cerca de tu
                   ubicación.
@@ -96,10 +93,12 @@ export default function Home() {
                     ></path>
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold mb-3 dark:text-white">Perfiles Detallados</h3>
+                <h3 className="text-xl font-bold mb-3 dark:text-white">
+                  Perfiles Detallados
+                </h3>
                 <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                  Mirá trabajos anteriores, leé descripciones y consultá
-                  horarios de atención antes de contactar.
+                  Lee descripciones y consultá horarios de atención antes de
+                  contactar.
                 </p>
               </div>
 
@@ -146,7 +145,9 @@ export default function Home() {
                     ></path>
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold mb-3 dark:text-white">Contacto Directo</h3>
+                <h3 className="text-xl font-bold mb-3 dark:text-white">
+                  Contacto Directo
+                </h3>
                 <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                   Sin intermediarios. Contactá al profesional directamente a su
                   WhatsApp o teléfono con un solo clic.
@@ -192,8 +193,7 @@ export default function Home() {
 
       <footer className="bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 py-12 text-center transition-colors">
         <div className="max-w-7xl mx-auto px-4 flex flex-col items-center">
-          <div className="relative w-8 h-8 opacity-50 mb-4">
-          </div>
+          <div className="relative w-8 h-8 opacity-50 mb-4"></div>
           <p className="text-gray-400 text-sm">
             &copy; {new Date().getFullYear()} SimpleDevs. Guía Puntana. Hecho
             con ❤️ en San Luis.

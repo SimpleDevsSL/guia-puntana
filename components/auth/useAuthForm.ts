@@ -89,7 +89,7 @@ export function useAuthForm() {
         if (error) throw error;
 
         // Éxito: Redirigir al home (el Middleware verificará el perfil)
-        router.push("/");
+        router.push("/feed");
         router.refresh();
       } else {
         // REGISTRO

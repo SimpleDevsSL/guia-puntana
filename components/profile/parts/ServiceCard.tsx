@@ -24,18 +24,23 @@ export const ServiceCard = ({
   const getError = (field: keyof ServiceFormData) =>
     errors[`${index}.${field}`];
 
-  // Estilos centralizados - High Contrast & Orange Theme
   const labelClass =
-    "block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wide";
-  const inputClass = `w-full rounded-md border border-gray-300 p-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100 outline-none transition-all shadow-sm`;
-  const errorClass = "text-red-600 text-xs mt-1 font-bold";
+    "block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1 uppercase tracking-wide";
+
+  const inputClass = `w-full rounded-md border border-gray-300 dark:border-gray-700 
+    bg-white dark:bg-slate-950 text-sm text-gray-900 dark:text-white 
+    placeholder:text-gray-400 dark:placeholder:text-gray-500
+    focus:border-orange-500 focus:ring-2 focus:ring-orange-100 dark:focus:ring-orange-900/30 
+    outline-none transition-all shadow-sm`;
+
+  const errorClass = "text-red-600 dark:text-red-400 text-xs mt-1 font-bold";
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm relative group hover:shadow-md transition-shadow animate-in fade-in slide-in-from-bottom-2 duration-300">
+    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm relative group hover:shadow-md transition-all animate-in fade-in slide-in-from-bottom-2 duration-300">
       <button
         type="button"
         onClick={() => onRemove(data.tempId)}
-        className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors p-1.5 rounded-md hover:bg-red-50"
+        className="absolute top-4 right-4 text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 transition-colors p-1.5 rounded-md hover:bg-red-50 dark:hover:bg-red-900/20"
         title="Eliminar servicio"
       >
         <svg
@@ -54,7 +59,8 @@ export const ServiceCard = ({
       </button>
 
       <div className="mb-6 flex items-center gap-2">
-        <span className="bg-orange-100 text-orange-700 text-xs font-bold px-2 py-1 rounded">
+        {/* CAMBIO: Badge colores */}
+        <span className="bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 text-xs font-bold px-2 py-1 rounded">
           SERVICIO #{index + 1}
         </span>
       </div>
