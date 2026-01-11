@@ -14,16 +14,23 @@ CREATE TABLE public.categorias (
   CONSTRAINT categorias_created_by_fkey FOREIGN KEY (created_by) REFERENCES auth.users(id),
   CONSTRAINT categorias_updated_by_fkey FOREIGN KEY (updated_by) REFERENCES auth.users(id)
 );
+CREATE TABLE public.keepalive (
+  id integer NOT NULL DEFAULT nextval('keepalive_id_seq'::regclass),
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT keepalive_pkey PRIMARY KEY (id)
+);
 CREATE TABLE public.perfiles (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   usuario_id uuid NOT NULL UNIQUE,
   nombre_completo text,
-  rol text DEFAULT 'user'::text,
+  rol USER-DEFINED DEFAULT 'user'::app_role,
   es_activo boolean DEFAULT true,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   created_by uuid,
   updated_at timestamp with time zone NOT NULL DEFAULT now(),
   updated_by uuid,
+  foto_url text,
+  insignias ARRAY DEFAULT '{}'::text[],
   CONSTRAINT perfiles_pkey PRIMARY KEY (id),
   CONSTRAINT perfiles_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES auth.users(id),
   CONSTRAINT perfiles_created_by_fkey FOREIGN KEY (created_by) REFERENCES auth.users(id),
