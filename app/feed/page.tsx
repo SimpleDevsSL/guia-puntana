@@ -1,128 +1,150 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
-import HeroSection from '../../components/feed/HeroSection';
-import CategoryList from '../../components/feed/CategoryList';
-import ResultsGrid from '../../components/feed/ResultsGrid';
-import { Header } from '../../components/feed/Header';
-import { Professional, Category } from '../lib/definitions';
-import { exampleProfessionals } from './testing';
-/**
- * Página Feed
- * Ruta: /feed
- * Muestra el formulario para crear el perfil inicial del usuario.
- */
+import React, { useState, useEffect, useCallback } from "react";
+import HeroSection from "../../components/feed/HeroSection";
+import CategoryList from "../../components/feed/CategoryList";
+import ResultsGrid from "../../components/feed/ResultsGrid";
+import { Header } from "../../components/feed/Header";
+import { ServiceWithProfile, Category } from "../lib/definitions";
+import { createClient } from "@/utils/supabase/client";
 
-const App: React.FC = () => {
-  const [activeCategory, setActiveCategory] = useState<string>(Category.GASISTA);
-  const [searchQuery, setSearchQuery] = useState<string>('Instalación y revisión de estufas');
-  const [professionals, setProfessionals] = useState<Professional[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [showConnectModal, setShowConnectModal] = useState<Professional | null>(null);
+const FeedPage: React.FC = () => {
+  const supabase = createClient();
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [locationQuery, setLocationQuery] = useState<string>("");
+  const [services, setServices] = useState<ServiceWithProfile[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [showConnectModal, setShowConnectModal] =
+    useState<ServiceWithProfile | null>(null);
 
+  // Obtener categorías desde DB
+  useEffect(() => {
+    const fetchCats = async () => {
+      const { data } = await supabase
+        .from("categorias")
+        .select("id, nombre")
+        .eq("es_activa", true);
+      if (data) setCategories(data);
+    };
+    fetchCats();
+  }, [supabase]);
+
+  // Consulta principal (Producción)
   const handleSearch = useCallback(async () => {
     setLoading(true);
-    setProfessionals([]); 
-    // Simulate slight network delay for better UX feel
-    // await new Promise(r => setTimeout(r, 800)); 
-    
-    const results = exampleProfessionals.filter(prof =>
-      prof.category.toLowerCase().includes(activeCategory.toLowerCase()) ||
-      prof.specialization.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      prof.description.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setProfessionals(results);
+
+    let query = supabase
+      .from("servicios")
+      .select(
+        `
+        id, nombre, descripcion, localidad, barrio, telefono,
+        categoria:categorias(id, nombre),
+        proveedor:perfiles(id, nombre_completo, foto_url, insignias)
+      `
+      )
+      .eq("es_activo", true);
+
+    // Filtro por categoría
+    if (activeCategoryId) {
+      query = query.eq("categoria_id", activeCategoryId);
+    }
+
+    // Filtro por texto (Nombre o Descripción)
+    if (searchQuery) {
+      query = query.or(
+        `nombre.ilike.%${searchQuery}%,descripcion.ilike.%${searchQuery}%`
+      );
+    }
+
+    if (locationQuery) {
+      query = query.ilike("localidad", `%${locationQuery}%`);
+    }
+
+    const { data, error } = await query;
+    if (!error && data) {
+      setServices(data as unknown as ServiceWithProfile[]);
+    }
     setLoading(false);
-  }, [activeCategory, searchQuery]);
+  }, [activeCategoryId, searchQuery, locationQuery, supabase]);
 
-  // Initial load
   useEffect(() => {
     handleSearch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); 
-
-  // Auto-search when category changes
-  useEffect(() => {
-    handleSearch();
-  }, [activeCategory, handleSearch]);
+  }, [handleSearch]);
 
   return (
-    <div className="min-h-screen bg-white flex flex-col font-sans text-gray-900">
-      <main className="fgrow pt-16">
-
-        <Header />
-
-        <HeroSection 
+    <div className="min-h-screen bg-white dark:bg-gray-950 flex flex-col font-sans transition-colors">
+      <Header />
+      <main className="grow pt-16">
+        <HeroSection
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
+          locationQuery={locationQuery}
+          setLocationQuery={setLocationQuery}
           onSearch={handleSearch}
         />
-        
-        <CategoryList 
-          activeCategory={activeCategory}
-          setActiveCategory={setActiveCategory}
+        <CategoryList
+          categories={categories}
+          activeCategoryId={activeCategoryId}
+          setActiveCategoryId={setActiveCategoryId}
         />
-
-        <ResultsGrid 
+        <ResultsGrid
           loading={loading}
-          professionals={professionals}
-          activeCategory={activeCategory}
+          services={services}
+          activeCategoryName={
+            categories.find((c) => c.id === activeCategoryId)?.nombre || "Todos"
+          }
           searchQuery={searchQuery}
           onConnect={setShowConnectModal}
-          onRetry={handleSearch}
+          onRetry={() => {
+            setActiveCategoryId(null);
+            setSearchQuery("");
+          }}
         />
       </main>
 
-      <footer className="bg-slate-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-           <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="bg-brand-orange h-8 w-8 rounded flex items-center justify-center">
-               <span className="text-white font-serif text-lg leading-none">V</span>
-            </div>
-            <span className="text-xl font-bold tracking-tight">Guía Puntana</span>
-          </div>
-          <p className="text-slate-400 text-sm">
-            &copy; {new Date().getFullYear()} Guía Puntana. Conectando San Luis.
+      <footer className="bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 py-12 text-center">
+        <div className="max-w-7xl mx-auto px-4">
+          <p className="text-gray-400 text-sm">
+            &copy; {new Date().getFullYear()} SimpleDevs. Guía Puntana. Hecho
+            con ❤️ en San Luis.
           </p>
         </div>
       </footer>
 
+      {/* Modal de Contacto */}
       {showConnectModal && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl animate-in fade-in zoom-in duration-200">
-            <h3 className="text-xl font-bold mb-2 text-brand-dark">Contactar a {showConnectModal.name}</h3>
-            <p className="text-gray-600 mb-6">
-              Estás a punto de solicitar un servicio de <span className="font-semibold text-brand-orange">{showConnectModal.category}</span>.
-            </p>
-            
-            <div className="space-y-4 mb-6">
-              <div className="bg-orange-50 p-4 rounded-xl border border-orange-100">
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-gray-600">Tarifa estimada</span>
-                  <span className="font-bold text-gray-900">${showConnectModal.hourlyRate}/hora</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Ubicación</span>
-                  <span className="text-gray-900 font-medium">A {showConnectModal.distanceKm.toFixed(1)} km</span>
-                </div>
-              </div>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl max-w-md w-full p-6 shadow-2xl border dark:border-gray-800">
+            <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+              Contactar a {showConnectModal.proveedor.nombre_completo}
+            </h3>
+            <div className="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-xl border border-orange-100 dark:border-orange-800 mb-6">
+              <p className="text-sm text-gray-700 dark:text-gray-300">
+                <b>Ubicación:</b> {showConnectModal.localidad}
+              </p>
+              <p className="text-sm text-gray-700 dark:text-gray-300">
+                <b>Servicio:</b> {showConnectModal.nombre}
+              </p>
             </div>
-
             <div className="flex gap-3">
-              <button 
+              <button
                 onClick={() => setShowConnectModal(null)}
-                className="flex-1 py-3 border border-gray-300 rounded-xl font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                className="flex-1 py-3 border dark:border-gray-700 rounded-xl text-gray-600 dark:text-gray-300"
               >
                 Cancelar
               </button>
-              <button 
-                onClick={() => {
-                  alert("¡Solicitud enviada con éxito! El profesional te contactará pronto.");
-                  setShowConnectModal(null);
-                }}
-                className="flex-1 py-3 bg-brand-orange hover:bg-orange-700 text-white rounded-xl font-bold transition-colors shadow-lg shadow-orange-500/20"
+              <button
+                onClick={() =>
+                  window.open(
+                    `https://wa.me/${showConnectModal.telefono}`,
+                    "_blank"
+                  )
+                }
+                className="flex-1 py-3 bg-orange-600 text-white rounded-xl font-bold"
               >
-                Confirmar
+                WhatsApp
               </button>
             </div>
           </div>
@@ -132,4 +154,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default FeedPage;

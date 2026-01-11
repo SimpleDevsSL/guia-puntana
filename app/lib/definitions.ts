@@ -1,29 +1,25 @@
-export interface Review {
-  author: string;
-  rating: number;
-  comment: string;
-}
-
-export interface Professional {
+// app/lib/definitions.ts
+export interface Category {
   id: string;
-  name: string;
-  category: string;
-  specialization: string;
-  rating: number;
-  reviewCount: number;
-  hourlyRate: number;
-  distanceKm: number;
-  isVerified: boolean;
-  description: string;
-  imageUrl: string;
-  badges: string[];
+  nombre: string;
+  descripcion?: string;
 }
 
-export enum Category {
-  PLOMERIA = 'Plomería',
-  GASISTA = 'Gasista',
-  ELECTRICIDAD = 'Electricidad',
-  PINTURA = 'Pintura',
-  CARPINTERIA = 'Carpintería',
-  LIMPIEZA = 'Limpieza',
+export interface ServiceWithProfile {
+  id: string;
+  nombre: string; // Título del servicio (ej: "Instalación de estufas")
+  descripcion: string;
+  localidad: string;
+  barrio?: string;
+  telefono?: string;
+  categoria: {
+    id: string;
+    nombre: string;
+  };
+  proveedor: {
+    id: string;
+    nombre_completo: string;
+    foto_url: string;
+    insignias: string[];
+  };
 }
