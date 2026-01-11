@@ -19,6 +19,8 @@ class Perfil {
     + nombre_completo: String
     + rol: String
     + es_activo: Boolean
+    + foto : url
+    + insignias : text[]
     -- Auditoría --
     + created_at: DateTime
     + created_by: UUID
