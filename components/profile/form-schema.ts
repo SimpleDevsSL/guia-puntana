@@ -6,7 +6,6 @@ export type Category = {
   descripcion: string | null;
 };
 
-// Esquema para un solo servicio
 export const serviceSchema = z.object({
   categoria_id: z.string().min(1, { message: "Selecciona una categoría." }),
   nombre: z.string().min(3, { message: "Mínimo 3 caracteres." }),
@@ -17,13 +16,16 @@ export const serviceSchema = z.object({
   barrio: z.string().optional(),
 });
 
-// Esquema para el perfil
 export const profileSchema = z.object({
   nombre_completo: z
     .string()
     .min(2, { message: "Mínimo 2 caracteres." })
     .max(100, { message: "Máximo 100 caracteres." }),
   rol: z.enum(["user", "proveedor"]),
+  // foto_url es opcional porque puede no tener foto al principio
+  foto_url: z.string().optional(),
+  // Las insignias suelen ser asignadas por el sistema, pero las definimos aquí
+  insignias: z.array(z.string()).default([]),
 });
 
 export type ProfileFormData = z.infer<typeof profileSchema>;

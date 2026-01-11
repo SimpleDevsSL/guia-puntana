@@ -14,7 +14,9 @@ export default function ProfileForm() {
     validationErrors,
     serviceErrors,
     generalError,
+    previewUrl,
     handleProfileChange,
+    handleAvatarChange,
     addService,
     removeService,
     handleServiceChange,
@@ -37,6 +39,8 @@ export default function ProfileForm() {
           data={profileData}
           errors={validationErrors}
           onChange={handleProfileChange}
+          onFileChange={handleAvatarChange} // Pasamos el handler
+          previewUrl={previewUrl} // Pasamos la URL de vista previa
         />
 
         {profileData.rol === "proveedor" && (

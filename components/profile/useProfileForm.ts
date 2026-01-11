@@ -1,4 +1,3 @@
-// components/profile/useProfileForm.ts
 import { useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
@@ -18,10 +17,19 @@ export function useProfileForm() {
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
+
+  // Datos del formulario
   const [profileData, setProfileData] = useState<ProfileFormData>({
     nombre_completo: "",
     rol: "user",
+    foto_url: "",
+    insignias: [],
   });
+
+  // Estado específico para el archivo de imagen nuevo
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
   const [servicesData, setServicesData] = useState<ServiceFormData[]>([]);
 
   // Errores
@@ -33,29 +41,46 @@ export function useProfileForm() {
   );
   const [generalError, setGeneralError] = useState<string | null>(null);
 
-  // Efectos de carga inicial
   useEffect(() => {
     const init = async () => {
-      // Usuario
+      // 1. Obtener usuario
       const {
         data: { user },
       } = await supabase.auth.getUser();
       if (user) setUserId(user.id);
       else setGeneralError("Sesión no válida.");
 
-      // Categorías
+      // 2. Obtener Categorías
       const { data: cats } = await supabase
         .from("categorias")
         .select("id, nombre, descripcion")
         .eq("es_activa", true)
         .order("nombre");
       if (cats) setCategories(cats);
+
+      // 3. Cargar datos existentes del perfil si existen
+      if (user) {
+        const { data: existingProfile } = await supabase
+          .from("perfiles")
+          .select("nombre_completo, rol, foto_url, insignias")
+          .eq("usuario_id", user.id)
+          .single();
+
+        if (existingProfile) {
+          setProfileData({
+            nombre_completo: existingProfile.nombre_completo || "",
+            rol: existingProfile.rol as "user" | "proveedor",
+            foto_url: existingProfile.foto_url || "",
+            insignias: existingProfile.insignias || [],
+          });
+        }
+      }
     };
     init();
   }, []);
 
-  // Handlers
-  const handleProfileChange = (field: keyof ProfileFormData, value: string) => {
+  // Handler para cambios de texto/select
+  const handleProfileChange = (field: keyof ProfileFormData, value: any) => {
     setProfileData((prev) => ({ ...prev, [field]: value }));
     if (validationErrors[field]) {
       setValidationErrors((prev) => {
@@ -64,6 +89,14 @@ export function useProfileForm() {
         return n;
       });
     }
+  };
+
+  // Handler específico para el archivo
+  const handleAvatarChange = (file: File) => {
+    setAvatarFile(file);
+    // Crear URL local para preview inmediata
+    const objectUrl = URL.createObjectURL(file);
+    setPreviewUrl(objectUrl);
   };
 
   const addService = () => {
@@ -96,6 +129,7 @@ export function useProfileForm() {
       newData[index] = { ...newData[index], [field]: value };
       return newData;
     });
+    // Limpiar errores
     const errKey = `${index}.${field}`;
     if (serviceErrors[errKey]) {
       setServiceErrors((prev) => {
@@ -106,7 +140,30 @@ export function useProfileForm() {
     }
   };
 
-  // Submit Logic
+  // Helper para subir imagen
+  const uploadAvatar = async (
+    file: File,
+    userId: string
+  ): Promise<string | null> => {
+    try {
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${userId}-${Math.random()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("avatars")
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data } = supabase.storage.from("avatars").getPublicUrl(filePath);
+      return data.publicUrl;
+    } catch (error) {
+      console.error("Error subiendo imagen:", error);
+      throw new Error("Error al subir la imagen de perfil");
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -119,7 +176,7 @@ export function useProfileForm() {
       return setGeneralError("Usuario no identificado.");
     }
 
-    // Validación Zod
+    // 1. Validaciones
     const profVal = profileSchema.safeParse(profileData);
     if (!profVal.success) {
       const errors: Record<string, string> = {};
@@ -150,26 +207,40 @@ export function useProfileForm() {
       }
     }
 
-    // Persistencia
     try {
+      // 2. Subir Imagen si existe nueva
+      let finalFotoUrl = profileData.foto_url;
+      if (avatarFile) {
+        const url = await uploadAvatar(avatarFile, userId);
+        if (url) finalFotoUrl = url;
+      }
+
+      // 3. Insertar/Actualizar Perfil (Upsert es mejor aquí por si ya existe)
       const { data: profile, error: pError } = await supabase
         .from("perfiles")
-        .insert({
-          usuario_id: userId,
-          nombre_completo: profileData.nombre_completo,
-          rol: profileData.rol,
-          es_activo: true,
-          created_by: userId,
-          updated_by: userId,
-        })
+        .upsert(
+          {
+            usuario_id: userId,
+            nombre_completo: profileData.nombre_completo,
+            rol: profileData.rol,
+            foto_url: finalFotoUrl,
+            insignias: profileData.insignias, // Se guardan si hubiera
+            es_activo: true,
+            updated_at: new Date().toISOString(),
+            updated_by: userId,
+          },
+          { onConflict: "usuario_id" }
+        ) // Usamos upsert basado en usuario_id
         .select()
         .single();
 
       if (pError) throw pError;
 
+      // 4. Guardar Servicios (Solo si es proveedor)
       if (profileData.rol === "proveedor" && servicesData.length > 0) {
+        // ... (Lógica de servicios existente)
         const servicesPayload = servicesData.map((s) => ({
-          proveedor_id: profile.id,
+          proveedor_id: profile.id, // Aseguramos usar el ID del perfil retornado
           categoria_id: s.categoria_id,
           nombre: s.nombre,
           descripcion: s.descripcion,
@@ -192,6 +263,7 @@ export function useProfileForm() {
       router.push("/feed");
       router.refresh();
     } catch (err: any) {
+      console.error(err);
       setGeneralError(err.message || "Error al guardar.");
     } finally {
       setLoading(false);
@@ -207,7 +279,9 @@ export function useProfileForm() {
     validationErrors,
     serviceErrors,
     generalError,
+    previewUrl, // Exportamos para el preview
     handleProfileChange,
+    handleAvatarChange, // Exportamos el handler de archivo
     addService,
     removeService,
     handleServiceChange,
