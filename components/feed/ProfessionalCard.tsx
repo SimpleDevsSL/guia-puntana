@@ -1,80 +1,94 @@
-import React from 'react';
-import { Professional } from '../../app/lib/definitions';
-import { Star, ShieldCheck, MapPin, BadgeCheck } from 'lucide-react';
+import React from "react";
+import { ServiceWithProfile } from "../../app/lib/definitions";
+import { MapPin, BadgeCheck, MessageSquare } from "lucide-react";
+import { Eye } from "lucide-react";
 
 interface Props {
-  professional: Professional;
-  onConnect: (prof: Professional) => void;
+  service: ServiceWithProfile;
+  onConnect: (service: ServiceWithProfile) => void;
+  onViewDetail: (service: ServiceWithProfile) => void;
 }
 
-const ProfessionalCard: React.FC<Props> = ({ professional, onConnect }) => {
+const getInitials = (name: string) => {
+  if (!name) return "";
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+};
+
+const ProfessionalCard: React.FC<Props> = ({ service, onConnect, onViewDetail }) => {
   return (
-    <div className="bg-white rounded-2xl shadow-[0_2px_10px_rgb(0,0,0,0.05)] border border-gray-100 overflow-hidden hover:shadow-[0_8px_20px_rgb(0,0,0,0.1)] transition-all duration-300 flex flex-col h-full group hover:-translate-y-1">
-      <div className="p-5 flex flex-col flex-grow">
+    <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden hover:shadow-md transition-all flex flex-col h-full group">      <div className="p-5 flex flex-col flex-grow">
         <div className="flex justify-between items-start mb-4">
           <div className="flex items-center gap-3">
             <div className="relative">
-              <img 
-                src={professional.imageUrl} 
-                alt={professional.name} 
-                className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm ring-1 ring-gray-100"
-              />
-              {professional.isVerified && (
-                <div className="absolute -bottom-1 -right-1 bg-blue-500 text-white p-0.5 rounded-full border-2 border-white" title="Verificado">
-                  <ShieldCheck size={12} fill="currentColor" />
-                </div>
-              )}
-            </div>
+  {service.proveedor.foto_url ? (
+    <img
+      src={service.proveedor.foto_url}
+      alt={service.proveedor.nombre_completo}
+      className="w-14 h-14 rounded-full object-cover border-2 border-white dark:border-gray-800 shadow-sm"
+    />
+  ) : (
+    <div className="w-14 h-14 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center border-2 border-white dark:border-gray-800 shadow-sm text-orange-600 dark:text-orange-400 font-bold text-lg">
+      {getInitials(service.proveedor.nombre_completo)}
+    </div>
+  )}
+</div>
             <div>
-              <h3 className="font-bold text-gray-900 text-lg leading-tight group-hover:text-brand-orange transition-colors">
-                {professional.name}
+              <h3 className="font-bold text-gray-900 dark:text-white text-lg leading-tight group-hover:text-orange-600 transition-colors">
+                {service.proveedor.nombre_completo}
               </h3>
-              <p className="text-xs text-gray-500 font-medium uppercase tracking-wide mt-0.5">{professional.specialization}</p>
+              <p className="text-xs text-orange-600 font-semibold uppercase tracking-wide mt-0.5">
+                {service.nombre}
+              </p>
             </div>
-          </div>
-          <div className="flex flex-col items-end">
-             <div className="flex items-center gap-1 bg-yellow-50 px-2 py-1 rounded-md">
-                <Star className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500" />
-                <span className="text-sm font-bold text-gray-800">{professional.rating.toFixed(1)}</span>
-             </div>
-             <span className="text-xs text-gray-400 mt-1">{professional.reviewCount} reseñas</span>
           </div>
         </div>
 
-        <p className="text-gray-600 text-sm mb-5 line-clamp-3 flex-grow leading-relaxed">
-          {professional.description}
+        <p className="text-gray-600 dark:text-gray-400 text-sm mb-5 line-clamp-3 flex-grow leading-relaxed">
+          {service.descripcion}
         </p>
 
         <div className="flex flex-wrap gap-2 mb-5">
-          {professional.badges.slice(0, 3).map((badge: string, idx: number) => (
-            <span key={idx} className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-50 text-gray-600 border border-gray-100">
-               {badge === 'Matriculado' && <BadgeCheck size={12} className="mr-1 text-brand-orange" />}
-               {badge}
+          {service.proveedor.insignias?.map((badge, idx) => (
+            <span
+              key={idx}
+              className="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-100 dark:border-gray-700"
+            >
+              <BadgeCheck size={12} className="mr-1 text-orange-500" />
+              {badge}
             </span>
           ))}
         </div>
 
-        <div className="flex items-center justify-between text-sm text-gray-500 pt-4 mt-auto border-t border-dashed border-gray-200">
+        <div className="flex items-center justify-between text-sm text-gray-500 pt-4 mt-auto border-t border-dashed border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-1.5">
-            <MapPin size={14} className="text-gray-400"/>
-            <span className="text-gray-600">{professional.distanceKm.toFixed(1)} km</span>
-          </div>
-          <div className="font-bold text-gray-900 text-lg">
-            ${professional.hourlyRate}<span className="text-xs font-normal text-gray-400">/h</span>
+            <MapPin size={14} className="text-gray-400" />
+            <span className="text-gray-600 dark:text-gray-400">
+              {service.localidad}
+            </span>
           </div>
         </div>
       </div>
-      
-      <div className="p-4 bg-gray-50/50">
-        <button 
-          onClick={() => onConnect(professional)}
-          className="w-full bg-brand-dark hover:bg-slate-800 text-white font-medium py-3 px-4 rounded-xl transition-colors duration-200 flex items-center justify-center gap-2"
+
+      {/* Footer de la Card con dos botones */}
+      <div className="p-4 bg-gray-50/50 dark:bg-gray-800/50 flex gap-2">
+        <button
+          onClick={() => onViewDetail(service)}
+          className="flex-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-orange-500 dark:hover:border-orange-500 text-gray-700 dark:text-gray-200 font-medium py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
         >
+          <Eye size={18} />
+          Detalles
+        </button>
+        <button
+          onClick={() => onConnect(service)}
+          className="flex-[1.5] bg-gray-900 dark:bg-orange-600 hover:bg-orange-600 dark:hover:bg-orange-700 text-white font-medium py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
+        >
+          <MessageSquare size={18} />
           Contactar
         </button>
       </div>
     </div>
   );
 };
-
 export default ProfessionalCard;
