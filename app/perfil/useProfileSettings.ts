@@ -99,7 +99,9 @@ export function useProfileSettings() {
           nombre_completo: profileData.nombre_completo,
           foto_url: finalFotoUrl,
           updated_at: new Date().toISOString(),
-        });
+          },
+    { onConflict: 'usuario_id' }
+        );
 
       if (error) throw error;
       alert("Información básica actualizada.");
@@ -150,17 +152,33 @@ export function useProfileSettings() {
   };
 
   const handleDeleteAccount = async () => {
-    const confirm = window.confirm("¿Estás 100% seguro? Esto borrará tus datos de perfil.");
-    if (!confirm || !userData) return;
+  const confirm = window.confirm("¿Estás 100% seguro? Esto borrará permanentemente tu perfil y cuenta.");
+  if (!confirm || !userData) return;
 
-    try {
-      await supabase.from("perfiles").delete().eq("usuario_id", userData.id);
-      await supabase.auth.signOut();
-      router.push("/");
-    } catch (error: any) {
-      alert("Error: " + error.message);
+  setSaving(true); // Puedes usar un estado de carga
+  try {
+    // Llamamos a nuestra API interna en lugar de borrar directamente desde el cliente
+    const response = await fetch('/api/delete-account', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: userData.id }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || 'Error al eliminar la cuenta');
     }
-  };
+
+    // Si todo salió bien, cerramos sesión localmente y redirigimos
+    await supabase.auth.signOut();
+    router.push("/");
+  } catch (error: any) {
+    alert("Error: " + error.message);
+  } finally {
+    setSaving(false);
+  }
+};
 
   return {
     loading, saving, userData, profileData, setProfileData,
