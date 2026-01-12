@@ -16,24 +16,30 @@ const getInitials = (name: string) => {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 };
 
-const ProfessionalCard: React.FC<Props> = ({ service, onConnect, onViewDetail }) => {
+const ProfessionalCard: React.FC<Props> = ({
+  service,
+  onConnect,
+  onViewDetail,
+}) => {
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden hover:shadow-md transition-all flex flex-col h-full group">      <div className="p-5 flex flex-col flex-grow">
+    <article className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden hover:shadow-md transition-all flex flex-col h-full group">
+      {" "}
+      <div className="p-5 flex flex-col flex-grow">
         <div className="flex justify-between items-start mb-4">
           <div className="flex items-center gap-3">
             <div className="relative">
-  {service.proveedor.foto_url ? (
-    <img
-      src={service.proveedor.foto_url}
-      alt={service.proveedor.nombre_completo}
-      className="w-14 h-14 rounded-full object-cover border-2 border-white dark:border-gray-800 shadow-sm"
-    />
-  ) : (
-    <div className="w-14 h-14 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center border-2 border-white dark:border-gray-800 shadow-sm text-orange-600 dark:text-orange-400 font-bold text-lg">
-      {getInitials(service.proveedor.nombre_completo)}
-    </div>
-  )}
-</div>
+              {service.proveedor.foto_url ? (
+                <img
+                  src={service.proveedor.foto_url}
+                  alt={service.proveedor.nombre_completo}
+                  className="w-14 h-14 rounded-full object-cover border-2 border-white dark:border-gray-800 shadow-sm"
+                />
+              ) : (
+                <div className="w-14 h-14 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center border-2 border-white dark:border-gray-800 shadow-sm text-orange-600 dark:text-orange-400 font-bold text-lg">
+                  {getInitials(service.proveedor.nombre_completo)}
+                </div>
+              )}
+            </div>
             <div>
               <h3 className="font-bold text-gray-900 dark:text-white text-lg leading-tight group-hover:text-orange-600 transition-colors">
                 {service.proveedor.nombre_completo}
@@ -70,7 +76,6 @@ const ProfessionalCard: React.FC<Props> = ({ service, onConnect, onViewDetail })
           </div>
         </div>
       </div>
-
       {/* Footer de la Card con dos botones */}
       <div className="p-4 bg-gray-50/50 dark:bg-gray-800/50 flex gap-2">
         <button
@@ -88,7 +93,7 @@ const ProfessionalCard: React.FC<Props> = ({ service, onConnect, onViewDetail })
           Contactar
         </button>
       </div>
-    </div>
+    </article>
   );
 };
 export default ProfessionalCard;
