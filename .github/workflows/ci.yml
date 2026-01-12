@@ -1,0 +1,32 @@
+name: CI - Calidad y Pruebas
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Linting (Calidad de código)
+        run: npm run lint
+
+      - name: Formato (Prettier)
+        run: npm run format # Asegúrate que este script no falle si hay errores, o usa --check
+
+      - name: Ejecutar Pruebas Unitarias
+        run: npm run test

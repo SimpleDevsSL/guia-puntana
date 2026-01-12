@@ -1,18 +1,11 @@
 import React from 'react';
 import { ServiceWithProfile } from '../../app/lib/definitions';
-import {
-  MapPin,
-  BadgeCheck,
-  MessageSquare,
-  X,
-  Phone,
-  Star,
-} from 'lucide-react';
+import { MapPin, BadgeCheck, MessageSquare, X, Phone } from 'lucide-react';
+import { createClient } from '../../utils/supabase/client';
 
 interface Props {
   service: ServiceWithProfile;
   onClose: () => void;
-  onContact: (service: ServiceWithProfile) => void;
 }
 
 const getInitials = (name: string) => {
@@ -22,15 +15,37 @@ const getInitials = (name: string) => {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 };
 
-const ServiceDetailModal: React.FC<Props> = ({
-  service,
-  onClose,
-  onContact,
-}) => {
+const ServiceDetailModal: React.FC<Props> = ({ service, onClose }) => {
+  const handleWhatsApp = async () => {
+    // 1. Tracking
+    try {
+      const supabase = createClient();
+      await supabase.from('analytics_events').insert({
+        event_type: 'contact_click_modal', // Diferenciamos que vino del modal
+        metadata: {
+          service_id: service.id,
+          provider_name: service.proveedor.nombre_completo,
+          provider_id: (service.proveedor as any).id,
+        },
+      });
+    } catch (error) {
+      console.error('Error tracking contact:', error);
+    }
+
+    // 2. Redirección WhatsApp
+    if (service.telefono) {
+      const cleanPhone = service.telefono.replace(/\D/g, '');
+      const text = `Hola ${service.proveedor.nombre_completo}, vi tu servicio "${service.nombre}" en Guía Puntana y me gustaría hacerte una consulta.`;
+      const url = `https://wa.me/549${cleanPhone}?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+    } else {
+      alert('Este profesional no tiene un número de teléfono registrado.');
+    }
+  };
+
   return (
     <div className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm duration-200">
       <div className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl border bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-900">
-        {/* Botón Cerrar / Volver */}
         <button
           onClick={onClose}
           className="absolute right-4 top-4 rounded-full bg-gray-100 p-2 text-gray-500 transition-colors hover:text-gray-900 dark:bg-gray-800 dark:hover:text-white"
@@ -39,7 +54,7 @@ const ServiceDetailModal: React.FC<Props> = ({
         </button>
 
         <div className="p-8">
-          {/* Encabezado con Foto y Nombre */}
+          {/* Header */}
           <div className="mb-8 flex flex-col items-center gap-6 md:flex-row md:items-start">
             {service.proveedor.foto_url ? (
               <img
@@ -75,7 +90,7 @@ const ServiceDetailModal: React.FC<Props> = ({
 
           <hr className="mb-8 border-gray-100 dark:border-gray-800" />
 
-          {/* Información del Servicio */}
+          {/* Información */}
           <div className="space-y-6">
             <div>
               <h3 className="mb-3 flex items-center gap-2 text-lg font-bold text-gray-900 dark:text-white">
@@ -119,10 +134,10 @@ const ServiceDetailModal: React.FC<Props> = ({
             </div>
           </div>
 
-          {/* Acción Principal */}
+          {/* Botones de Acción */}
           <div className="mt-10">
             <button
-              onClick={() => onContact(service)}
+              onClick={handleWhatsApp}
               className="flex w-full items-center justify-center gap-3 rounded-2xl bg-orange-600 py-4 text-lg font-bold text-white shadow-lg shadow-orange-600/20 transition-all hover:bg-orange-700"
             >
               <MessageSquare size={22} />
