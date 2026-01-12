@@ -4,6 +4,7 @@ import CategoryList from "@/components/feed/CategoryList"; //
 import { Header } from "@/components/feed/Header";
 import { ServiceWithProfile, Category } from "../lib/definitions"; //
 import ClientFeedLogic from "./ClientFeedLogic";
+import { Metadata } from "next";
 
 interface PageProps {
   searchParams: Promise<{
@@ -11,6 +12,15 @@ interface PageProps {
     l?: string; // Localidad
     cat?: string; // ID de Categoría
   }>;
+}
+
+export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
+  const params = await searchParams;
+  const categoryName = params.cat ? "Servicios" : "Profesionales"; // O busca el nombre real
+  return {
+    title: `${params.q || categoryName} en San Luis | Guía Puntana`,
+    description: `Encuentra los mejores ${params.q || "profesionales"} en ${params.l || "San Luis"}.`,
+  };
 }
 
 export default async function FeedPage({ searchParams }: PageProps) {
@@ -21,7 +31,8 @@ export default async function FeedPage({ searchParams }: PageProps) {
   const { data: categoriesData } = await supabase
     .from("categorias")
     .select("id, nombre")
-    .eq("es_activa", true);
+    .eq("es_activa", true)
+    .throwOnError(); // Añade manejo de errores simple
 
   const categories = (categoriesData as Category[]) || [];
 

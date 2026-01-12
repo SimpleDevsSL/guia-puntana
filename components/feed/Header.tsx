@@ -11,24 +11,36 @@ import { useRouter } from "next/navigation";
 export const Header: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
+  // 1. Nuevo estado para controlar la carga inicial
+  const [isLoading, setIsLoading] = useState(true);
+
   const supabase = createClient();
   const router = useRouter();
 
   useEffect(() => {
     const getUserData = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (user) {
-        setUser(user);
-        const { data: profile } = await supabase
-          .from("perfiles")
-          .select("rol")
-          .eq("usuario_id", user.id)
-          .single();
-        setUserRole(profile?.rol || null);
+      try {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+
+        if (user) {
+          setUser(user);
+          const { data: profile } = await supabase
+            .from("perfiles")
+            .select("rol")
+            .eq("usuario_id", user.id)
+            .single();
+          setUserRole(profile?.rol || null);
+        }
+      } catch (error) {
+        console.error("Error al obtener datos del usuario:", error);
+      } finally {
+        // 2. Finaliza la carga independientemente del resultado
+        setIsLoading(false);
       }
     };
+
     getUserData();
 
     const {
@@ -58,7 +70,6 @@ export const Header: React.FC = () => {
     }
   };
 
-  // Estilo base para todos los botones
   const buttonStyle =
     "bg-orange-600 hover:bg-orange-700 text-white transition-all shadow-md rounded-full text-sm font-bold flex items-center gap-2";
 
@@ -79,9 +90,15 @@ export const Header: React.FC = () => {
         <div className="flex items-center gap-2 sm:gap-4">
           <ThemeToggle />
 
-          {user ? (
+          {/* 3. Renderizado condicional basado en isLoading */}
+          {isLoading ? (
+            // Skeleton: Muestra un marcador de posición animado mientras carga
             <div className="flex items-center gap-2 sm:gap-3">
-              {/* Botón Nuevo Servicio (Solo si es proveedor) */}
+              <div className="h-9 w-24 sm:w-32 bg-gray-200 dark:bg-gray-800 animate-pulse rounded-full"></div>
+              <div className="h-9 w-9 bg-gray-200 dark:bg-gray-800 animate-pulse rounded-full"></div>
+            </div>
+          ) : user ? (
+            <div className="flex items-center gap-2 sm:gap-3">
               {userRole === "proveedor" && (
                 <Link
                   href="/servicios/nuevo"
@@ -104,7 +121,6 @@ export const Header: React.FC = () => {
                 </Link>
               )}
 
-              {/* Botón Ver Perfil */}
               <Link
                 href="/perfil"
                 className={`${buttonStyle} p-2 sm:px-5 sm:py-2`}
@@ -127,7 +143,6 @@ export const Header: React.FC = () => {
                 <span className="hidden sm:inline">Ver mi perfil</span>
               </Link>
 
-              {/* Botón Cerrar Sesión */}
               <button
                 onClick={handleLogout}
                 className={`${buttonStyle} p-2 sm:px-4 sm:py-2 font-bold`}
