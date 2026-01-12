@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider" 
 import "./globals.css";
 import { Inter } from "next/font/google";
+import type { Metadata, Viewport } from "next";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -9,6 +9,18 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Guía Puntana",
   description: "Tu guía de San Luis",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Guía Puntana",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0f172a",
 };
 
 export default function RootLayout({
@@ -18,14 +30,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" suppressHydrationWarning>
-      <body 
-        className={`
-          ${inter.className} 
-          antialiased
-          bg-white text-slate-900 
-          dark:bg-slate-950 dark:text-slate-100 
-          transition-colors duration-300 ease-in-out
-        `}
+      <head>
+        {/* Enlace opcional para iconos de Apple */}
+        <link rel="apple-touch-icon" href="/icon-192x192.png" />
+      </head>
+      <body
+        className={`${inter.className} antialiased bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300 ease-in-out`}
       >
         <ThemeProvider
           attribute="class"
