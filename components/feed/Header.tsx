@@ -69,7 +69,7 @@ export const Header: React.FC = () => {
             <div className="flex items-center gap-3">
               {/* Botón Principal: Ver Perfil */}
               <Link
-                href="/completar-perfil"
+                href="/perfil"
                 className="hidden sm:inline-block px-5 py-2 text-sm font-semibold text-white bg-gray-900 dark:bg-orange-600 rounded-full hover:bg-orange-600 transition-colors shadow-lg"
               >
                 Ver mi perfil

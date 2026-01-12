@@ -8,6 +8,13 @@ interface Props {
   onContact: (service: ServiceWithProfile) => void;
 }
 
+const getInitials = (name: string) => {
+  if (!name) return "";
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+};
+
 const ServiceDetailModal: React.FC<Props> = ({ service, onClose, onContact }) => {
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
@@ -24,11 +31,17 @@ const ServiceDetailModal: React.FC<Props> = ({ service, onClose, onContact }) =>
         <div className="p-8">
           {/* Encabezado con Foto y Nombre */}
           <div className="flex flex-col md:flex-row gap-6 items-center md:items-start mb-8">
-            <img
-              src={service.proveedor.foto_url || "https://via.placeholder.com/150"}
-              alt={service.proveedor.nombre_completo }
-              className="w-32 h-32 rounded-2xl object-cover border-4 border-orange-50 dark:border-orange-900/30 shadow-lg"
-            />
+  {service.proveedor.foto_url ? (
+    <img
+      src={service.proveedor.foto_url}
+      alt={service.proveedor.nombre_completo}
+      className="w-32 h-32 rounded-2xl object-cover border-4 border-orange-50 dark:border-orange-900/30 shadow-lg"
+    />
+  ) : (
+    <div className="w-32 h-32 rounded-2xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center border-4 border-orange-50 dark:border-orange-900/30 shadow-lg text-4xl font-extrabold text-orange-600 dark:text-orange-400">
+      {getInitials(service.proveedor.nombre_completo)}
+    </div>
+  )}
             <div className="text-center md:text-left">
               <span className="inline-block px-3 py-1 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 text-xs font-bold uppercase tracking-wider mb-2">
                 {service.categoria.nombre}

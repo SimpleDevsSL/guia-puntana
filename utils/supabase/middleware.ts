@@ -2,12 +2,10 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function updateSession(request: NextRequest) {
-  // 1. Configuración inicial de la respuesta
   let supabaseResponse = NextResponse.next({
     request,
   });
 
-  // 2. Configuración del cliente Supabase (Manejo robusto de cookies)
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -31,65 +29,53 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  // 3. Obtener usuario (esto refresca la sesión si es necesario)
-  // IMPORTANTE: getUser valida el token de forma segura contra Supabase Auth
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // ==========================================
-  // LÓGICA DE PROTECCIÓN DE RUTAS Y PERFIL
-  // ==========================================
+  const path = request.nextUrl.pathname;
 
-  // --- CASO A: USUARIO NO LOGUEADO ---
+  // --- CASO A: USUARIO NO LOGUEADO (Visitante) ---
   if (!user) {
-    // Definimos las rutas que son PRIVADAS
-    const protectedPaths = ["/feed", "/completar-perfil"];
-    const isProtected = protectedPaths.some((path) =>
-      request.nextUrl.pathname.startsWith(path)
-    );
+    // Definimos qué rutas son PRIVADAS (solo para miembros)
+    // El /feed ya NO está aquí, por lo tanto es público.
+    const privatePaths = ["/completar-perfil", "/perfil"];
+    const isPrivate = privatePaths.some((p) => path.startsWith(p));
 
-    // Si intenta entrar a una ruta privada sin sesión, lo mandamos a la Landing Page (/)
-    if (isProtected) {
-      return NextResponse.redirect(new URL("/", request.url));
+    if (isPrivate) {
+      return NextResponse.redirect(new URL("/login", request.url));
     }
-    // Si no es protegida (ej: /, /login), dejamos pasar
     return supabaseResponse;
   }
 
   // --- CASO B: USUARIO LOGUEADO ---
   if (user) {
-    // 4. Verificamos si ya completó su perfil en la base de datos
     const { data: profile } = await supabase
       .from("perfiles")
       .select("id")
       .eq("usuario_id", user.id)
       .single();
 
-    // ESCENARIO 1: TIENE SESIÓN PERO NO TIENE PERFIL
-    // Debe completar el perfil obligatoriamente antes de usar la app.
+    // 1. Sesión iniciada pero SIN perfil creado
     if (!profile) {
-      // Si NO está en /completar-perfil, lo forzamos a ir allí
-      if (!request.nextUrl.pathname.startsWith("/completar-perfil")) {
+      // Forzamos a completar perfil a menos que ya esté en esa ruta
+      if (!path.startsWith("/completar-perfil")) {
         return NextResponse.redirect(new URL("/completar-perfil", request.url));
       }
-      // Si ya está en /completar-perfil, permitimos el acceso para que llene el formulario
       return supabaseResponse;
     }
 
-    // ESCENARIO 2: YA TIENE PERFIL COMPLETO (Usuario activo normal)
+    // 2. Sesión iniciada y CON perfil completo
     if (profile) {
-      // No tiene sentido que vuelva a /completar-perfil
-      if (request.nextUrl.pathname.startsWith("/completar-perfil")) {
+      // No debe poder volver a completar perfil o login
+      if (path.startsWith("/completar-perfil") || path.startsWith("/login")) {
         return NextResponse.redirect(new URL("/feed", request.url));
       }
-
-      // No tiene sentido que vaya a /login si ya está autenticado
-      if (request.nextUrl.pathname.startsWith("/login")) {
+      
+      // Si intenta entrar a la landing (/), lo mandamos al feed para que vea el contenido
+      if (path === "/") {
         return NextResponse.redirect(new URL("/feed", request.url));
       }
-
-      // Aquí el usuario puede navegar libremente al /feed u otras rutas protegidas
     }
   }
 
