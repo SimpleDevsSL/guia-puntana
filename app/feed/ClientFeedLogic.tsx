@@ -50,10 +50,6 @@ export default function ClientFeedLogic({
         <ServiceDetailModal
           service={showDetailModal}
           onClose={() => setShowDetailModal(null)}
-          onContact={(s) => {
-            setShowDetailModal(null);
-            setShowConnectModal(s);
-          }}
         />
       )}
 
