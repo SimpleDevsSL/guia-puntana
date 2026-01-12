@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
-import { createClient } from "@/utils/supabase/client";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from 'react';
+import { createClient } from '@/utils/supabase/client';
+import { useRouter } from 'next/navigation';
 import {
   profileSchema,
   serviceSchema,
   type ProfileFormData,
   type ServiceFormData,
   type Category,
-} from "./form-schema";
+} from './form-schema';
 
 export function useProfileForm() {
   const supabase = createClient();
@@ -20,9 +20,9 @@ export function useProfileForm() {
 
   // Datos del formulario
   const [profileData, setProfileData] = useState<ProfileFormData>({
-    nombre_completo: "",
-    rol: "user",
-    foto_url: "",
+    nombre_completo: '',
+    rol: 'user',
+    foto_url: '',
     insignias: [],
   });
 
@@ -48,29 +48,29 @@ export function useProfileForm() {
         data: { user },
       } = await supabase.auth.getUser();
       if (user) setUserId(user.id);
-      else setGeneralError("Sesión no válida.");
+      else setGeneralError('Sesión no válida.');
 
       // 2. Obtener Categorías
       const { data: cats } = await supabase
-        .from("categorias")
-        .select("id, nombre, descripcion")
-        .eq("es_activa", true)
-        .order("nombre");
+        .from('categorias')
+        .select('id, nombre, descripcion')
+        .eq('es_activa', true)
+        .order('nombre');
       if (cats) setCategories(cats);
 
       // 3. Cargar datos existentes del perfil si existen
       if (user) {
         const { data: existingProfile } = await supabase
-          .from("perfiles")
-          .select("nombre_completo, rol, foto_url, insignias")
-          .eq("usuario_id", user.id)
+          .from('perfiles')
+          .select('nombre_completo, rol, foto_url, insignias')
+          .eq('usuario_id', user.id)
           .single();
 
         if (existingProfile) {
           setProfileData({
-            nombre_completo: existingProfile.nombre_completo || "",
-            rol: existingProfile.rol as "user" | "proveedor",
-            foto_url: existingProfile.foto_url || "",
+            nombre_completo: existingProfile.nombre_completo || '',
+            rol: existingProfile.rol as 'user' | 'proveedor',
+            foto_url: existingProfile.foto_url || '',
             insignias: existingProfile.insignias || [],
           });
         }
@@ -104,13 +104,13 @@ export function useProfileForm() {
       ...prev,
       {
         tempId: Date.now(),
-        categoria_id: "",
-        nombre: "",
-        descripcion: "",
-        telefono: "",
-        direccion: "",
-        localidad: "",
-        barrio: "",
+        categoria_id: '',
+        nombre: '',
+        descripcion: '',
+        telefono: '',
+        direccion: '',
+        localidad: '',
+        barrio: '',
       },
     ]);
   };
@@ -146,21 +146,21 @@ export function useProfileForm() {
     userId: string
   ): Promise<string | null> => {
     try {
-      const fileExt = file.name.split(".").pop();
+      const fileExt = file.name.split('.').pop();
       const fileName = `${userId}-${Math.random()}.${fileExt}`;
       const filePath = `${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from("avatars")
+        .from('avatars')
         .upload(filePath, file);
 
       if (uploadError) throw uploadError;
 
-      const { data } = supabase.storage.from("avatars").getPublicUrl(filePath);
+      const { data } = supabase.storage.from('avatars').getPublicUrl(filePath);
       return data.publicUrl;
     } catch (error) {
-      console.error("Error subiendo imagen:", error);
-      throw new Error("Error al subir la imagen de perfil");
+      console.error('Error subiendo imagen:', error);
+      throw new Error('Error al subir la imagen de perfil');
     }
   };
 
@@ -173,7 +173,7 @@ export function useProfileForm() {
 
     if (!userId) {
       setLoading(false);
-      return setGeneralError("Usuario no identificado.");
+      return setGeneralError('Usuario no identificado.');
     }
 
     // 1. Validaciones
@@ -188,7 +188,7 @@ export function useProfileForm() {
       return;
     }
 
-    if (profileData.rol === "proveedor" && servicesData.length > 0) {
+    if (profileData.rol === 'proveedor' && servicesData.length > 0) {
       const newServErrors: Record<string, string> = {};
       let hasErr = false;
       servicesData.forEach((s, idx) => {
@@ -217,7 +217,7 @@ export function useProfileForm() {
 
       // 3. Insertar/Actualizar Perfil (Upsert es mejor aquí por si ya existe)
       const { data: profile, error: pError } = await supabase
-        .from("perfiles")
+        .from('perfiles')
         .upsert(
           {
             usuario_id: userId,
@@ -229,7 +229,7 @@ export function useProfileForm() {
             updated_at: new Date().toISOString(),
             updated_by: userId,
           },
-          { onConflict: "usuario_id" }
+          { onConflict: 'usuario_id' }
         ) // Usamos upsert basado en usuario_id
         .select()
         .single();
@@ -237,7 +237,7 @@ export function useProfileForm() {
       if (pError) throw pError;
 
       // 4. Guardar Servicios (Solo si es proveedor)
-      if (profileData.rol === "proveedor" && servicesData.length > 0) {
+      if (profileData.rol === 'proveedor' && servicesData.length > 0) {
         // ... (Lógica de servicios existente)
         const servicesPayload = servicesData.map((s) => ({
           proveedor_id: profile.id, // Aseguramos usar el ID del perfil retornado
@@ -255,16 +255,16 @@ export function useProfileForm() {
         }));
 
         const { error: sError } = await supabase
-          .from("servicios")
+          .from('servicios')
           .insert(servicesPayload);
         if (sError) throw sError;
       }
 
-      router.push("/feed");
+      router.push('/feed');
       router.refresh();
     } catch (err: any) {
       console.error(err);
-      setGeneralError(err.message || "Error al guardar.");
+      setGeneralError(err.message || 'Error al guardar.');
     } finally {
       setLoading(false);
     }

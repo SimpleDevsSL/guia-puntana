@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useProfileForm } from "./useProfileForm";
-import { ProfileInfo } from "./parts/ProfileInfo";
-import { ServicesList } from "./parts/ServicesList";
+import { useProfileForm } from './useProfileForm';
+import { ProfileInfo } from './parts/ProfileInfo';
+import { ServicesList } from './parts/ServicesList';
 
 export default function ProfileForm() {
   const {
@@ -24,17 +24,17 @@ export default function ProfileForm() {
   } = useProfileForm();
 
   return (
-    <div className="w-full max-w-3xl mx-auto bg-white dark:bg-gray-900 rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800 my-8 transition-colors duration-300">
+    <div className="mx-auto my-8 w-full max-w-3xl overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl transition-colors duration-300 dark:border-gray-800 dark:bg-gray-900">
       <div className="bg-orange-600 p-8 text-center">
         <h2 className="text-3xl font-bold text-white">
           ¡Te damos la bienvenida!
         </h2>
-        <p className="text-orange-100 mt-2 text-base">
+        <p className="mt-2 text-base text-orange-100">
           Completa tu perfil para comenzar
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="p-8 space-y-8">
+      <form onSubmit={handleSubmit} className="space-y-8 p-8">
         <ProfileInfo
           data={profileData}
           errors={validationErrors}
@@ -43,7 +43,7 @@ export default function ProfileForm() {
           previewUrl={previewUrl} // Pasamos la URL de vista previa
         />
 
-        {profileData.rol === "proveedor" && (
+        {profileData.rol === 'proveedor' && (
           <ServicesList
             services={servicesData}
             categories={categories}
@@ -55,7 +55,7 @@ export default function ProfileForm() {
         )}
 
         {generalError && (
-          <div className="p-4 bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 text-red-700 dark:text-red-300 text-sm rounded-r-md">
+          <div className="rounded-r-md border-l-4 border-red-500 bg-red-50 p-4 text-sm text-red-700 dark:bg-red-900/20 dark:text-red-300">
             <p className="font-bold">Error</p>
             <p>{generalError}</p>
           </div>
@@ -64,13 +64,13 @@ export default function ProfileForm() {
         <button
           type="submit"
           disabled={loading || !userId}
-          className={`w-full py-4 px-6 rounded-xl font-bold text-white text-lg shadow-md transition-all transform hover:-translate-y-0.5 ${
+          className={`w-full transform rounded-xl px-6 py-4 text-lg font-bold text-white shadow-md transition-all hover:-translate-y-0.5 ${
             loading
-              ? "bg-gray-400 dark:bg-gray-600 cursor-wait"
-              : "bg-gradient-to-r from-orange-500 to-orange-700 hover:from-orange-600 hover:to-orange-800 hover:shadow-orange-500/25"
+              ? 'cursor-wait bg-gray-400 dark:bg-gray-600'
+              : 'bg-gradient-to-r from-orange-500 to-orange-700 hover:from-orange-600 hover:to-orange-800 hover:shadow-orange-500/25'
           }`}
         >
-          {loading ? "Guardando..." : "Finalizar Perfil"}
+          {loading ? 'Guardando...' : 'Finalizar Perfil'}
         </button>
       </form>
     </div>

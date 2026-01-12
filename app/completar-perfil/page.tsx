@@ -1,4 +1,4 @@
-import ProfileForm from "@/components/profile/ProfileForm";
+import ProfileForm from '@/components/profile/ProfileForm';
 
 /**
  * Página Completar Perfil
@@ -7,14 +7,14 @@ import ProfileForm from "@/components/profile/ProfileForm";
  */
 export default function CompletarPerfilPage() {
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-slate-950 flex flex-col items-center justify-center p-4 transition-colors duration-300">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-4 transition-colors duration-300 dark:bg-slate-950">
       {/* Contenedor principal con padding para móviles */}
-      <div className="w-full flex justify-center">
+      <div className="flex w-full justify-center">
         <ProfileForm />
       </div>
 
       {/* Footer simple */}
-      <footer className="mt-8 text-center text-gray-400 dark:text-gray-500 text-sm">
+      <footer className="mt-8 text-center text-sm text-gray-400 dark:text-gray-500">
         &copy; {new Date().getFullYear()} Guía Puntana. Todos los derechos
         reservados.
       </footer>

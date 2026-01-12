@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { ServiceWithProfile } from "../lib/definitions"; //
-import ResultsGrid from "@/components/feed/ResultsGrid"; //
-import ServiceDetailModal from "@/components/feed/ServiceDetailModal";
-import { useRouter } from "next/navigation";
+import React, { useState } from 'react';
+import { ServiceWithProfile } from '../lib/definitions'; //
+import ResultsGrid from '@/components/feed/ResultsGrid'; //
+import ServiceDetailModal from '@/components/feed/ServiceDetailModal';
+import { useRouter } from 'next/navigation';
 
 interface ClientFeedLogicProps {
   services: ServiceWithProfile[];
@@ -30,7 +30,7 @@ export default function ClientFeedLogic({
 
   const handleRetry = () => {
     // Resetear filtros navegando a la ruta base
-    router.push("/feed");
+    router.push('/feed');
   };
 
   return (
@@ -59,12 +59,12 @@ export default function ClientFeedLogic({
 
       {/* Modal de Contacto (WhatsApp) */}
       {showConnectModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-gray-900 rounded-2xl max-w-md w-full p-6 shadow-2xl border dark:border-gray-800">
-            <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-2xl border bg-white p-6 shadow-2xl dark:border-gray-800 dark:bg-gray-900">
+            <h3 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
               Contactar a {showConnectModal.proveedor.nombre_completo}
             </h3>
-            <div className="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-xl border border-orange-100 dark:border-orange-800 mb-6">
+            <div className="mb-6 rounded-xl border border-orange-100 bg-orange-50 p-4 dark:border-orange-800 dark:bg-orange-900/20">
               <p className="text-sm text-gray-700 dark:text-gray-300">
                 <b>Ubicación:</b> {showConnectModal.localidad}
               </p>
@@ -75,7 +75,7 @@ export default function ClientFeedLogic({
             <div className="flex gap-3">
               <button
                 onClick={() => setShowConnectModal(null)}
-                className="flex-1 py-3 border dark:border-gray-700 rounded-xl text-gray-600 dark:text-gray-300"
+                className="flex-1 rounded-xl border py-3 text-gray-600 dark:border-gray-700 dark:text-gray-300"
               >
                 Cancelar
               </button>
@@ -83,10 +83,10 @@ export default function ClientFeedLogic({
                 onClick={() =>
                   window.open(
                     `https://wa.me/${showConnectModal.telefono}`,
-                    "_blank"
+                    '_blank'
                   )
                 }
-                className="flex-1 py-3 bg-orange-600 text-white rounded-xl font-bold"
+                className="flex-1 rounded-xl bg-orange-600 py-3 font-bold text-white"
               >
                 WhatsApp
               </button>

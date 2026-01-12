@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import { ThemeToggle } from "@/components/ThemeToggle";
-import { Logo } from "@/components/ui/Logo";
-import Link from "next/link";
-import { createClient } from "@/utils/supabase/client";
-import { User } from "@supabase/supabase-js";
-import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from 'react';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import { Logo } from '@/components/ui/Logo';
+import Link from 'next/link';
+import { createClient } from '@/utils/supabase/client';
+import { User } from '@supabase/supabase-js';
+import { useRouter } from 'next/navigation';
 
 export const Header: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -27,14 +27,14 @@ export const Header: React.FC = () => {
         if (user) {
           setUser(user);
           const { data: profile } = await supabase
-            .from("perfiles")
-            .select("rol")
-            .eq("usuario_id", user.id)
+            .from('perfiles')
+            .select('rol')
+            .eq('usuario_id', user.id)
             .single();
           setUserRole(profile?.rol || null);
         }
       } catch (error) {
-        console.error("Error al obtener datos del usuario:", error);
+        console.error('Error al obtener datos del usuario:', error);
       } finally {
         // 2. Finaliza la carga independientemente del resultado
         setIsLoading(false);
@@ -47,7 +47,7 @@ export const Header: React.FC = () => {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
-      if (_event === "SIGNED_OUT") {
+      if (_event === 'SIGNED_OUT') {
         setUser(null);
         setUserRole(null);
         router.refresh();
@@ -64,23 +64,23 @@ export const Header: React.FC = () => {
       await supabase.auth.signOut();
       setUser(null);
       router.refresh();
-      router.replace("/");
+      router.replace('/');
     } catch (error) {
-      console.error("Error al cerrar sesión:", error);
+      console.error('Error al cerrar sesión:', error);
     }
   };
 
   const buttonStyle =
-    "bg-orange-600 hover:bg-orange-700 text-white transition-all shadow-md rounded-full text-sm font-bold flex items-center gap-2";
+    'bg-orange-600 hover:bg-orange-700 text-white transition-all shadow-md rounded-full text-sm font-bold flex items-center gap-2';
 
   return (
-    <header className="fixed top-0 w-full z-50 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <header className="fixed top-0 z-50 w-full border-b border-gray-100 bg-white/80 backdrop-blur-md transition-colors dark:border-gray-800 dark:bg-gray-950/80">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Lado Izquierdo: Logo */}
         <div className="flex items-center gap-3">
           <Link href="/feed" className="flex items-center gap-2 sm:gap-3">
-            <Logo className="w-8 h-8 sm:w-10 sm:h-10 text-gray-900 dark:text-white" />
-            <span className="text-lg sm:text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+            <Logo className="h-8 w-8 text-gray-900 dark:text-white sm:h-10 sm:w-10" />
+            <span className="text-lg font-bold tracking-tight text-gray-900 dark:text-white sm:text-xl">
               Guía <span className="text-orange-600">Puntana</span>
             </span>
           </Link>
@@ -94,12 +94,12 @@ export const Header: React.FC = () => {
           {isLoading ? (
             // Skeleton: Muestra un marcador de posición animado mientras carga
             <div className="flex items-center gap-2 sm:gap-3">
-              <div className="h-9 w-24 sm:w-32 bg-gray-200 dark:bg-gray-800 animate-pulse rounded-full"></div>
-              <div className="h-9 w-9 bg-gray-200 dark:bg-gray-800 animate-pulse rounded-full"></div>
+              <div className="h-9 w-24 animate-pulse rounded-full bg-gray-200 dark:bg-gray-800 sm:w-32"></div>
+              <div className="h-9 w-9 animate-pulse rounded-full bg-gray-200 dark:bg-gray-800"></div>
             </div>
           ) : user ? (
             <div className="flex items-center gap-2 sm:gap-3">
-              {userRole === "proveedor" && (
+              {userRole === 'proveedor' && (
                 <Link
                   href="/servicios/nuevo"
                   className={`${buttonStyle} p-2 sm:px-4 sm:py-2`}
@@ -132,7 +132,7 @@ export const Header: React.FC = () => {
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="w-5 h-5"
+                  className="h-5 w-5"
                 >
                   <path
                     strokeLinecap="round"
@@ -145,7 +145,7 @@ export const Header: React.FC = () => {
 
               <button
                 onClick={handleLogout}
-                className={`${buttonStyle} p-2 sm:px-4 sm:py-2 font-bold`}
+                className={`${buttonStyle} p-2 font-bold sm:px-4 sm:py-2`}
                 title="Cerrar Sesión"
               >
                 <span className="hidden sm:inline">Cerrar Sesión</span>
@@ -155,7 +155,7 @@ export const Header: React.FC = () => {
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="w-6 h-6"
+                  className="h-6 w-6"
                 >
                   <path
                     strokeLinecap="round"

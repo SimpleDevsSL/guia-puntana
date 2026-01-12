@@ -1,7 +1,7 @@
-import React from "react";
-import { ServiceWithProfile } from "../../app/lib/definitions";
-import { MapPin, BadgeCheck, MessageSquare } from "lucide-react";
-import { Eye } from "lucide-react";
+import React from 'react';
+import { ServiceWithProfile } from '../../app/lib/definitions';
+import { MapPin, BadgeCheck, MessageSquare } from 'lucide-react';
+import { Eye } from 'lucide-react';
 
 interface Props {
   service: ServiceWithProfile;
@@ -10,7 +10,7 @@ interface Props {
 }
 
 const getInitials = (name: string) => {
-  if (!name) return "";
+  if (!name) return '';
   const parts = name.trim().split(/\s+/);
   if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
@@ -22,44 +22,44 @@ const ProfessionalCard: React.FC<Props> = ({
   onViewDetail,
 }) => {
   return (
-    <article className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden hover:shadow-md transition-all flex flex-col h-full group">
-      {" "}
-      <div className="p-5 flex flex-col flex-grow">
-        <div className="flex justify-between items-start mb-4">
+    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:shadow-md dark:border-gray-800 dark:bg-gray-900">
+      {' '}
+      <div className="flex flex-grow flex-col p-5">
+        <div className="mb-4 flex items-start justify-between">
           <div className="flex items-center gap-3">
             <div className="relative">
               {service.proveedor.foto_url ? (
                 <img
                   src={service.proveedor.foto_url}
                   alt={service.proveedor.nombre_completo}
-                  className="w-14 h-14 rounded-full object-cover border-2 border-white dark:border-gray-800 shadow-sm"
+                  className="h-14 w-14 rounded-full border-2 border-white object-cover shadow-sm dark:border-gray-800"
                 />
               ) : (
-                <div className="w-14 h-14 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center border-2 border-white dark:border-gray-800 shadow-sm text-orange-600 dark:text-orange-400 font-bold text-lg">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-white bg-orange-100 text-lg font-bold text-orange-600 shadow-sm dark:border-gray-800 dark:bg-orange-900/30 dark:text-orange-400">
                   {getInitials(service.proveedor.nombre_completo)}
                 </div>
               )}
             </div>
             <div>
-              <h3 className="font-bold text-gray-900 dark:text-white text-lg leading-tight group-hover:text-orange-600 transition-colors">
+              <h3 className="text-lg font-bold leading-tight text-gray-900 transition-colors group-hover:text-orange-600 dark:text-white">
                 {service.proveedor.nombre_completo}
               </h3>
-              <p className="text-xs text-orange-600 font-semibold uppercase tracking-wide mt-0.5">
+              <p className="mt-0.5 text-xs font-semibold uppercase tracking-wide text-orange-600">
                 {service.nombre}
               </p>
             </div>
           </div>
         </div>
 
-        <p className="text-gray-600 dark:text-gray-400 text-sm mb-5 line-clamp-3 flex-grow leading-relaxed">
+        <p className="mb-5 line-clamp-3 flex-grow text-sm leading-relaxed text-gray-600 dark:text-gray-400">
           {service.descripcion}
         </p>
 
-        <div className="flex flex-wrap gap-2 mb-5">
+        <div className="mb-5 flex flex-wrap gap-2">
           {service.proveedor.insignias?.map((badge, idx) => (
             <span
               key={idx}
-              className="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-100 dark:border-gray-700"
+              className="inline-flex items-center rounded-md border border-gray-100 bg-gray-50 px-2 py-1 text-[10px] font-bold text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
             >
               <BadgeCheck size={12} className="mr-1 text-orange-500" />
               {badge}
@@ -67,7 +67,7 @@ const ProfessionalCard: React.FC<Props> = ({
           ))}
         </div>
 
-        <div className="flex items-center justify-between text-sm text-gray-500 pt-4 mt-auto border-t border-dashed border-gray-200 dark:border-gray-700">
+        <div className="mt-auto flex items-center justify-between border-t border-dashed border-gray-200 pt-4 text-sm text-gray-500 dark:border-gray-700">
           <div className="flex items-center gap-1.5">
             <MapPin size={14} className="text-gray-400" />
             <span className="text-gray-600 dark:text-gray-400">
@@ -77,17 +77,17 @@ const ProfessionalCard: React.FC<Props> = ({
         </div>
       </div>
       {/* Footer de la Card con dos botones */}
-      <div className="p-4 bg-gray-50/50 dark:bg-gray-800/50 flex gap-2">
+      <div className="flex gap-2 bg-gray-50/50 p-4 dark:bg-gray-800/50">
         <button
           onClick={() => onViewDetail(service)}
-          className="flex-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-orange-500 dark:hover:border-orange-500 text-gray-700 dark:text-gray-200 font-medium py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
+          className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white py-3 font-medium text-gray-700 transition-colors hover:border-orange-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:border-orange-500"
         >
           <Eye size={18} />
           Detalles
         </button>
         <button
           onClick={() => onConnect(service)}
-          className="flex-[1.5] bg-gray-900 dark:bg-orange-600 hover:bg-orange-600 dark:hover:bg-orange-700 text-white font-medium py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
+          className="flex flex-[1.5] items-center justify-center gap-2 rounded-xl bg-gray-900 py-3 font-medium text-white transition-colors hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700"
         >
           <MessageSquare size={18} />
           Contactar

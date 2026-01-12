@@ -8,10 +8,10 @@ export const GoogleButton = ({ onClick, loading }: Props) => (
     onClick={onClick}
     disabled={loading}
     type="button"
-    className="w-full flex items-center justify-center gap-3 bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 font-medium py-2.5 px-4 rounded-lg transition-all shadow-sm focus:ring-2 focus:ring-offset-1 focus:ring-gray-200 disabled:opacity-50"
+    className="flex w-full items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-2.5 font-medium text-gray-700 shadow-sm transition-all hover:bg-gray-50 focus:ring-2 focus:ring-gray-200 focus:ring-offset-1 disabled:opacity-50"
   >
     <svg
-      className="w-5 h-5"
+      className="h-5 w-5"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
     >

@@ -1,6 +1,6 @@
-import { ProfileFormData } from "../form-schema";
-import Image from "next/image";
-import { ChangeEvent } from "react";
+import { ProfileFormData } from '../form-schema';
+import Image from 'next/image';
+import { ChangeEvent } from 'react';
 
 interface Props {
   data: ProfileFormData;
@@ -27,24 +27,24 @@ export const ProfileInfo = ({
 
   return (
     <section className="space-y-6">
-      <h3 className="text-xl font-bold text-gray-800 dark:text-white border-b border-gray-100 dark:border-gray-800 pb-3">
+      <h3 className="border-b border-gray-100 pb-3 text-xl font-bold text-gray-800 dark:border-gray-800 dark:text-white">
         Información Personal
       </h3>
 
       {/* Sección de Foto de Perfil */}
-      <div className="flex flex-col items-center sm:flex-row gap-6 mb-6">
-        <div className="relative w-24 h-24 rounded-full overflow-hidden border-2 border-orange-500 bg-gray-100">
+      <div className="mb-6 flex flex-col items-center gap-6 sm:flex-row">
+        <div className="relative h-24 w-24 overflow-hidden rounded-full border-2 border-orange-500 bg-gray-100">
           {previewUrl || data.foto_url ? (
             <Image
-              src={previewUrl || data.foto_url || "/placeholder-user.jpg"}
+              src={previewUrl || data.foto_url || '/placeholder-user.jpg'}
               alt="Foto de perfil"
               fill
               className="object-cover"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-gray-400">
+            <div className="flex h-full w-full items-center justify-center text-gray-400">
               <svg
-                className="w-12 h-12"
+                className="h-12 w-12"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -60,61 +60,54 @@ export const ProfileInfo = ({
           )}
         </div>
         <div className="flex-1">
-          <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+          <label className="mb-2 block text-sm font-bold text-gray-700 dark:text-gray-300">
             Foto de Perfil (opcional)
           </label>
           <input
             type="file"
             accept="image/*"
             onChange={handleImageChange}
-            className="block w-full text-sm text-gray-500
-              file:mr-4 file:py-2 file:px-4
-              file:rounded-full file:border-0
-              file:text-sm file:font-semibold
-              file:bg-orange-50 file:text-orange-700
-              hover:file:bg-orange-100
-              dark:file:bg-orange-900/20 dark:file:text-orange-400
-            "
+            className="block w-full text-sm text-gray-500 file:mr-4 file:rounded-full file:border-0 file:bg-orange-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-orange-700 hover:file:bg-orange-100 dark:file:bg-orange-900/20 dark:file:text-orange-400"
           />
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="mt-1 text-xs text-gray-500">
             Recomendado: 400x400px, JPG o PNG.
           </p>
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+        <label className="mb-2 block text-sm font-bold text-gray-700 dark:text-gray-300">
           Nombre Completo
         </label>
         <input
           type="text"
           value={data.nombre_completo}
-          onChange={(e) => onChange("nombre_completo", e.target.value)}
+          onChange={(e) => onChange('nombre_completo', e.target.value)}
           placeholder="Ej. Juan Pérez"
-          className={`w-full rounded-lg border px-4 py-3 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 bg-white dark:bg-slate-950 focus:outline-none focus:ring-2 transition-all ${
+          className={`w-full rounded-lg border bg-white px-4 py-3 text-gray-900 transition-all placeholder:text-gray-400 focus:outline-none focus:ring-2 dark:bg-slate-950 dark:text-white dark:placeholder:text-gray-500 ${
             errors.nombre_completo
-              ? "border-red-500 focus:border-red-500 focus:ring-red-100 dark:focus:ring-red-900/30"
-              : "border-gray-300 dark:border-gray-700 focus:border-orange-500 focus:ring-orange-100 dark:focus:ring-orange-900/30"
+              ? 'border-red-500 focus:border-red-500 focus:ring-red-100 dark:focus:ring-red-900/30'
+              : 'border-gray-300 focus:border-orange-500 focus:ring-orange-100 dark:border-gray-700 dark:focus:ring-orange-900/30'
           }`}
         />
         {errors.nombre_completo && (
-          <p className="text-red-500 text-xs mt-1 font-medium">
+          <p className="mt-1 text-xs font-medium text-red-500">
             {errors.nombre_completo}
           </p>
         )}
       </div>
 
       <div>
-        <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+        <label className="mb-2 block text-sm font-bold text-gray-700 dark:text-gray-300">
           Rol en la plataforma
         </label>
         <div className="relative">
           <select
             value={data.rol}
             onChange={(e) =>
-              onChange("rol", e.target.value as "user" | "proveedor")
+              onChange('rol', e.target.value as 'user' | 'proveedor')
             }
-            className="w-full appearance-none rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-950 px-4 py-3 pr-8 text-gray-900 dark:text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-100 dark:focus:ring-orange-900/30 outline-none cursor-pointer transition-all"
+            className="w-full cursor-pointer appearance-none rounded-lg border border-gray-300 bg-white px-4 py-3 pr-8 text-gray-900 outline-none transition-all focus:border-orange-500 focus:ring-2 focus:ring-orange-100 dark:border-gray-700 dark:bg-slate-950 dark:text-white dark:focus:ring-orange-900/30"
           >
             <option value="user">Usuario normal (Busco servicios)</option>
             <option value="proveedor">

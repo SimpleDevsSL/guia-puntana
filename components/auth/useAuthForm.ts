@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { createClient } from "@/utils/supabase/client";
-import { useRouter } from "next/navigation";
-import { authSchema, type AuthFormData } from "./auth-schema";
+import { useState } from 'react';
+import { createClient } from '@/utils/supabase/client';
+import { useRouter } from 'next/navigation';
+import { authSchema, type AuthFormData } from './auth-schema';
 
 export function useAuthForm() {
   const supabase = createClient();
@@ -11,8 +11,8 @@ export function useAuthForm() {
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<AuthFormData>({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
 
   // Feedback
@@ -46,7 +46,7 @@ export function useAuthForm() {
     setGeneralError(null);
     try {
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
+        provider: 'google',
         options: {
           redirectTo: `${window.location.origin}/auth/callback`,
         },
@@ -89,7 +89,7 @@ export function useAuthForm() {
         if (error) throw error;
 
         // Éxito: Redirigir al home (el Middleware verificará el perfil)
-        router.push("/feed");
+        router.push('/feed');
         router.refresh();
       } else {
         // REGISTRO
@@ -101,11 +101,11 @@ export function useAuthForm() {
           },
         });
         if (error) throw error;
-        setSuccessMessage("¡Cuenta creada! Revisa tu correo para confirmar.");
+        setSuccessMessage('¡Cuenta creada! Revisa tu correo para confirmar.');
         setLoading(false);
       }
     } catch (err: any) {
-      setGeneralError(err.message || "Ocurrió un error inesperado.");
+      setGeneralError(err.message || 'Ocurrió un error inesperado.');
       setLoading(false);
     }
   };

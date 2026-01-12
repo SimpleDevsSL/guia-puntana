@@ -1,4 +1,4 @@
-import { ServiceFormData, Category } from "../form-schema";
+import { ServiceFormData, Category } from '../form-schema';
 
 interface Props {
   index: number;
@@ -25,7 +25,7 @@ export const ServiceCard = ({
     errors[`${index}.${field}`];
 
   const labelClass =
-    "block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1 uppercase tracking-wide";
+    'block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1 uppercase tracking-wide';
 
   const inputClass = `w-full rounded-md border border-gray-300 dark:border-gray-700 
     bg-white dark:bg-slate-950 text-sm text-gray-900 dark:text-white 
@@ -33,18 +33,18 @@ export const ServiceCard = ({
     focus:border-orange-500 focus:ring-2 focus:ring-orange-100 dark:focus:ring-orange-900/30 
     outline-none transition-all shadow-sm`;
 
-  const errorClass = "text-red-600 dark:text-red-400 text-xs mt-1 font-bold";
+  const errorClass = 'text-red-600 dark:text-red-400 text-xs mt-1 font-bold';
 
   return (
-    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm relative group hover:shadow-md transition-all animate-in fade-in slide-in-from-bottom-2 duration-300">
+    <div className="animate-in fade-in slide-in-from-bottom-2 group relative rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
       <button
         type="button"
         onClick={() => onRemove(data.tempId)}
-        className="absolute top-4 right-4 text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 transition-colors p-1.5 rounded-md hover:bg-red-50 dark:hover:bg-red-900/20"
+        className="absolute right-4 top-4 rounded-md p-1.5 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-500 dark:text-gray-500 dark:hover:bg-red-900/20 dark:hover:text-red-400"
         title="Eliminar servicio"
       >
         <svg
-          className="w-5 h-5"
+          className="h-5 w-5"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -60,18 +60,18 @@ export const ServiceCard = ({
 
       <div className="mb-6 flex items-center gap-2">
         {/* CAMBIO: Badge colores */}
-        <span className="bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 text-xs font-bold px-2 py-1 rounded">
+        <span className="rounded bg-orange-100 px-2 py-1 text-xs font-bold text-orange-700 dark:bg-orange-900/30 dark:text-orange-300">
           SERVICIO #{index + 1}
         </span>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         {/* Categoría */}
         <div className="md:col-span-2">
           <label className={labelClass}>Categoría *</label>
           <select
             value={data.categoria_id}
-            onChange={(e) => onChange(index, "categoria_id", e.target.value)}
+            onChange={(e) => onChange(index, 'categoria_id', e.target.value)}
             className={inputClass}
           >
             <option value="">Selecciona una categoría...</option>
@@ -81,8 +81,8 @@ export const ServiceCard = ({
               </option>
             ))}
           </select>
-          {getError("categoria_id") && (
-            <p className={errorClass}>{getError("categoria_id")}</p>
+          {getError('categoria_id') && (
+            <p className={errorClass}>{getError('categoria_id')}</p>
           )}
         </div>
 
@@ -92,12 +92,12 @@ export const ServiceCard = ({
           <input
             type="text"
             value={data.nombre}
-            onChange={(e) => onChange(index, "nombre", e.target.value)}
+            onChange={(e) => onChange(index, 'nombre', e.target.value)}
             className={inputClass}
             placeholder="Ej. Plomería Express 24hs"
           />
-          {getError("nombre") && (
-            <p className={errorClass}>{getError("nombre")}</p>
+          {getError('nombre') && (
+            <p className={errorClass}>{getError('nombre')}</p>
           )}
         </div>
 
@@ -106,29 +106,29 @@ export const ServiceCard = ({
           <label className={labelClass}>Descripción Detallada *</label>
           <textarea
             value={data.descripcion}
-            onChange={(e) => onChange(index, "descripcion", e.target.value)}
+            onChange={(e) => onChange(index, 'descripcion', e.target.value)}
             className={`${inputClass} resize-none`}
             rows={3}
             placeholder="Describe tus servicios, experiencia y horarios de atención..."
           />
-          {getError("descripcion") && (
-            <p className={errorClass}>{getError("descripcion")}</p>
+          {getError('descripcion') && (
+            <p className={errorClass}>{getError('descripcion')}</p>
           )}
         </div>
 
-       <div>
-  <label className={labelClass}>Teléfono / WhatsApp *</label>
-  <input
-    type="text"
-    value={data.telefono || ""}
-    onChange={(e) => onChange(index, "telefono", e.target.value)}
-    className={inputClass}
-    placeholder="+54 266 4..."
-  />
-  {getError("telefono") && (
-    <p className={errorClass}>{getError("telefono")}</p>
-  )}
-</div>
+        <div>
+          <label className={labelClass}>Teléfono / WhatsApp *</label>
+          <input
+            type="text"
+            value={data.telefono || ''}
+            onChange={(e) => onChange(index, 'telefono', e.target.value)}
+            className={inputClass}
+            placeholder="+54 266 4..."
+          />
+          {getError('telefono') && (
+            <p className={errorClass}>{getError('telefono')}</p>
+          )}
+        </div>
 
         {/* Dirección */}
         <div>
@@ -136,12 +136,12 @@ export const ServiceCard = ({
           <input
             type="text"
             value={data.direccion}
-            onChange={(e) => onChange(index, "direccion", e.target.value)}
+            onChange={(e) => onChange(index, 'direccion', e.target.value)}
             className={inputClass}
             placeholder="Ej. Av. Illia 123"
           />
-          {getError("direccion") && (
-            <p className={errorClass}>{getError("direccion")}</p>
+          {getError('direccion') && (
+            <p className={errorClass}>{getError('direccion')}</p>
           )}
         </div>
 
@@ -151,12 +151,12 @@ export const ServiceCard = ({
           <input
             type="text"
             value={data.localidad}
-            onChange={(e) => onChange(index, "localidad", e.target.value)}
+            onChange={(e) => onChange(index, 'localidad', e.target.value)}
             className={inputClass}
             placeholder="Ej. San Luis Capital"
           />
-          {getError("localidad") && (
-            <p className={errorClass}>{getError("localidad")}</p>
+          {getError('localidad') && (
+            <p className={errorClass}>{getError('localidad')}</p>
           )}
         </div>
 
@@ -165,8 +165,8 @@ export const ServiceCard = ({
           <label className={labelClass}>Barrio (Opcional)</label>
           <input
             type="text"
-            value={data.barrio || ""}
-            onChange={(e) => onChange(index, "barrio", e.target.value)}
+            value={data.barrio || ''}
+            onChange={(e) => onChange(index, 'barrio', e.target.value)}
             className={inputClass}
             placeholder="Ej. Barrio Jardín"
           />

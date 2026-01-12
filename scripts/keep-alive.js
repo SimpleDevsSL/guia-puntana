@@ -3,10 +3,14 @@ const { createClient } = require('@supabase/supabase-js');
 
 // Usamos las variables de entorno que inyectará GitHub Actions
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseKey =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
-  console.error('Error: Faltan las variables de entorno SUPABASE_URL o SUPABASE_KEY');
+  console.error(
+    'Error: Faltan las variables de entorno SUPABASE_URL o SUPABASE_KEY'
+  );
   process.exit(1);
 }
 

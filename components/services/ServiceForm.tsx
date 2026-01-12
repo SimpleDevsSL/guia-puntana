@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { createClient } from "@/utils/supabase/client";
-import { serviceSchema } from "@/components/profile/form-schema";
+import React, { useState, useEffect } from 'react';
+import { createClient } from '@/utils/supabase/client';
+import { serviceSchema } from '@/components/profile/form-schema';
 
 interface ServiceFormProps {
   serviceToEdit?: any; // Datos del servicio si estamos editando
@@ -21,21 +21,21 @@ export function ServiceForm({
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const [formData, setFormData] = useState({
-    categoria_id: serviceToEdit?.categoria_id || "",
-    nombre: serviceToEdit?.nombre || "",
-    descripcion: serviceToEdit?.descripcion || "",
-    telefono: serviceToEdit?.telefono || "",
-    direccion: serviceToEdit?.direccion || "",
-    localidad: serviceToEdit?.localidad || "San Luis",
-    barrio: serviceToEdit?.barrio || "",
+    categoria_id: serviceToEdit?.categoria_id || '',
+    nombre: serviceToEdit?.nombre || '',
+    descripcion: serviceToEdit?.descripcion || '',
+    telefono: serviceToEdit?.telefono || '',
+    direccion: serviceToEdit?.direccion || '',
+    localidad: serviceToEdit?.localidad || 'San Luis',
+    barrio: serviceToEdit?.barrio || '',
   });
 
   useEffect(() => {
     const fetchCats = async () => {
       const { data } = await supabase
-        .from("categorias")
-        .select("id, nombre")
-        .eq("es_activa", true);
+        .from('categorias')
+        .select('id, nombre')
+        .eq('es_activa', true);
       if (data) setCategories(data);
     };
     fetchCats();
@@ -61,12 +61,12 @@ export function ServiceForm({
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user) throw new Error("Sesión no encontrada");
+      if (!user) throw new Error('Sesión no encontrada');
 
       if (serviceToEdit) {
         // MODO EDICIÓN
         const { error } = await supabase
-          .from("servicios")
+          .from('servicios')
           .update({
             categoria_id: formData.categoria_id,
             nombre: formData.nombre,
@@ -78,17 +78,17 @@ export function ServiceForm({
             updated_at: new Date().toISOString(),
             updated_by: user.id,
           })
-          .eq("id", serviceToEdit.id);
+          .eq('id', serviceToEdit.id);
         if (error) throw error;
       } else {
         // MODO CREACIÓN
         const { data: profile } = await supabase
-          .from("perfiles")
-          .select("id")
-          .eq("usuario_id", user.id)
+          .from('perfiles')
+          .select('id')
+          .eq('usuario_id', user.id)
           .single();
 
-        const { error } = await supabase.from("servicios").insert({
+        const { error } = await supabase.from('servicios').insert({
           proveedor_id: profile?.id,
           categoria_id: formData.categoria_id,
           nombre: formData.nombre,
@@ -104,26 +104,26 @@ export function ServiceForm({
 
       onSuccess();
     } catch (err: any) {
-      console.error("Error saving service:", err);
-      alert("Hubo un error al guardar el servicio");
+      console.error('Error saving service:', err);
+      alert('Hubo un error al guardar el servicio');
     } finally {
       setLoading(false);
     }
   };
 
   const inputClass =
-    "w-full p-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-950 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 outline-none transition-all";
+    'w-full p-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-950 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 outline-none transition-all';
   const labelClass =
-    "block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1 uppercase tracking-wider";
+    'block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1 uppercase tracking-wider';
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white dark:bg-gray-900 p-6 md:p-8 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 space-y-6"
+      className="space-y-6 rounded-2xl border border-gray-100 bg-white p-6 shadow-xl dark:border-gray-800 dark:bg-gray-900 md:p-8"
     >
-      <div className="flex justify-between items-center mb-4">
+      <div className="mb-4 flex items-center justify-between">
         <h2 className="text-xl font-bold text-gray-800 dark:text-white">
-          {serviceToEdit ? "Editar Servicio" : "Nuevo Servicio"}
+          {serviceToEdit ? 'Editar Servicio' : 'Nuevo Servicio'}
         </h2>
         <button
           type="button"
@@ -134,7 +134,7 @@ export function ServiceForm({
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <div className="md:col-span-2">
           <label className={labelClass}>Categoría *</label>
           <select
@@ -152,7 +152,7 @@ export function ServiceForm({
             ))}
           </select>
           {errors.categoria_id && (
-            <p className="text-red-500 text-xs mt-1 font-bold">
+            <p className="mt-1 text-xs font-bold text-red-500">
               {errors.categoria_id}
             </p>
           )}
@@ -169,7 +169,7 @@ export function ServiceForm({
             }
           />
           {errors.nombre && (
-            <p className="text-red-500 text-xs mt-1 font-bold">
+            <p className="mt-1 text-xs font-bold text-red-500">
               {errors.nombre}
             </p>
           )}
@@ -216,20 +216,20 @@ export function ServiceForm({
         <button
           type="button"
           onClick={onCancel}
-          className="flex-1 py-4 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-bold rounded-xl"
+          className="flex-1 rounded-xl bg-gray-100 py-4 font-bold text-gray-600 dark:bg-gray-800 dark:text-gray-300"
         >
           Cancelar
         </button>
         <button
           type="submit"
           disabled={loading}
-          className="flex-2 py-4 bg-orange-600 text-white font-bold rounded-xl shadow-lg hover:bg-orange-700 transition-all disabled:opacity-50"
+          className="flex-2 rounded-xl bg-orange-600 py-4 font-bold text-white shadow-lg transition-all hover:bg-orange-700 disabled:opacity-50"
         >
           {loading
-            ? "Guardando..."
+            ? 'Guardando...'
             : serviceToEdit
-            ? "Actualizar Servicio"
-            : "Publicar Servicio"}
+              ? 'Actualizar Servicio'
+              : 'Publicar Servicio'}
         </button>
       </div>
     </form>

@@ -1,30 +1,30 @@
-import { MetadataRoute } from "next";
+import { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Guía Puntana",
-    short_name: "Guía Puntana",
-    description: "Tu guía de San Luis",
-    start_url: "/",
-    display: "standalone",
-    background_color: "#ffffff",
-    theme_color: "#0f172a",
+    name: 'Guía Puntana',
+    short_name: 'Guía Puntana',
+    description: 'Tu guía de San Luis',
+    start_url: '/',
+    display: 'standalone',
+    background_color: '#ffffff',
+    theme_color: '#0f172a',
     icons: [
       {
-        src: "/app/favicon.ico",
-        sizes: "any",
-        type: "image/x-icon",
+        src: '/app/favicon.ico',
+        sizes: 'any',
+        type: 'image/x-icon',
       },
       {
-        src: "/icon-192x192.png",
-        sizes: "192x192",
-        type: "image/png",
+        src: '/icon-192x192.png',
+        sizes: '192x192',
+        type: 'image/png',
       },
       {
-        src: "/icon-512x512.png",
-        sizes: "512x512",
-        type: "image/png",
-        purpose: "maskable",
+        src: '/icon-512x512.png',
+        sizes: '512x512',
+        type: 'image/png',
+        purpose: 'maskable',
       },
     ],
   };

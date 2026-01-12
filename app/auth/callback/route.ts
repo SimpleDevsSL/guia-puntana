@@ -1,10 +1,10 @@
-import { NextResponse } from "next/server";
-import { createClient } from "@/utils/supabase/server";
+import { NextResponse } from 'next/server';
+import { createClient } from '@/utils/supabase/server';
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
-  const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/feed"; // Por defecto al home
+  const code = searchParams.get('code');
+  const next = searchParams.get('next') ?? '/feed'; // Por defecto al home
 
   if (code) {
     const supabase = await createClient();

@@ -1,5 +1,5 @@
-import { createServerClient } from "@supabase/ssr";
-import { NextResponse, type NextRequest } from "next/server";
+import { createServerClient } from '@supabase/ssr';
+import { NextResponse, type NextRequest } from 'next/server';
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -39,11 +39,11 @@ export async function updateSession(request: NextRequest) {
   if (!user) {
     // Definimos qué rutas son PRIVADAS (solo para miembros)
     // El /feed ya NO está aquí, por lo tanto es público.
-    const privatePaths = ["/completar-perfil", "/perfil"];
+    const privatePaths = ['/completar-perfil', '/perfil'];
     const isPrivate = privatePaths.some((p) => path.startsWith(p));
 
     if (isPrivate) {
-      return NextResponse.redirect(new URL("/login", request.url));
+      return NextResponse.redirect(new URL('/login', request.url));
     }
     return supabaseResponse;
   }
@@ -51,16 +51,16 @@ export async function updateSession(request: NextRequest) {
   // --- CASO B: USUARIO LOGUEADO ---
   if (user) {
     const { data: profile } = await supabase
-      .from("perfiles")
-      .select("id")
-      .eq("usuario_id", user.id)
+      .from('perfiles')
+      .select('id')
+      .eq('usuario_id', user.id)
       .single();
 
     // 1. Sesión iniciada pero SIN perfil creado
     if (!profile) {
       // Forzamos a completar perfil a menos que ya esté en esa ruta
-      if (!path.startsWith("/completar-perfil")) {
-        return NextResponse.redirect(new URL("/completar-perfil", request.url));
+      if (!path.startsWith('/completar-perfil')) {
+        return NextResponse.redirect(new URL('/completar-perfil', request.url));
       }
       return supabaseResponse;
     }
@@ -68,13 +68,13 @@ export async function updateSession(request: NextRequest) {
     // 2. Sesión iniciada y CON perfil completo
     if (profile) {
       // No debe poder volver a completar perfil o login
-      if (path.startsWith("/completar-perfil") || path.startsWith("/login")) {
-        return NextResponse.redirect(new URL("/feed", request.url));
+      if (path.startsWith('/completar-perfil') || path.startsWith('/login')) {
+        return NextResponse.redirect(new URL('/feed', request.url));
       }
-      
+
       // Si intenta entrar a la landing (/), lo mandamos al feed para que vea el contenido
-      if (path === "/") {
-        return NextResponse.redirect(new URL("/feed", request.url));
+      if (path === '/') {
+        return NextResponse.redirect(new URL('/feed', request.url));
       }
     }
   }
