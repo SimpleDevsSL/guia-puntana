@@ -116,17 +116,19 @@ export const ServiceCard = ({
           )}
         </div>
 
-        {/* Teléfono */}
-        <div>
-          <label className={labelClass}>Teléfono / WhatsApp</label>
-          <input
-            type="text"
-            value={data.telefono || ""}
-            onChange={(e) => onChange(index, "telefono", e.target.value)}
-            className={inputClass}
-            placeholder="+54 266 4..."
-          />
-        </div>
+       <div>
+  <label className={labelClass}>Teléfono / WhatsApp *</label>
+  <input
+    type="text"
+    value={data.telefono || ""}
+    onChange={(e) => onChange(index, "telefono", e.target.value)}
+    className={inputClass}
+    placeholder="+54 266 4..."
+  />
+  {getError("telefono") && (
+    <p className={errorClass}>{getError("telefono")}</p>
+  )}
+</div>
 
         {/* Dirección */}
         <div>

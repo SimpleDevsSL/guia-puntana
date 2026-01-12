@@ -6,11 +6,17 @@ export type Category = {
   descripcion: string | null;
 };
 
+// RegEx para validar teléfonos (mínimo 10 dígitos, permite +, espacios y guiones)
+const phoneRegex = /^\+?[0-9\s-]{10,15}$/;
+
 export const serviceSchema = z.object({
   categoria_id: z.string().min(1, { message: "Selecciona una categoría." }),
   nombre: z.string().min(3, { message: "Mínimo 3 caracteres." }),
   descripcion: z.string().min(10, { message: "Mínimo 10 caracteres." }),
-  telefono: z.string().optional(),
+  telefono: z
+    .string()
+    .min(1, { message: "El teléfono es requerido." })
+    .regex(phoneRegex, { message: "Formato de teléfono inválido (ej: +54 266 4123456)." }),
   direccion: z.string().min(5, { message: "Requerido." }),
   localidad: z.string().min(2, { message: "Requerido." }),
   barrio: z.string().optional(),

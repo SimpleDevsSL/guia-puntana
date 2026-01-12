@@ -12,6 +12,23 @@ export const Header: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const supabase = createClient();
   const router = useRouter();
+  const [userRole, setUserRole] = useState<string | null>(null);
+
+useEffect(() => {
+  const getUserData = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      setUser(user);
+      const { data: profile } = await supabase
+        .from("perfiles")
+        .select("rol")
+        .eq("usuario_id", user.id)
+        .single();
+      setUserRole(profile?.rol || null);
+    }
+  };
+  getUserData();
+}, [supabase]);
 
   useEffect(() => {
     // Verificar sesión actual al cargar
@@ -100,6 +117,17 @@ export const Header: React.FC = () => {
                   </svg>
                 </span>
               </button>
+              {userRole === 'proveedor' && (
+  <Link
+    href="/servicios/nuevo"
+    className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-full text-sm font-bold transition-all shadow-md flex items-center gap-2"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+      <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+    </svg>
+    <span className="hidden md:inline">Nuevo Servicio</span>
+  </Link>
+)}
             </div>
           ) : (
             // Si NO hay usuario, mostramos "Ingresar"
