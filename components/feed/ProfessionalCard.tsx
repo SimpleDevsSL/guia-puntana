@@ -1,16 +1,17 @@
 import React from "react";
 import { ServiceWithProfile } from "../../app/lib/definitions";
 import { MapPin, BadgeCheck, MessageSquare } from "lucide-react";
+import { Eye } from "lucide-react";
 
 interface Props {
   service: ServiceWithProfile;
   onConnect: (service: ServiceWithProfile) => void;
+  onViewDetail: (service: ServiceWithProfile) => void;
 }
 
-const ProfessionalCard: React.FC<Props> = ({ service, onConnect }) => {
+const ProfessionalCard: React.FC<Props> = ({ service, onConnect, onViewDetail }) => {
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden hover:shadow-md transition-all flex flex-col h-full group">
-      <div className="p-5 flex flex-col flex-grow">
+    <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden hover:shadow-md transition-all flex flex-col h-full group">      <div className="p-5 flex flex-col flex-grow">
         <div className="flex justify-between items-start mb-4">
           <div className="flex items-center gap-3">
             <div className="relative">
@@ -60,10 +61,18 @@ const ProfessionalCard: React.FC<Props> = ({ service, onConnect }) => {
         </div>
       </div>
 
-      <div className="p-4 bg-gray-50/50 dark:bg-gray-800/50">
+      {/* Footer de la Card con dos botones */}
+      <div className="p-4 bg-gray-50/50 dark:bg-gray-800/50 flex gap-2">
+        <button
+          onClick={() => onViewDetail(service)}
+          className="flex-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-orange-500 dark:hover:border-orange-500 text-gray-700 dark:text-gray-200 font-medium py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
+        >
+          <Eye size={18} />
+          Detalles
+        </button>
         <button
           onClick={() => onConnect(service)}
-          className="w-full bg-gray-900 dark:bg-orange-600 hover:bg-orange-600 dark:hover:bg-orange-700 text-white font-medium py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
+          className="flex-[1.5] bg-gray-900 dark:bg-orange-600 hover:bg-orange-600 dark:hover:bg-orange-700 text-white font-medium py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
         >
           <MessageSquare size={18} />
           Contactar
@@ -72,5 +81,4 @@ const ProfessionalCard: React.FC<Props> = ({ service, onConnect }) => {
     </div>
   );
 };
-
 export default ProfessionalCard;

@@ -7,6 +7,7 @@ import ResultsGrid from "../../components/feed/ResultsGrid";
 import { Header } from "../../components/feed/Header";
 import { ServiceWithProfile, Category } from "../lib/definitions";
 import { createClient } from "@/utils/supabase/client";
+import ServiceDetailModal from "@/components/feed/ServiceDetailModal";
 
 const FeedPage: React.FC = () => {
   const supabase = createClient();
@@ -18,6 +19,7 @@ const FeedPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [showConnectModal, setShowConnectModal] =
     useState<ServiceWithProfile | null>(null);
+  const [showDetailModal, setShowDetailModal] = useState<ServiceWithProfile | null>(null);
 
   // Obtener categorías desde DB
   useEffect(() => {
@@ -97,6 +99,7 @@ const FeedPage: React.FC = () => {
           }
           searchQuery={searchQuery}
           onConnect={setShowConnectModal}
+          onViewDetail={setShowDetailModal}
           onRetry={() => {
             setActiveCategoryId(null);
             setSearchQuery("");
@@ -112,6 +115,18 @@ const FeedPage: React.FC = () => {
           </p>
         </div>
       </footer>
+
+      {/* Modal de Detalle */}
+{showDetailModal && (
+  <ServiceDetailModal
+    service={showDetailModal}
+    onClose={() => setShowDetailModal(null)}
+    onContact={(s) => {
+      setShowDetailModal(null);
+      setShowConnectModal(s);
+    }}
+  />
+)}
 
       {/* Modal de Contacto */}
       {showConnectModal && (

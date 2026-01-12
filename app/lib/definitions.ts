@@ -1,4 +1,3 @@
-// app/lib/definitions.ts
 export interface Category {
   id: string;
   nombre: string;
@@ -7,7 +6,7 @@ export interface Category {
 
 export interface ServiceWithProfile {
   id: string;
-  nombre: string; // Título del servicio (ej: "Instalación de estufas")
+  nombre: string;
   descripcion: string;
   localidad: string;
   barrio?: string;
