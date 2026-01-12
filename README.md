@@ -1,21 +1,21 @@
 # Guía Puntana 🏔️
 
-[cite_start]**Guía Puntana** es una plataforma de código abierto diseñada para conectar a emprendedores y proveedores de servicios locales de San Luis, Argentina, con ciudadanos que buscan servicios confiables de manera directa y gratuita[cite: 5, 17].
+**Guía Puntana** es una plataforma de código abierto diseñada para conectar a emprendedores y proveedores de servicios locales de San Luis, Argentina, con ciudadanos que buscan servicios confiables de manera directa y gratuita.
 
 ## 🎯 Objetivo del Proyecto
-[cite_start]El propósito central es brindar visibilidad a los trabajadores locales sin cobrar comisiones ni intermediarios, fomentando el crecimiento económico regional mediante una herramienta pro-bono[cite: 17, 24].
+El propósito central es brindar visibilidad a los trabajadores locales sin cobrar comisiones ni intermediarios, fomentando el crecimiento económico regional mediante una herramienta pro-bono.
 
 ## ✨ Funcionalidades (MVP)
-* [cite_start]**Autenticación:** Registro y acceso para proveedores vía Supabase Auth[cite: 10, 90].
-* [cite_start]**Perfiles de Servicio:** Los proveedores pueden publicar su contacto, descripción y categoría[cite: 11, 91].
-* [cite_start]**Búsqueda y Filtros:** Exploración de servicios por categorías (ej. Plomería, Electricidad)[cite: 12, 93].
-* [cite_start]**Contacto Directo:** Botones funcionales para contactar vía WhatsApp o llamada telefónica[cite: 13, 94].
+* **Autenticación:** Registro y acceso para proveedores vía Supabase Auth.
+* **Perfiles de Servicio:** Los proveedores pueden publicar su contacto, descripción y categoría.
+* **Búsqueda y Filtros:** Exploración de servicios por categorías (ej. Plomería, Electricidad).
+* **Contacto Directo:** Botones funcionales para contactar vía WhatsApp o llamada telefónica.
 
 ## 🛠️ Stack Tecnológico
-* [cite_start]**Framework:** [Next.js 15](https://nextjs.org/) (React + TypeScript)[cite: 48].
-* [cite_start]**Base de Datos y Auth:** [Supabase](https://supabase.com/) (PostgreSQL)[cite: 47, 49].
+* **Framework:** [Next.js 15](https://nextjs.org/) (React + TypeScript).
+* **Base de Datos y Auth:** [Supabase](https://supabase.com/) (PostgreSQL).
 * **Estilos:** Tailwind CSS.
-* [cite_start]**Despliegue:** Vercel[cite: 50].
+* **Despliegue:** Vercel.
 
 ## 🚀 Instalación y Desarrollo Local
 
@@ -41,7 +41,7 @@
     ```bash
     npm run dev
     ```
-    Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
+    Abre http://localhost:3000 en tu navegador.
 
 ## 📄 Licencia
-[cite_start]Este proyecto está bajo la **Licencia MIT**[cite: 57, 58].
+Este proyecto está bajo la **Licencia MIT**.
