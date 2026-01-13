@@ -67,24 +67,6 @@ export function ServiceForm({
     }
   }, [serviceToEdit]);
 
-  // Asegurar que la categoría del servicio editado esté entre las opciones (incluso si no está activa)
-  useEffect(() => {
-    const ensureCategoryPresent = async () => {
-      if (!serviceToEdit?.categoria?.id) return;
-      if (categories.some((c) => c.id === serviceToEdit.categoria.id)) return;
-      try {
-        const { data: cat } = await supabase
-          .from('categorias')
-          .select('id, nombre')
-          .eq('id', serviceToEdit.categoria.id)
-          .single();
-        if (cat) setCategories((prev) => [cat, ...prev]);
-      } catch (e) {
-        // noop
-      }
-    };
-    ensureCategoryPresent();
-  }, [serviceToEdit, categories, supabase]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
