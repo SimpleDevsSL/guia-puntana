@@ -7,12 +7,11 @@ interface Props {
   errors: Record<string, string>;
   onChange: (
     field: keyof ProfileFormData,
-    value: string | string[] | boolean
-  ) => void; // Tipar mejor según tu schema
+    value: ProfileFormData[keyof ProfileFormData]
+  ) => void;
   onFileChange: (file: File) => void;
   previewUrl: string | null;
 }
-
 export const ProfileInfo = ({
   data,
   errors,
