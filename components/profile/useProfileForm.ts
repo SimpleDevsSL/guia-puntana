@@ -80,7 +80,10 @@ export function useProfileForm() {
   }, [supabase]);
 
   // Handler para cambios de texto/select
-  const handleProfileChange = (field: keyof ProfileFormData, value: any) => {
+  const handleProfileChange = (
+    field: keyof ProfileFormData,
+    value: ProfileFormData[keyof ProfileFormData] // Tipado basado en el schema
+  ) => {
     setProfileData((prev) => ({ ...prev, [field]: value }));
     if (validationErrors[field]) {
       setValidationErrors((prev) => {
@@ -263,8 +266,10 @@ export function useProfileForm() {
       router.push('/feed');
       router.refresh();
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Error al guardar.';
-      setGeneralError(message);
+      console.error(err);
+      const errorMessage =
+        err instanceof Error ? err.message : 'Error al guardar.';
+      setGeneralError(errorMessage);
     } finally {
       setLoading(false);
     }

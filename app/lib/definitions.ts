@@ -9,6 +9,7 @@ export interface ServiceWithProfile {
   nombre: string;
   descripcion: string;
   localidad: string;
+  direccion?: string;
   barrio?: string;
   telefono?: string;
   categoria: {

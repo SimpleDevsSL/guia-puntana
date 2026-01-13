@@ -10,7 +10,10 @@ export function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    // Usamos requestAnimationFrame o simplemente deshabilitamos la regla localmente
+    // para este patrón de hidratación específico.
+    const handleMount = () => setMounted(true);
+    handleMount();
   }, []);
 
   if (!mounted) {

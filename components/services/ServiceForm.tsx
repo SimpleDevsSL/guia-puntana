@@ -3,10 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { serviceSchema } from '@/components/profile/form-schema';
+import { ServiceWithProfile, Category } from '@/app/lib/definitions'; // Importar tipos
 
 interface ServiceFormProps {
-  serviceToEdit?: any; // Datos del servicio si estamos editando
-  onSuccess: () => void; // Callback para refrescar la lista
+  serviceToEdit?: ServiceWithProfile | null; // Cambiar any por tipo real
+  onSuccess: () => void;
   onCancel: () => void;
 }
 
@@ -17,11 +18,11 @@ export function ServiceForm({
 }: ServiceFormProps) {
   const supabase = createClient();
   const [loading, setLoading] = useState(false);
-  const [categories, setCategories] = useState<any[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]); // Cambiar any[] por Category[]
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const [formData, setFormData] = useState({
-    categoria_id: serviceToEdit?.categoria_id || '',
+    categoria_id: serviceToEdit?.categoria.id || '',
     nombre: serviceToEdit?.nombre || '',
     descripcion: serviceToEdit?.descripcion || '',
     telefono: serviceToEdit?.telefono || '',
@@ -103,9 +104,10 @@ export function ServiceForm({
       }
 
       onSuccess();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error saving service:', err);
-      alert('Hubo un error al guardar el servicio');
+      const msg = err instanceof Error ? err.message : 'Error al guardar';
+      alert(`Hubo un error al guardar el servicio: ${msg}`);
     } finally {
       setLoading(false);
     }
