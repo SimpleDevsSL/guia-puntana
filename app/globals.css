@@ -6,7 +6,7 @@
   body {
     @apply bg-white text-gray-900 transition-colors duration-300;
   }
-  
+
   .dark body {
     /* Al usar gray-950 aquí, usará el Zinc que definimos en el config */
     @apply bg-gray-950 text-gray-100;

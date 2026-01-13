@@ -38,7 +38,10 @@ export default function GestionServiciosPage() {
           .select(
             `
             *,
-            categorias (nombre)
+            categoria:categorias (
+              id, 
+              nombre
+            )
           `
           )
           .eq('proveedor_id', profile.id)

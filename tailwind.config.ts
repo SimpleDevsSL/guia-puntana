@@ -1,5 +1,5 @@
 import type { Config } from 'tailwindcss';
-const colors = require('tailwindcss/colors'); // Importa los colores
+import colors from 'tailwindcss/colors'; // <--- CAMBIO AQUÍ: Usar import en lugar de require
 
 const config: Config = {
   darkMode: 'class',
