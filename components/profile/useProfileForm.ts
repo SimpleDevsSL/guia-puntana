@@ -262,9 +262,9 @@ export function useProfileForm() {
 
       router.push('/feed');
       router.refresh();
-    } catch (err: any) {
-      console.error(err);
-      setGeneralError(err.message || 'Error al guardar.');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Error al guardar.';
+      setGeneralError(message);
     } finally {
       setLoading(false);
     }

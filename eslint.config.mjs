@@ -17,7 +17,14 @@ const eslintConfig = defineConfig([
   },
   prettierConfig, // Desactiva reglas de ESLint que entran en conflicto con Prettier
 
-  globalIgnores(['.next/**', 'out/**', 'build/**', 'next-env.d.ts']),
+  // eslint.config.mjs
+  globalIgnores([
+    '.next/**',
+    'out/**',
+    'build/**',
+    'next-env.d.ts',
+    'public/*.js',
+  ]),
 ]);
 
 export default eslintConfig;

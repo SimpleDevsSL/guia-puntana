@@ -70,7 +70,7 @@ export default function GestionServiciosPage() {
 
       if (error) throw error;
       fetchUserServices();
-    } catch (error) {
+    } catch {
       alert('Error al eliminar el servicio');
     }
   };

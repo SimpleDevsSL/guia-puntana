@@ -5,10 +5,11 @@ import { ChangeEvent } from 'react';
 interface Props {
   data: ProfileFormData;
   errors: Record<string, string>;
-  onChange: (field: keyof ProfileFormData, value: any) => void;
-  // Nueva prop para manejar el archivo
+  onChange: (
+    field: keyof ProfileFormData,
+    value: string | string[] | boolean
+  ) => void; // Tipar mejor según tu schema
   onFileChange: (file: File) => void;
-  // URL temporal para previsualización (puede ser local o de supabase)
   previewUrl: string | null;
 }
 

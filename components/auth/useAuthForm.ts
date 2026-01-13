@@ -106,8 +106,10 @@ export function useAuthForm() {
         setSuccessMessage('¡Cuenta creada! Revisa tu correo para confirmar.');
         setLoading(false);
       }
-    } catch (err: any) {
-      setGeneralError(err.message || 'Ocurrió un error inesperado.');
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'Ocurrió un error inesperado.';
+      setGeneralError(errorMessage);
       setLoading(false);
     }
   };

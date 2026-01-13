@@ -8,7 +8,6 @@ import {
   Trash2,
   Save,
   User,
-  Mail,
   Camera,
   ShieldCheck,
   Info,

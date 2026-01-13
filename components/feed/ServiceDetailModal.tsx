@@ -1,13 +1,6 @@
 import React from 'react';
 import { ServiceWithProfile } from '../../app/lib/definitions';
-import {
-  MapPin,
-  BadgeCheck,
-  MessageSquare,
-  X,
-  Phone,
-  Star,
-} from 'lucide-react';
+import { MapPin, BadgeCheck, MessageSquare, X, Phone } from 'lucide-react';
 
 interface Props {
   service: ServiceWithProfile;
