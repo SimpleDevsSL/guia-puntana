@@ -1,8 +1,8 @@
 import type { Config } from 'tailwindcss';
+const colors = require('tailwindcss/colors'); // Importa los colores
 
 const config: Config = {
   darkMode: 'class',
-
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -10,6 +10,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        // Esto reemplaza el gris azulado por un gris neutro en TODO el proyecto
+        gray: colors.zinc,
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':

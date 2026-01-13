@@ -92,7 +92,7 @@ export default function GestionServiciosPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 transition-colors duration-300 dark:bg-slate-950">
+    <main className="min-h-screen bg-gray-50 transition-colors duration-300 dark:bg-gray-950">
       <Header />
 
       <div className="mx-auto max-w-4xl px-4 pb-12 pt-24">
