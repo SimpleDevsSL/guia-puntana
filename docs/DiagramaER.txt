@@ -1,0 +1,144 @@
+@startuml
+
+!theme plain
+hide circle
+skinparam linetype ortho
+' Aumentamos el espacio entre nodos y rangos para evitar superposiciones
+skinparam nodesep 100
+skinparam ranksep 80
+skinparam padding 5
+
+' --- COLORES Y ESTILOS ---
+skinparam entity {
+    BackgroundColor<<Auth>> Wheat
+    BorderColor<<Auth>> Tomato
+    BackgroundColor<<Core>> LightBlue
+    BorderColor<<Core>> SteelBlue
+    BackgroundColor<<Social>> LightGreen
+    BorderColor<<Social>> SeaGreen
+    BackgroundColor<<System>> LightGray
+    BorderColor<<System>> DimGray
+}
+
+title Diagrama ER - Guia Puntana (Vista de Negocio)
+
+' --- NOTA ACLARATORIA ---
+note as N1
+  <b>Convención de Auditoría:</b>
+  Para mantener la claridad del diagrama, las relaciones de los campos
+  'created_by' y 'updated_by' hacia la tabla 'auth.users'
+  <b>SE HAN OCULTADO</b> intencionalmente.
+  Casi todas las tablas mantienen estas referencias para la trazabilidad.
+end note
+
+
+' --- ENTIDADES ---
+
+entity "auth.users" as auth_users <<Auth>> {
+  *id : uuid
+  --
+  email : text
+  (Datos de Supabase)
+}
+
+entity "public.perfiles" as perfiles <<Core>> {
+  *id : uuid
+  --
+  *usuario_id : uuid <<FK>>
+  nombre_completo : text
+  rol : app_role
+  es_activo : boolean
+  foto_url : text
+  --
+  created/updated_by : uuid <<FK Hidden>>
+}
+
+entity "public.categorias" as categorias <<Core>> {
+  *id : uuid
+  --
+  nombre : text
+  descripcion : text
+  es_activa : boolean
+  --
+  created/updated_by : uuid <<FK Hidden>>
+}
+
+entity "public.servicios" as servicios <<Core>> {
+  *id : uuid
+  --
+  *proveedor_id : uuid <<FK>>
+  *categoria_id : uuid <<FK>>
+  nombre : text
+  descripcion : text
+  telefono : text
+  direccion : text
+  localidad : text
+  estado : boolean
+  es_activo : boolean
+  --
+  created/updated_by : uuid <<FK Hidden>>
+}
+
+entity "public.resenas" as resenas <<Social>> {
+  *id : uuid
+  --
+  *servicio_id : uuid <<FK>>
+  *autor_id : uuid <<FK>>
+  calificacion : integer
+  comentario : text
+  es_activo : boolean
+  --
+  created/updated_by : uuid <<FK Hidden>>
+}
+
+entity "public.solicitudes_presupuesto" as solicitudes <<Social>> {
+  *id : uuid
+  --
+  *cliente_id : uuid <<FK>>
+  *categoria_id : uuid <<FK>>
+  mensaje : text
+  estado : estado_solicitud_enum
+  --
+  created/updated_by : uuid <<FK Hidden>>
+}
+
+entity "public.metricas_clics" as metricas <<System>> {
+  *id : uuid
+  --
+  *servicio_id : uuid <<FK>>
+  *proveedor_id : uuid <<FK>>
+  tipo_contacto : text
+  created_at : timestamp
+}
+
+package "Mantenimiento" {
+    entity "public.keepalive" as keepalive <<System>> {
+    *id : integer
+    --
+    created_at : timestamp
+    }
+}
+
+
+' --- RELACIONES ---
+
+' Nivel 1: Identidad y Catálogo Base
+auth_users ||.d.|| perfiles : "Identidad (1:1)"
+categorias ||-d-{ servicios : "Clasifica"
+perfiles ||-d-{ servicios : "Publica (Proveedor)"
+
+' Nivel 2: Interacciones Sociales (Forzamos posición abajo)
+servicios -[hidden]d- resenas
+servicios ||-d-{ resenas : "Recibe"
+perfiles ||-d-{ resenas : "Escribe (Autor)"
+
+categorias -[hidden]d- solicitudes
+categorias ||-d-{ solicitudes : "Agrupa solicitudes"
+perfiles ||-d-{ solicitudes : "Pide presupuesto (Cliente)"
+
+' Nivel 3: Métricas
+servicios -[hidden]d- metricas
+servicios ||-d-{ metricas : "Genera clic"
+perfiles |o.d.{ metricas : "Referencia proveedor"
+
+@enduml
