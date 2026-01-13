@@ -77,7 +77,7 @@ export function useProfileForm() {
       }
     };
     init();
-  }, []);
+  }, [supabase]);
 
   // Handler para cambios de texto/select
   const handleProfileChange = (field: keyof ProfileFormData, value: any) => {

@@ -6,13 +6,15 @@ import { ServiceForm } from '@/components/services/ServiceForm';
 import { createClient } from '@/utils/supabase/client';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import { ServiceWithProfile } from '@/app/lib/definitions';
 
 export default function GestionServiciosPage() {
   const supabase = createClient();
-  const [services, setServices] = useState<any[]>([]);
+  const [services, setServices] = useState<ServiceWithProfile[]>([]);
+  const [editingService, setEditingService] =
+    useState<ServiceWithProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [editingService, setEditingService] = useState<any>(null);
 
   const fetchUserServices = useCallback(async () => {
     setLoading(true);
@@ -73,7 +75,7 @@ export default function GestionServiciosPage() {
     }
   };
 
-  const handleEdit = (service: any) => {
+  const handleEdit = (service: ServiceWithProfile) => {
     setEditingService(service);
     setShowForm(true);
   };
@@ -133,7 +135,7 @@ export default function GestionServiciosPage() {
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
                         <span className="rounded bg-orange-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-orange-600 dark:bg-orange-900/30">
-                          {service.categorias?.nombre}
+                          {service.categoria?.nombre}
                         </span>
                       </div>
                       <h3 className="text-lg font-bold text-gray-900 dark:text-white">

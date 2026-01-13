@@ -38,7 +38,7 @@ export const ServicesList = ({
           No has agregado ningún servicio todavía.
         </p>
         <p className="mt-1 text-sm text-gray-400 dark:text-gray-500">
-          Haz clic en "Agregar Servicio" para comenzar.
+          Haz clic en &quot;Agregar Servicio&quot; para comenzar.
         </p>
       </div>
     )}

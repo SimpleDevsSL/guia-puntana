@@ -30,7 +30,7 @@ const ResultsGrid: React.FC<ResultsGridProps> = ({
           </h2>
           {searchQuery && (
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              Resultados para: "{searchQuery}"
+              Resultados para: &quot;{searchQuery}&quot;
             </p>
           )}
         </div>

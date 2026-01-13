@@ -52,8 +52,10 @@ export function useAuthForm() {
         },
       });
       if (error) throw error;
-    } catch (error: any) {
-      setGeneralError(error.message);
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Error desconocido';
+      setGeneralError(errorMessage);
       setLoading(false);
     }
   };

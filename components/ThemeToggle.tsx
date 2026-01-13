@@ -7,9 +7,10 @@ export function ThemeToggle() {
   const { setTheme, theme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+ useEffect(() => {
+   setMounted(true);
+   // eslint-disable-next-line react-hooks/exhaustive-deps
+ }, []);
 
   if (!mounted) {
     // Placeholder invisible del mismo tamaño para evitar saltos

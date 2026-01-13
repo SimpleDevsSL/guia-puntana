@@ -110,8 +110,10 @@ export function useProfileSettings() {
 
       if (error) throw error;
       alert('Información básica actualizada.');
-    } catch (error: any) {
-      alert('Error: ' + error.message);
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Error desconocido';
+      alert('Error: ' + errorMessage);
     } finally {
       setSaving(false);
     }
@@ -130,8 +132,10 @@ export function useProfileSettings() {
       );
       setNewEmail('');
       setCurrentPassword('');
-    } catch (error: any) {
-      alert('Error: ' + error.message);
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Error desconocido';
+      alert('Error: ' + errorMessage);
     } finally {
       setSaving(false);
     }
@@ -154,8 +158,10 @@ export function useProfileSettings() {
       setNewPassword('');
       setConfirmPassword('');
       setCurrentPassword('');
-    } catch (error: any) {
-      alert('Error: ' + error.message);
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Error desconocido';
+      alert('Error: ' + errorMessage);
     } finally {
       setSaving(false);
     }
@@ -185,8 +191,10 @@ export function useProfileSettings() {
       // Si todo salió bien, cerramos sesión localmente y redirigimos
       await supabase.auth.signOut();
       router.push('/');
-    } catch (error: any) {
-      alert('Error: ' + error.message);
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Error desconocido';
+      alert('Error: ' + errorMessage);
     } finally {
       setSaving(false);
     }
