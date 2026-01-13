@@ -25,6 +25,7 @@ export function useProfileSettings() {
   const [newEmail, setNewEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [role, setRole] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,7 +40,7 @@ export function useProfileSettings() {
 
       const { data: profile } = await supabase
         .from('perfiles')
-        .select('nombre_completo, foto_url')
+        .select('nombre_completo, foto_url, rol')
         .eq('usuario_id', user.id)
         .single();
 
@@ -48,11 +49,42 @@ export function useProfileSettings() {
           nombre_completo: profile.nombre_completo || '',
           foto_url: profile.foto_url || '',
         });
+        setRole(profile.rol);
       }
       setLoading(false);
     };
     fetchData();
   }, [supabase, router]);
+
+  const handleBecomeProvider = async () => {
+    const confirm = window.confirm(
+      '¿Deseas convertirte en proveedor? Podrás publicar servicios. Esta acción no se puede deshacer manualmente.'
+    );
+
+    if (!confirm || !userData) return;
+    setSaving(true);
+
+    try {
+      const { error } = await supabase
+        .from('perfiles')
+        .update({ rol: 'proveedor' }) // Asegúrate que tu enum en DB acepte 'proveedor'
+        .eq('usuario_id', userData.id);
+
+      if (error) throw error;
+
+      setRole('proveedor'); // Actualizamos el estado local
+      alert('¡Felicidades! Ahora eres un proveedor.');
+      // Opcional: router.refresh() o redirigir a crear servicio
+      router.refresh();
+      router.push('/servicios/nuevo');
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Error desconocido';
+      alert('Error al actualizar rol: ' + errorMessage);
+    } finally {
+      setSaving(false);
+    }
+  };
 
   // Función para verificar identidad antes de cambios críticos
   const verifyIdentity = async () => {
@@ -220,5 +252,7 @@ export function useProfileSettings() {
     setConfirmPassword,
     handleUpdatePassword,
     handleDeleteAccount,
+    role,
+    handleBecomeProvider,
   };
 }

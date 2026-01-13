@@ -11,6 +11,7 @@ import {
   Camera,
   ShieldCheck,
   Info,
+  Briefcase,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -35,6 +36,8 @@ export default function ProfilePage() {
     setConfirmPassword,
     handleUpdatePassword,
     handleDeleteAccount,
+    role,
+    handleBecomeProvider,
   } = useProfileSettings();
 
   if (loading) {
@@ -131,6 +134,30 @@ export default function ProfilePage() {
                 {saving ? 'Guardando...' : 'Guardar Información Básica'}
               </button>
             </section>
+
+            {role === 'user' && (
+              <section className="mb-8 mt-8 rounded-2xl border border-orange-200 bg-gradient-to-r from-orange-50 to-white p-6 dark:border-orange-900/50 dark:from-orange-900/10 dark:to-gray-900">
+                <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+                  <div>
+                    <h3 className="flex items-center gap-2 text-lg font-bold text-orange-700 dark:text-orange-400">
+                      <Briefcase size={20} />
+                      ¿Quieres ofrecer tus servicios?
+                    </h3>
+                    <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                      Conviértete en proveedor para publicar anuncios y llegar a
+                      más clientes en la Guía Puntana.
+                    </p>
+                  </div>
+                  <button
+                    onClick={handleBecomeProvider}
+                    disabled={saving}
+                    className="shrink-0 rounded-xl bg-orange-600 px-6 py-3 font-bold text-white shadow-md transition-all hover:bg-orange-700 hover:shadow-lg disabled:opacity-50"
+                  >
+                    {saving ? 'Procesando...' : 'Convertirme en Proveedor'}
+                  </button>
+                </div>
+              </section>
+            )}
 
             {/* Sección Seguridad */}
             <section className="mt-12 space-y-8 border-t border-gray-100 pt-12 dark:border-gray-800">
