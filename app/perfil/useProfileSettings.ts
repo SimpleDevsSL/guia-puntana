@@ -76,6 +76,7 @@ export function useProfileSettings() {
       alert('¡Felicidades! Ahora eres un proveedor.');
       // Opcional: router.refresh() o redirigir a crear servicio
       router.refresh();
+      router.push('/servicios/nuevo');
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : 'Error desconocido';
