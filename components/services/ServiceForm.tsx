@@ -22,7 +22,7 @@ export function ServiceForm({
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const [formData, setFormData] = useState({
-    categoria_id: serviceToEdit?.categoria.id || '',
+    categoria_id: serviceToEdit?.categoria?.nombre || '',
     nombre: serviceToEdit?.nombre || '',
     descripcion: serviceToEdit?.descripcion || '',
     telefono: serviceToEdit?.telefono || '',

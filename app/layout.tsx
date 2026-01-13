@@ -35,7 +35,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icon-192x192.png" />
       </head>
       <body
-        className={`${inter.className} bg-white text-slate-900 antialiased transition-colors duration-300 ease-in-out dark:bg-slate-950 dark:text-slate-100`}
+        className={`${inter.className} bg-white text-gray-900 antialiased transition-colors duration-300 ease-in-out dark:bg-gray-950 dark:text-gray-100`}
       >
         <ThemeProvider
           attribute="class"
