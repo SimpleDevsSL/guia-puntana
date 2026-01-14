@@ -3,6 +3,36 @@ import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import { authSchema, type AuthFormData } from './auth-schema';
 
+/**
+ * Custom hook for managing authentication form state and operations.
+ *
+ * This hook handles:
+ * - Toggling between login and signup modes
+ * - Form input validation using Zod schema
+ * - Authentication with email/password and OAuth (Google)
+ * - Error and success state management
+ *
+ * @returns {Object} Auth form state and handler functions
+ * @returns {boolean} isLogin - Whether the form is in login mode (true) or signup mode (false)
+ * @returns {boolean} loading - Whether an authentication operation is in progress
+ * @returns {AuthFormData} formData - Current form input values (email, password)
+ * @returns {Record<string, string>} validationErrors - Field-level validation error messages
+ * @returns {string | null} generalError - General error message for the entire form
+ * @returns {string | null} successMessage - Success message displayed after operations
+ * @returns {Function} toggleMode - Switches between login and signup modes
+ * @returns {Function} handleInputChange - Updates form field values and clears related errors
+ * @returns {Function} handleGoogleLogin - Initiates OAuth login with Google
+ * @returns {Function} handleSubmit - Validates and submits the authentication form
+ *
+ * @example
+ * const {
+ *   isLogin,
+ *   loading,
+ *   formData,
+ *   handleInputChange,
+ *   handleSubmit,
+ * } = useAuthForm();
+ */
 export function useAuthForm() {
   const supabase = createClient();
   const router = useRouter();
@@ -22,7 +52,10 @@ export function useAuthForm() {
   const [generalError, setGeneralError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  // Handlers
+  /**
+   * Toggles between login and signup modes.
+   * Clears all error and success messages when switching modes.
+   */
   const toggleMode = () => {
     setIsLogin(!isLogin);
     setValidationErrors({});
@@ -30,6 +63,12 @@ export function useAuthForm() {
     setSuccessMessage(null);
   };
 
+  /**
+   * Updates a form field value and removes validation error for that field if present.
+   *
+   * @param {keyof AuthFormData} field - The field to update (e.g., 'email', 'password')
+   * @param {string} value - The new value for the field
+   */
   const handleInputChange = (field: keyof AuthFormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     if (validationErrors[field]) {
@@ -41,6 +80,13 @@ export function useAuthForm() {
     }
   };
 
+  /**
+   * Initiates OAuth login with Google using Supabase.
+   * Sets loading state and handles errors gracefully.
+   *
+   * @async
+   * @throws {Error} If OAuth configuration is invalid or network request fails
+   */
   const handleGoogleLogin = async () => {
     setLoading(true);
     setGeneralError(null);
@@ -60,6 +106,17 @@ export function useAuthForm() {
     }
   };
 
+  /**
+   * Handles form submission for login or signup operations.
+   *
+   * Process:
+   * 1. Validates form data using Zod schema
+   * 2. For login: Authenticates user and redirects to feed
+   * 3. For signup: Creates new account and prompts email confirmation
+   *
+   * @async
+   * @param {React.FormEvent} e - The form submission event
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);

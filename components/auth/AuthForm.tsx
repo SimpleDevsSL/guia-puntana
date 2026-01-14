@@ -3,6 +3,24 @@
 import { useAuthForm } from './useAuthForm';
 import { GoogleButton } from './parts/GoogleButton';
 
+/**
+ * Authentication form component supporting both login and signup modes.
+ *
+ * Features:
+ * - Toggle between login and signup modes
+ * - Email and password authentication
+ * - OAuth login with Google
+ * - Field-level validation error display
+ * - General error and success message handling
+ * - Dark mode support
+ * - Responsive design
+ *
+ * @component
+ * @returns {React.ReactElement} A styled authentication form
+ *
+ * @example
+ * <AuthForm />
+ */
 export default function AuthForm() {
   const {
     isLogin,
@@ -17,7 +35,13 @@ export default function AuthForm() {
     handleSubmit,
   } = useAuthForm();
 
-  // Estilos de inputs (Adaptados para Modo Oscuro)
+  /**
+   * Returns CSS classes for input elements based on validation state.
+   * Applies error styling (red border/ring) if field has validation error.
+   *
+   * @param {boolean} hasError - Whether the input field has a validation error
+   * @returns {string} CSS class string with conditional error styles
+   */
   const getInputClass = (hasError: boolean) => `
     w-full rounded-lg border px-4 py-2 
     text-gray-900 dark:text-white 
