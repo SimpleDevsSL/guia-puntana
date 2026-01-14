@@ -42,10 +42,11 @@ const ProfessionalCard: React.FC<Props> = ({
             </div>
             <div>
               <h3 className="text-lg font-bold leading-tight text-gray-900 transition-colors group-hover:text-orange-600 dark:text-white">
-                {service.proveedor.nombre_completo}
-              </h3>
-              <p className="mt-0.5 text-xs font-semibold uppercase tracking-wide text-orange-600">
                 {service.nombre}
+              </h3>
+
+              <p className="mt-0.5 text-sm font-medium text-gray-500 dark:text-gray-400">
+                Por {service.proveedor.nombre_completo}
               </p>
             </div>
           </div>
