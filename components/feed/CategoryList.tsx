@@ -20,6 +20,8 @@ import {
   PawPrint, // Mascotas
   Calculator, // Contaduría
   Car, // Mecánica
+  Scissors, // Estética y Moda
+  Home, // Inmobiliaria y Propiedades
 } from 'lucide-react';
 
 interface CategoryListProps {
@@ -45,6 +47,8 @@ const CATEGORY_ICONS: Record<string, React.ElementType> = {
   'Herrería y Metalurgia': Hammer,
   'Contaduría y Finanzas': Calculator,
   'Mecánica Automotor': Car,
+  'Estética y Moda': Scissors,
+  'Inmobiliaria y Propiedades': Home,
 };
 
 const CategoryList: React.FC<CategoryListProps> = ({
