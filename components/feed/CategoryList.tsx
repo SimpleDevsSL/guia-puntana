@@ -2,17 +2,22 @@ import React from 'react';
 import Link from 'next/link';
 import { Category } from '../../app/lib/definitions';
 import {
-  Sparkles,
-  Zap,
-  Leaf,
-  Hammer,
-  Wrench,
-  Monitor,
-  GraduationCap,
-  Truck,
-  Paintbrush,
-  Fan,
-  LayoutGrid,
+  Sparkles, // Por defecto
+  Zap, // Electricidad
+  Leaf, // Jardinería
+  Hammer, // Herrería
+  Wrench, // Plomería
+  Monitor, // Servicio Técnico
+  GraduationCap, // Apoyo Escolar
+  Truck, // Fletes
+  Paintbrush, // Albañilería y Pintura
+  LayoutGrid, // Todos
+  Droplets, // Piletas
+  Utensils, // Comida
+  ShoppingBag, // Productos Regionales
+  HeartPulse, // Enfermería
+  Activity, // Kinesiología
+  PawPrint, // Mascotas
 } from 'lucide-react';
 
 interface CategoryListProps {
@@ -22,16 +27,20 @@ interface CategoryListProps {
 
 // Mapa de iconos vinculados al nombre exacto de la base de datos
 const CATEGORY_ICONS: Record<string, React.ElementType> = {
-  Limpieza: Sparkles,
-  'Electricidad y Reparaciones': Zap,
-  'Jardinería y Paisajismo': Leaf,
-  Carpintería: Hammer,
   'Plomería y Gas': Wrench,
-  'Informática y Tecnología': Monitor,
-  'Clases Particulares': GraduationCap,
-  'Mudanzas y Transportes': Truck,
-  'Pintura y Decoración': Paintbrush,
-  'Climatización y Ventilación': Fan,
+  Electricidad: Zap,
+  'Albañilería y Pintura': Paintbrush,
+  'Jardinería y Paisajismo': Leaf,
+  'Mantenimiento de Piletas': Droplets,
+  'Viandas y Comida Casera': Utensils,
+  'Productos Regionales': ShoppingBag,
+  'Enfermería y Cuidadores': HeartPulse,
+  'Kinesiología y Masajes': Activity,
+  Mascotas: PawPrint,
+  'Fletes y Mudanzas': Truck,
+  'Servicio Técnico': Monitor,
+  'Apoyo Escolar': GraduationCap,
+  'Herrería y Metalurgia': Hammer,
 };
 
 const CategoryList: React.FC<CategoryListProps> = ({
