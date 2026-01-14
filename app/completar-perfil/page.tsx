@@ -7,7 +7,7 @@ import ProfileForm from '@/components/profile/ProfileForm';
  */
 export default function CompletarPerfilPage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-4 transition-colors duration-300 dark:bg-slate-950">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-4 transition-colors duration-300 dark:bg-gray-950">
       {/* Contenedor principal con padding para móviles */}
       <div className="flex w-full justify-center">
         <ProfileForm />
