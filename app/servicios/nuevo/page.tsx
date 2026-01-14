@@ -32,7 +32,6 @@ export default function GestionServiciosPage() {
         .single();
 
       if (profile) {
-        // 2. Obtener servicios vinculados a ese perfil
         const { data: servicesData } = await supabase
           .from('servicios')
           .select(
@@ -65,7 +64,6 @@ export default function GestionServiciosPage() {
     if (!confirm('¿Estás seguro de que deseas eliminar este servicio?')) return;
 
     try {
-      // Borrado lógico (recomendado según tu esquema sql que tiene es_activo)
       const { error } = await supabase
         .from('servicios')
         .update({ es_activo: false })

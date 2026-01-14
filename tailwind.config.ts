@@ -1,5 +1,5 @@
 import type { Config } from 'tailwindcss';
-import colors from 'tailwindcss/colors'; // <--- CAMBIO AQUÍ: Usar import en lugar de require
+import colors from 'tailwindcss/colors';
 
 const config: Config = {
   darkMode: 'class',
@@ -11,7 +11,6 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Esto reemplaza el gris azulado por un gris neutro en TODO el proyecto
         gray: colors.zinc,
       },
       backgroundImage: {

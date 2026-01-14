@@ -105,7 +105,6 @@ export const Header: React.FC = () => {
     }
   };
 
-  // Common button styling for header actions
   const buttonStyle =
     'bg-orange-600 hover:bg-orange-700 text-white transition-all shadow-md rounded-full text-sm font-bold flex items-center gap-2';
 
@@ -128,13 +127,11 @@ export const Header: React.FC = () => {
 
           {/* Conditional rendering based on loading state */}
           {isLoading ? (
-            // Loading skeleton: Shows animated placeholders while fetching auth state
             <div className="flex items-center gap-2 sm:gap-3">
               <div className="h-9 w-24 animate-pulse rounded-full bg-gray-200 dark:bg-gray-800 sm:w-32"></div>
               <div className="h-9 w-9 animate-pulse rounded-full bg-gray-200 dark:bg-gray-800"></div>
             </div>
           ) : user ? (
-            // Authenticated user menu
             <div className="flex items-center gap-2 sm:gap-3">
               {/* Provider-only action: Create new service */}
               {userRole === 'proveedor' && (
@@ -206,7 +203,6 @@ export const Header: React.FC = () => {
               </button>
             </div>
           ) : (
-            // Unauthenticated user: Show login link
             <Link href="/login" className={`${buttonStyle} px-6 py-2`}>
               Ingresar
             </Link>

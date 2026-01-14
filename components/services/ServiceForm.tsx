@@ -3,10 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { serviceSchema } from '@/components/profile/form-schema';
-import { ServiceWithProfile, Category } from '@/app/lib/definitions'; // Importar tipos
+import { ServiceWithProfile, Category } from '@/app/lib/definitions';
 
 interface ServiceFormProps {
-  serviceToEdit?: ServiceWithProfile | null; // Cambiar any por tipo real
+  serviceToEdit?: ServiceWithProfile | null;
   onSuccess: () => void;
   onCancel: () => void;
 }
@@ -18,7 +18,7 @@ export function ServiceForm({
 }: ServiceFormProps) {
   const supabase = createClient();
   const [loading, setLoading] = useState(false);
-  const [categories, setCategories] = useState<Category[]>([]); // Cambiar any[] por Category[]
+  const [categories, setCategories] = useState<Category[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const [formData, setFormData] = useState({
@@ -42,7 +42,6 @@ export function ServiceForm({
     fetchCats();
   }, [supabase]);
 
-  // Mantener el formulario sincronizado cuando se abre en modo edición
   useEffect(() => {
     if (serviceToEdit) {
       setFormData({

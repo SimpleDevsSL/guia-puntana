@@ -40,9 +40,7 @@ export const profileSchema = z.object({
       message: 'El nombre completo no puede exceder los 100 caracteres.',
     }),
   rol: z.enum(['user', 'proveedor']),
-  // foto_url es opcional porque puede no tener foto al principio
   foto_url: z.string().optional(),
-  // Las insignias suelen ser asignadas por el sistema, pero las definimos aquí
   insignias: z.array(z.string()).default([]),
 });
 

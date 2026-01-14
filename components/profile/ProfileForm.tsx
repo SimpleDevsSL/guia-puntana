@@ -52,7 +52,6 @@ export default function ProfileForm() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-8 p-8">
-        {/* Profile information section (name, role, avatar) */}
         <ProfileInfo
           data={profileData}
           errors={validationErrors}
@@ -61,7 +60,6 @@ export default function ProfileForm() {
           previewUrl={previewUrl}
         />
 
-        {/* Conditional services section - only shown if user is a provider */}
         {profileData.rol === 'proveedor' && (
           <ServicesList
             services={servicesData}
@@ -73,7 +71,6 @@ export default function ProfileForm() {
           />
         )}
 
-        {/* Error message display */}
         {generalError && (
           <div className="rounded-r-md border-l-4 border-red-500 bg-red-50 p-4 text-sm text-red-700 dark:bg-red-900/20 dark:text-red-300">
             <p className="font-bold">Error</p>
@@ -81,7 +78,6 @@ export default function ProfileForm() {
           </div>
         )}
 
-        {/* Submit button with loading state */}
         <button
           type="submit"
           disabled={loading || !userId}

@@ -59,7 +59,6 @@ export const ServiceCard = ({
       </button>
 
       <div className="mb-6 flex items-center gap-2">
-        {/* CAMBIO: Badge colores */}
         <span className="rounded bg-orange-100 px-2 py-1 text-xs font-bold text-orange-700 dark:bg-orange-900/30 dark:text-orange-300">
           SERVICIO #{index + 1}
         </span>

@@ -1,8 +1,8 @@
-import { createClient } from '@/utils/supabase/server'; //
-import HeroSection from '@/components/feed/HeroSection'; //
-import CategoryList from '@/components/feed/CategoryList'; //
+import { createClient } from '@/utils/supabase/server';
+import HeroSection from '@/components/feed/HeroSection';
+import CategoryList from '@/components/feed/CategoryList';
 import { Header } from '@/components/feed/Header';
-import { ServiceWithProfile, Category } from '../lib/definitions'; //
+import { ServiceWithProfile, Category } from '../lib/definitions';
 import ClientFeedLogic from './ClientFeedLogic';
 import { Metadata } from 'next';
 
@@ -34,7 +34,7 @@ export default async function FeedPage({ searchParams }: PageProps) {
     .from('categorias')
     .select('id, nombre')
     .eq('es_activa', true)
-    .throwOnError(); // Añade manejo de errores simple
+    .throwOnError();
 
   const categories = (categoriesData as Category[]) || [];
 

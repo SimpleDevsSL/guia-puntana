@@ -32,7 +32,6 @@ export default function Home() {
             </p>
 
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-              {/* CAMBIO: Ahora lleva al Feed público */}
               <Link
                 href="/feed"
                 className="w-full transform rounded-xl bg-orange-600 px-8 py-4 text-lg font-bold text-white transition-all hover:-translate-y-1 hover:bg-orange-700 hover:shadow-xl hover:shadow-orange-500/25 sm:w-auto"

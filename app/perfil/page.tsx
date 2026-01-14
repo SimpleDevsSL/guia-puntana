@@ -64,7 +64,6 @@ export default function ProfilePage() {
           <div className="h-32 bg-gradient-to-r from-orange-500 to-orange-700"></div>
 
           <div className="px-8 pb-8">
-            {/* Header Perfil */}
             <div className="relative -mt-16 mb-8 flex flex-col items-center sm:flex-row sm:items-start sm:gap-6">
               <div className="group relative">
                 <div className="flex h-32 w-32 items-center justify-center overflow-hidden rounded-2xl border-4 border-white bg-gray-200 shadow-lg dark:border-gray-900 dark:bg-gray-800">

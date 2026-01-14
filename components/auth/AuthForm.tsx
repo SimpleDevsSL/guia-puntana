@@ -57,7 +57,6 @@ export default function AuthForm() {
 
   return (
     <div className="w-full max-w-md rounded-xl border border-gray-200 bg-white p-8 shadow-lg transition-colors duration-200 dark:border-gray-800 dark:bg-gray-900">
-      {/* Header */}
       <div className="mb-6 text-center">
         <h2 className="text-3xl font-bold text-gray-900 transition-colors dark:text-white">
           {isLogin ? 'Iniciar Sesión' : 'Crear Cuenta'}
@@ -69,28 +68,23 @@ export default function AuthForm() {
         </p>
       </div>
 
-      {/* Social Login */}
       <div className="mb-6">
         {/* Asegúrate de que tu GoogleButton soporte dark mode o sea neutro */}
         <GoogleButton onClick={handleGoogleLogin} loading={loading} />
       </div>
 
-      {/* Separador */}
       <div className="relative mb-6">
         <div className="absolute inset-0 flex items-center">
           <div className="w-full border-t border-gray-200 transition-colors dark:border-gray-700"></div>
         </div>
         <div className="relative flex justify-center text-sm">
-          {/* El span debe tener el mismo color de fondo que el contenedor padre para tapar la línea */}
           <span className="bg-white px-2 text-gray-500 transition-colors dark:bg-gray-900 dark:text-gray-400">
             O con tu correo
           </span>
         </div>
       </div>
 
-      {/* Formulario Credenciales */}
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Email */}
         <div>
           <label
             className="mb-1 block text-sm font-bold text-gray-700 transition-colors dark:text-gray-300"

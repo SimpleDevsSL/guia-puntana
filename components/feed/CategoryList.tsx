@@ -95,7 +95,6 @@ const CategoryList: React.FC<CategoryListProps> = ({
   return (
     <div className="mx-auto mt-8 max-w-7xl px-4">
       <div className="no-scrollbar flex space-x-6 overflow-x-auto border-b pb-4 dark:border-gray-800">
-        {/* "Todos" option - shows all categories */}
         <Link
           href="/feed"
           className={`flex items-center gap-2 whitespace-nowrap border-b-2 pb-2 text-sm font-medium transition-colors ${

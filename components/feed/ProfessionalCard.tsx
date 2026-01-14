@@ -23,7 +23,6 @@ const ProfessionalCard: React.FC<Props> = ({
 }) => {
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:shadow-md dark:border-gray-800 dark:bg-gray-900">
-      {' '}
       <div className="flex flex-grow flex-col p-5">
         <div className="mb-4 flex items-start justify-between">
           <div className="flex items-center gap-3">
@@ -77,7 +76,6 @@ const ProfessionalCard: React.FC<Props> = ({
           </div>
         </div>
       </div>
-      {/* Footer de la Card con dos botones */}
       <div className="flex gap-2 bg-gray-50/50 p-4 dark:bg-gray-800/50">
         <button
           onClick={() => onViewDetail(service)}

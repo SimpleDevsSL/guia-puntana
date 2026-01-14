@@ -13,7 +13,6 @@ const withPWA = withPWAInit({
 });
 
 const nextConfig: NextConfig = {
-  /* Aquí puedes agregar otras opciones de configuración si las necesitas */
   turbopack: {},
 };
 
