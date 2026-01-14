@@ -2,12 +2,29 @@ import React from 'react';
 import { ServiceWithProfile } from '../../app/lib/definitions';
 import { MapPin, BadgeCheck, MessageSquare, X, Phone } from 'lucide-react';
 
+/**
+ * Props for the ServiceDetailModal component
+ * @interface Props
+ */
 interface Props {
+  /** The service to display detailed information for */
   service: ServiceWithProfile;
+  /** Callback function to execute when modal is closed */
   onClose: () => void;
+  /** Callback function to execute when user initiates contact */
   onContact: (service: ServiceWithProfile) => void;
 }
 
+/**
+ * Generates initials from a person's name for avatar fallback.
+ *
+ * @param {string} name - The full name to extract initials from
+ * @returns {string} Uppercase initials (max 2 characters)
+ *
+ * @example
+ * getInitials('Juan Pérez') // Returns 'JP'
+ * getInitials('María') // Returns 'MA'
+ */
 const getInitials = (name: string) => {
   if (!name) return '';
   const parts = name.trim().split(/\s+/);
@@ -15,6 +32,33 @@ const getInitials = (name: string) => {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 };
 
+/**
+ * Modal component displaying detailed service information.
+ *
+ * This component shows:
+ * - Service provider profile (photo, name, badges/credentials)
+ * - Service category
+ * - Service description
+ * - Location and contact information
+ * - Action button to initiate contact via WhatsApp
+ *
+ * Features:
+ * - Responsive design (mobile and desktop)
+ * - Dark mode support
+ * - Smooth animations
+ * - Fallback avatar with initials if no photo available
+ *
+ * @component
+ * @param {Props} props - Component props
+ * @returns {React.ReactElement} A modal dialog with service details
+ *
+ * @example
+ * <ServiceDetailModal
+ *   service={serviceData}
+ *   onClose={() => setService(null)}
+ *   onContact={handleWhatsAppContact}
+ * />
+ */
 const ServiceDetailModal: React.FC<Props> = ({
   service,
   onClose,
@@ -27,6 +71,7 @@ const ServiceDetailModal: React.FC<Props> = ({
         <button
           onClick={onClose}
           className="absolute right-4 top-4 rounded-full bg-gray-100 p-2 text-gray-500 transition-colors hover:text-gray-900 dark:bg-gray-800 dark:hover:text-white"
+          aria-label="Close modal"
         >
           <X size={20} />
         </button>

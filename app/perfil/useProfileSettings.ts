@@ -3,6 +3,47 @@ import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
 
+/**
+ * Custom hook for managing user profile settings and account operations.
+ *
+ * This hook provides functionality for:
+ * - Loading user authentication and profile data
+ * - Updating basic profile information (name, avatar)
+ * - Email and password management with identity verification
+ * - Role management (converting to provider)
+ * - Account deletion
+ *
+ * @returns {Object} Profile settings state and handler functions
+ * @returns {boolean} loading - Whether initial data is being loaded
+ * @returns {boolean} saving - Whether a save operation is in progress
+ * @returns {User | null} userData - Current Supabase auth user object
+ * @returns {Object} profileData - User profile data (nombre_completo, foto_url)
+ * @returns {Function} setProfileData - Updates profile data object
+ * @returns {string | null} previewUrl - Local preview URL for selected avatar
+ * @returns {Function} handleAvatarChange - Handles avatar file selection and preview
+ * @returns {Function} handleSaveBasicInfo - Saves name and avatar changes to database
+ * @returns {string} currentPassword - Current password input value
+ * @returns {Function} setCurrentPassword - Updates current password field
+ * @returns {string} newEmail - New email input value
+ * @returns {Function} setNewEmail - Updates new email field
+ * @returns {Function} handleUpdateEmail - Updates user email after verification
+ * @returns {string} newPassword - New password input value
+ * @returns {Function} setNewPassword - Updates new password field
+ * @returns {string} confirmPassword - Password confirmation input value
+ * @returns {Function} setConfirmPassword - Updates password confirmation field
+ * @returns {Function} handleUpdatePassword - Updates user password after verification
+ * @returns {Function} handleDeleteAccount - Permanently deletes user account and profile
+ * @returns {string | null} role - User role ('user' or 'proveedor')
+ * @returns {Function} handleBecomeProvider - Converts user role to provider
+ *
+ * @example
+ * const {
+ *   profileData,
+ *   setProfileData,
+ *   handleSaveBasicInfo,
+ *   handleUpdatePassword,
+ * } = useProfileSettings();
+ */
 export function useProfileSettings() {
   const supabase = createClient();
   const router = useRouter();
@@ -27,6 +68,10 @@ export function useProfileSettings() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [role, setRole] = useState<string | null>(null);
 
+  /**
+   * Initializes the hook by loading current user data and profile information.
+   * Redirects to login if user is not authenticated.
+   */
   useEffect(() => {
     const fetchData = async () => {
       const {
@@ -56,6 +101,14 @@ export function useProfileSettings() {
     fetchData();
   }, [supabase, router]);
 
+  /**
+   * Upgrades user role from 'user' to 'proveedor' (provider).
+   * Requires user confirmation and updates the database.
+   * After successful upgrade, redirects to create first service.
+   *
+   * @async
+   * @throws {Error} If database update fails
+   */
   const handleBecomeProvider = async () => {
     const confirm = window.confirm(
       '¿Deseas convertirte en proveedor? Podrás publicar servicios. Esta acción no se puede deshacer manualmente.'
@@ -86,7 +139,14 @@ export function useProfileSettings() {
     }
   };
 
-  // Función para verificar identidad antes de cambios críticos
+  /**
+   * Verifies user identity by re-authenticating with the current password.
+   * Required before making critical changes like email or password updates.
+   *
+   * @async
+   * @returns {Promise<boolean>} True if identity verification succeeds, false otherwise
+   * @throws {Error} If authentication fails
+   */
   const verifyIdentity = async () => {
     if (!currentPassword || !userData?.email) {
       alert(
@@ -105,11 +165,23 @@ export function useProfileSettings() {
     return true;
   };
 
+  /**
+   * Handles avatar file selection and creates a local preview URL.
+   *
+   * @param {File} file - The image file selected by the user
+   */
   const handleAvatarChange = (file: File) => {
     setAvatarFile(file);
     setPreviewUrl(URL.createObjectURL(file));
   };
 
+  /**
+   * Saves basic profile information (name and avatar) to the database.
+   * If a new avatar is provided, uploads it to Supabase storage first.
+   *
+   * @async
+   * @throws {Error} If upload or database update fails
+   */
   const handleSaveBasicInfo = async () => {
     if (!userData) return;
     setSaving(true);
@@ -151,6 +223,13 @@ export function useProfileSettings() {
     }
   };
 
+  /**
+   * Updates user email after identity verification.
+   * Sends confirmation emails to both old and new addresses.
+   *
+   * @async
+   * @throws {Error} If verification fails or email update fails
+   */
   const handleUpdateEmail = async () => {
     const isVerified = await verifyIdentity();
     if (!isVerified) return;
@@ -173,6 +252,13 @@ export function useProfileSettings() {
     }
   };
 
+  /**
+   * Updates user password after identity verification.
+   * Requires new password and confirmation password to match.
+   *
+   * @async
+   * @throws {Error} If verification fails or password update fails
+   */
   const handleUpdatePassword = async () => {
     if (newPassword !== confirmPassword)
       return alert('Las contraseñas no coinciden');
@@ -199,6 +285,14 @@ export function useProfileSettings() {
     }
   };
 
+  /**
+   * Permanently deletes the user account and associated profile.
+   * This is irreversible and requires explicit user confirmation.
+   * Uses a server API endpoint to handle cascading deletions safely.
+   *
+   * @async
+   * @throws {Error} If deletion fails
+   */
   const handleDeleteAccount = async () => {
     const confirm = window.confirm(
       '¿Estás 100% seguro? Esto borrará permanentemente tu perfil y cuenta.'

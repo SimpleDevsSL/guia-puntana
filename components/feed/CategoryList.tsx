@@ -24,12 +24,25 @@ import {
   Home, // Inmobiliaria y Propiedades
 } from 'lucide-react';
 
+/**
+ * Props for the CategoryList component
+ * @interface CategoryListProps
+ */
 interface CategoryListProps {
+  /** Array of available service categories to display */
   categories: Category[];
+  /** ID of currently active/selected category (null for "all") */
   activeCategoryId: string | null;
 }
 
-// Mapa de iconos vinculados al nombre exacto de la base de datos
+/**
+ * Maps category names to their corresponding Lucide icons.
+ * Uses a default Sparkles icon for any category without a specific mapping.
+ * Maps must match database category names exactly.
+ *
+ * @constant
+ * @type {Record<string, React.ElementType>}
+ */
 const CATEGORY_ICONS: Record<string, React.ElementType> = {
   'Plomería y Gas': Wrench,
   Electricidad: Zap,
@@ -51,6 +64,30 @@ const CATEGORY_ICONS: Record<string, React.ElementType> = {
   'Inmobiliaria y Propiedades': Home,
 };
 
+/**
+ * Horizontal scrollable category filter list component.
+ *
+ * Displays:
+ * - "Todos" (All) option to show services from all categories
+ * - Individual category buttons with icons and names
+ * - Active category highlighting with orange underline
+ *
+ * Features:
+ * - Horizontal scroll on smaller screens
+ * - Icon-category mapping from constant
+ * - Responsive design with Tailwind classes
+ * - Dark mode support
+ *
+ * @component
+ * @param {CategoryListProps} props - Component props
+ * @returns {React.ReactElement} A scrollable category filter bar
+ *
+ * @example
+ * <CategoryList
+ *   categories={allCategories}
+ *   activeCategoryId={selectedCategoryId}
+ * />
+ */
 const CategoryList: React.FC<CategoryListProps> = ({
   categories,
   activeCategoryId,
@@ -58,7 +95,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
   return (
     <div className="mx-auto mt-8 max-w-7xl px-4">
       <div className="no-scrollbar flex space-x-6 overflow-x-auto border-b pb-4 dark:border-gray-800">
-        {/* Opción "Todos" con un icono de cuadrícula */}
+        {/* "Todos" option - shows all categories */}
         <Link
           href="/feed"
           className={`flex items-center gap-2 whitespace-nowrap border-b-2 pb-2 text-sm font-medium transition-colors ${
@@ -70,8 +107,9 @@ const CategoryList: React.FC<CategoryListProps> = ({
           <LayoutGrid size={22} /> Todos
         </Link>
 
+        {/* Individual category links */}
         {categories.map((cat) => {
-          // Buscamos el icono en el mapa, si no existe usamos Sparkles por defecto
+          // Retrieve icon from map, fallback to Sparkles if not found
           const IconComponent = CATEGORY_ICONS[cat.nombre] || Sparkles;
 
           return (

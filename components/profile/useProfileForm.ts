@@ -9,6 +9,42 @@ import {
   type Category,
 } from './form-schema';
 
+/**
+ * Custom hook for managing profile and service creation/editing form state.
+ *
+ * This hook handles:
+ * - Loading user data and available service categories
+ * - Managing profile information (name, role, avatar)
+ * - Managing multiple services (add, remove, update)
+ * - Avatar file upload to Supabase storage
+ * - Form validation using Zod schemas
+ * - Profile and service persistence to database
+ *
+ * @returns {Object} Profile form state and handler functions
+ * @returns {string | null} userId - Current authenticated user's ID
+ * @returns {boolean} loading - Whether a save operation is in progress
+ * @returns {Category[]} categories - Available service categories from database
+ * @returns {ProfileFormData} profileData - Current profile form values
+ * @returns {ServiceFormData[]} servicesData - Array of services being edited
+ * @returns {Record<string, string>} validationErrors - Profile field validation errors
+ * @returns {Record<string, string>} serviceErrors - Service field validation errors
+ * @returns {string | null} generalError - General form error message
+ * @returns {string | null} previewUrl - Local preview URL for selected avatar
+ * @returns {Function} handleProfileChange - Updates a profile field value
+ * @returns {Function} handleAvatarChange - Handles avatar file selection and preview
+ * @returns {Function} addService - Adds a new empty service to the form
+ * @returns {Function} removeService - Removes a service by its temporary ID
+ * @returns {Function} handleServiceChange - Updates a service field value
+ * @returns {Function} handleSubmit - Validates and saves profile and services to database
+ *
+ * @example
+ * const {
+ *   profileData,
+ *   servicesData,
+ *   handleProfileChange,
+ *   handleSubmit,
+ * } = useProfileForm();
+ */
 export function useProfileForm() {
   const supabase = createClient();
   const router = useRouter();
@@ -41,6 +77,12 @@ export function useProfileForm() {
   );
   const [generalError, setGeneralError] = useState<string | null>(null);
 
+  /**
+   * Initializes the form by:
+   * 1. Fetching the current authenticated user
+   * 2. Loading active service categories
+   * 3. Loading existing profile data if available
+   */
   useEffect(() => {
     const init = async () => {
       // 1. Obtener usuario
@@ -79,7 +121,12 @@ export function useProfileForm() {
     init();
   }, [supabase]);
 
-  // Handler para cambios de texto/select
+  /**
+   * Updates a profile field and clears its validation error if present.
+   *
+   * @param {keyof ProfileFormData} field - The profile field to update
+   * @param {ProfileFormData[keyof ProfileFormData]} value - The new field value
+   */
   const handleProfileChange = (
     field: keyof ProfileFormData,
     value: ProfileFormData[keyof ProfileFormData] // Tipado basado en el schema
@@ -94,7 +141,11 @@ export function useProfileForm() {
     }
   };
 
-  // Handler específico para el archivo
+  /**
+   * Handles avatar file selection and creates a local preview URL.
+   *
+   * @param {File} file - The image file selected by the user
+   */
   const handleAvatarChange = (file: File) => {
     setAvatarFile(file);
     // Crear URL local para preview inmediata
@@ -102,6 +153,10 @@ export function useProfileForm() {
     setPreviewUrl(objectUrl);
   };
 
+  /**
+   * Adds a new empty service object to the services array.
+   * Uses current timestamp as temporary ID until saved to database.
+   */
   const addService = () => {
     setServicesData((prev) => [
       ...prev,
@@ -118,10 +173,22 @@ export function useProfileForm() {
     ]);
   };
 
+  /**
+   * Removes a service from the form by its temporary ID.
+   *
+   * @param {number} tempId - The temporary ID of the service to remove
+   */
   const removeService = (tempId: number) => {
     setServicesData((prev) => prev.filter((s) => s.tempId !== tempId));
   };
 
+  /**
+   * Updates a service field and clears related validation errors.
+   *
+   * @param {number} index - The index of the service in the array
+   * @param {keyof ServiceFormData} field - The service field to update
+   * @param {string} value - The new field value
+   */
   const handleServiceChange = (
     index: number,
     field: keyof ServiceFormData,
@@ -143,7 +210,15 @@ export function useProfileForm() {
     }
   };
 
-  // Helper para subir imagen
+  /**
+   * Uploads an avatar image to Supabase storage and returns the public URL.
+   *
+   * @async
+   * @param {File} file - The image file to upload
+   * @param {string} userId - The user ID for organizing the file path
+   * @returns {Promise<string | null>} The public URL of the uploaded image or null on failure
+   * @throws {Error} If the upload operation fails
+   */
   const uploadAvatar = async (
     file: File,
     userId: string
@@ -167,6 +242,20 @@ export function useProfileForm() {
     }
   };
 
+  /**
+   * Validates and submits the profile and services form.
+   *
+   * Process:
+   * 1. Validates profile data against schema
+   * 2. Validates all services if user is a provider
+   * 3. Uploads avatar if a new one was selected
+   * 4. Saves/updates profile in database
+   * 5. Inserts services if user is a provider with services
+   * 6. Redirects to feed on success
+   *
+   * @async
+   * @param {React.FormEvent} e - The form submission event
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);

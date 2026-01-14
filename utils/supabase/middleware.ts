@@ -1,6 +1,30 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
+/**
+ * Middleware function to handle session updates and route protection.
+ *
+ * This middleware:
+ * - Refreshes the Supabase session from cookies on each request
+ * - Protects private routes (requires authentication)
+ * - Enforces profile completion flow for new authenticated users
+ * - Redirects authenticated users away from public auth pages
+ *
+ * @async
+ * @param {NextRequest} request - The incoming HTTP request from Next.js
+ * @returns {Promise<NextResponse>} The response to send to the client, potentially with a redirect
+ *
+ * @example
+ * // In middleware.ts (Next.js middleware)
+ * export const middleware = updateSession;
+ *
+ * Route Access Rules:
+ * - Unauthenticated: Can access /feed, /login, public pages; Blocked from /completar-perfil, /perfil
+ * - Authenticated without profile: Redirected to /completar-perfil
+ * - Authenticated with profile: Can access all routes; Blocked from /login and /completar-perfil
+ *
+ * @throws {Error} If unable to create Supabase client or query database
+ */
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,

@@ -8,15 +8,43 @@ import { createClient } from '@/utils/supabase/client';
 import { User } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
 
+/**
+ * Header component for the main feed page.
+ *
+ * Displays:
+ * - Application logo and branding
+ * - Theme toggle button
+ * - Conditional navigation based on authentication state
+ * - User menu (profile, my services for providers, logout)
+ * - Loading skeleton while authentication state is being determined
+ *
+ * Features:
+ * - Responsive design (mobile and desktop)
+ * - Dark mode support
+ * - Real-time auth state subscription
+ * - Role-based UI rendering (provider-specific actions)
+ *
+ * @component
+ * @returns {React.ReactElement} A sticky header with navigation
+ *
+ * @example
+ * <Header />
+ */
 export const Header: React.FC = () => {
+  // Authentication state
   const [user, setUser] = useState<User | null>(null);
+  // User role from profile (user | proveedor)
   const [userRole, setUserRole] = useState<string | null>(null);
-  // 1. Nuevo estado para controlar la carga inicial
+  // Loading state while fetching initial auth data
   const [isLoading, setIsLoading] = useState(true);
 
   const supabase = createClient();
   const router = useRouter();
 
+  /**
+   * Initializes user data and sets up auth state listener.
+   * Fetches current user from Supabase and loads their profile role.
+   */
   useEffect(() => {
     const getUserData = async () => {
       try {
@@ -36,13 +64,13 @@ export const Header: React.FC = () => {
       } catch (error) {
         console.error('Error al obtener datos del usuario:', error);
       } finally {
-        // 2. Finaliza la carga independientemente del resultado
         setIsLoading(false);
       }
     };
 
     getUserData();
 
+    // Subscribe to auth state changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -59,6 +87,13 @@ export const Header: React.FC = () => {
     };
   }, [supabase, router]);
 
+  /**
+   * Handles user logout by signing out from Supabase,
+   * clearing local state, and redirecting to home page.
+   *
+   * @async
+   * @throws {Error} If sign out fails (logged to console)
+   */
   const handleLogout = async () => {
     try {
       await supabase.auth.signOut();
@@ -70,13 +105,14 @@ export const Header: React.FC = () => {
     }
   };
 
+  // Common button styling for header actions
   const buttonStyle =
     'bg-orange-600 hover:bg-orange-700 text-white transition-all shadow-md rounded-full text-sm font-bold flex items-center gap-2';
 
   return (
     <header className="fixed top-0 z-50 w-full border-b border-gray-100 bg-white/80 backdrop-blur-md transition-colors dark:border-gray-800 dark:bg-gray-950/80">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Lado Izquierdo: Logo */}
+        {/* Left side: Logo and branding */}
         <div className="flex items-center gap-3">
           <Link href="/feed" className="flex items-center gap-2 sm:gap-3">
             <Logo className="h-8 w-8 text-gray-900 dark:text-white sm:h-10 sm:w-10" />
@@ -86,19 +122,21 @@ export const Header: React.FC = () => {
           </Link>
         </div>
 
-        {/* Lado Derecho: Acciones */}
+        {/* Right side: Theme toggle and auth actions */}
         <div className="flex items-center gap-2 sm:gap-4">
           <ThemeToggle />
 
-          {/* 3. Renderizado condicional basado en isLoading */}
+          {/* Conditional rendering based on loading state */}
           {isLoading ? (
-            // Skeleton: Muestra un marcador de posición animado mientras carga
+            // Loading skeleton: Shows animated placeholders while fetching auth state
             <div className="flex items-center gap-2 sm:gap-3">
               <div className="h-9 w-24 animate-pulse rounded-full bg-gray-200 dark:bg-gray-800 sm:w-32"></div>
               <div className="h-9 w-9 animate-pulse rounded-full bg-gray-200 dark:bg-gray-800"></div>
             </div>
           ) : user ? (
+            // Authenticated user menu
             <div className="flex items-center gap-2 sm:gap-3">
+              {/* Provider-only action: Create new service */}
               {userRole === 'proveedor' && (
                 <Link
                   href="/servicios/nuevo"
@@ -121,6 +159,7 @@ export const Header: React.FC = () => {
                 </Link>
               )}
 
+              {/* Profile link */}
               <Link
                 href="/perfil"
                 className={`${buttonStyle} p-2 sm:px-5 sm:py-2`}
@@ -143,6 +182,7 @@ export const Header: React.FC = () => {
                 <span className="hidden sm:inline">Ver mi perfil</span>
               </Link>
 
+              {/* Logout button */}
               <button
                 onClick={handleLogout}
                 className={`${buttonStyle} p-2 font-bold sm:px-4 sm:py-2`}
@@ -166,6 +206,7 @@ export const Header: React.FC = () => {
               </button>
             </div>
           ) : (
+            // Unauthenticated user: Show login link
             <Link href="/login" className={`${buttonStyle} px-6 py-2`}>
               Ingresar
             </Link>
