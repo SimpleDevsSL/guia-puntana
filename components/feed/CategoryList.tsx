@@ -18,6 +18,8 @@ import {
   HeartPulse, // Enfermería
   Activity, // Kinesiología
   PawPrint, // Mascotas
+  Calculator, // Contaduría
+  Car, // Mecánica
 } from 'lucide-react';
 
 interface CategoryListProps {
@@ -41,6 +43,8 @@ const CATEGORY_ICONS: Record<string, React.ElementType> = {
   'Servicio Técnico': Monitor,
   'Apoyo Escolar': GraduationCap,
   'Herrería y Metalurgia': Hammer,
+  'Contaduría y Finanzas': Calculator,
+  'Mecánica Automotor': Car,
 };
 
 const CategoryList: React.FC<CategoryListProps> = ({
