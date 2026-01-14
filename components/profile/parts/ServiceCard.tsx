@@ -28,7 +28,7 @@ export const ServiceCard = ({
     'block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1 uppercase tracking-wide';
 
   const inputClass = `w-full rounded-md border border-gray-300 dark:border-gray-700 
-    bg-white dark:bg-slate-950 text-sm text-gray-900 dark:text-white 
+    bg-white dark:bg-gray-950 text-sm text-gray-900 dark:text-white 
     placeholder:text-gray-400 dark:placeholder:text-gray-500
     focus:border-orange-500 focus:ring-2 focus:ring-orange-100 dark:focus:ring-orange-900/30 
     outline-none transition-all shadow-sm`;

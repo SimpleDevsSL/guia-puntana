@@ -84,7 +84,7 @@ export const ProfileInfo = ({
           value={data.nombre_completo}
           onChange={(e) => onChange('nombre_completo', e.target.value)}
           placeholder="Ej. Juan Pérez"
-          className={`w-full rounded-lg border bg-white px-4 py-3 text-gray-900 transition-all placeholder:text-gray-400 focus:outline-none focus:ring-2 dark:bg-slate-950 dark:text-white dark:placeholder:text-gray-500 ${
+          className={`w-full rounded-lg border bg-white px-4 py-3 text-gray-900 transition-all placeholder:text-gray-400 focus:outline-none focus:ring-2 dark:bg-gray-950 dark:text-white dark:placeholder:text-gray-500 ${
             errors.nombre_completo
               ? 'border-red-500 focus:border-red-500 focus:ring-red-100 dark:focus:ring-red-900/30'
               : 'border-gray-300 focus:border-orange-500 focus:ring-orange-100 dark:border-gray-700 dark:focus:ring-orange-900/30'
@@ -107,7 +107,7 @@ export const ProfileInfo = ({
             onChange={(e) =>
               onChange('rol', e.target.value as 'user' | 'proveedor')
             }
-            className="w-full cursor-pointer appearance-none rounded-lg border border-gray-300 bg-white px-4 py-3 pr-8 text-gray-900 outline-none transition-all focus:border-orange-500 focus:ring-2 focus:ring-orange-100 dark:border-gray-700 dark:bg-slate-950 dark:text-white dark:focus:ring-orange-900/30"
+            className="w-full cursor-pointer appearance-none rounded-lg border border-gray-300 bg-white px-4 py-3 pr-8 text-gray-900 outline-none transition-all focus:border-orange-500 focus:ring-2 focus:ring-orange-100 dark:border-gray-700 dark:bg-gray-950 dark:text-white dark:focus:ring-orange-900/30"
           >
             <option value="user">Usuario normal (Busco servicios)</option>
             <option value="proveedor">

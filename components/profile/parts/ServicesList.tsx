@@ -33,7 +33,7 @@ export const ServicesList = ({
     </div>
 
     {services.length === 0 && (
-      <div className="rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 py-8 text-center dark:border-gray-800 dark:bg-slate-900">
+      <div className="rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 py-8 text-center dark:border-gray-800 dark:bg-gray-900">
         <p className="font-medium text-gray-500 dark:text-gray-400">
           No has agregado ningún servicio todavía.
         </p>

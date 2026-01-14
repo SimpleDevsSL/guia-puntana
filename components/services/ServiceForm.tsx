@@ -139,7 +139,7 @@ export function ServiceForm({
   };
 
   const inputClass =
-    'w-full p-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-950 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 outline-none transition-all';
+    'w-full p-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 outline-none transition-all';
   const labelClass =
     'block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1 uppercase tracking-wider';
 
