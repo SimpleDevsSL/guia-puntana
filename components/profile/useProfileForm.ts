@@ -169,6 +169,7 @@ export function useProfileForm() {
         direccion: '',
         localidad: '',
         barrio: '',
+        redes: '',
       },
     ]);
   };
@@ -340,6 +341,7 @@ export function useProfileForm() {
           direccion: s.direccion,
           localidad: s.localidad,
           barrio: s.barrio || null,
+          redes: s.redes || null,
           es_activo: true,
           estado: true,
           created_by: userId,

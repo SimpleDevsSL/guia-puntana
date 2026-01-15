@@ -30,6 +30,12 @@ export const serviceSchema = z.object({
     .min(5, { message: 'La dirección es requerida (mínimo 5 caracteres).' }),
   localidad: z.string().min(3, { message: 'La localidad es requerida.' }),
   barrio: z.string().optional(),
+
+  redes: z
+    .string()
+    .max(200, { message: 'El texto es demasiado largo.' })
+    .optional()
+    .or(z.literal('')),
 });
 
 export const profileSchema = z.object({

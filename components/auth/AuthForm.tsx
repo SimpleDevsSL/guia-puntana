@@ -36,6 +36,33 @@ export default function AuthForm() {
   } = useAuthForm();
 
   /**
+   * Manejador del click de Google.
+   * Realiza la detección del navegador "in-app" (Instagram, Facebook) justo antes de intentar el login.
+   * Esto evita usar useEffect y re-renderizados innecesarios.
+   */
+  const handleGoogleClick = () => {
+    // Verificar si window existe (seguridad SSR) y chequear el User Agent
+    if (typeof window !== 'undefined') {
+      const ua = window.navigator.userAgent;
+      // Regex para detectar navegadores embebidos
+      const isEmbedded = /Instagram|FBAN|FBAV|LinkedIn|Twitter/i.test(ua);
+
+      if (isEmbedded) {
+        alert(
+          'Google no permite iniciar sesión desde el navegador interno de Instagram/Facebook por seguridad.\n\n' +
+            'SOLUCIÓN:\n' +
+            '1. Toca los 3 puntos (•••) en la esquina superior.\n' +
+            "2. Selecciona 'Abrir en el navegador' (Chrome/Safari)."
+        );
+        return; // Detenemos la ejecución aquí
+      }
+    }
+
+    // Si no es embedded o estamos en un entorno seguro, procedemos
+    handleGoogleLogin();
+  };
+
+  /**
    * Returns CSS classes for input elements based on validation state.
    * Applies error styling (red border/ring) if field has validation error.
    *
@@ -69,8 +96,8 @@ export default function AuthForm() {
       </div>
 
       <div className="mb-6">
-        {/* Asegúrate de que tu GoogleButton soporte dark mode o sea neutro */}
-        <GoogleButton onClick={handleGoogleLogin} loading={loading} />
+        {/* Usamos el nuevo handler optimizado */}
+        <GoogleButton onClick={handleGoogleClick} loading={loading} />
       </div>
 
       <div className="relative mb-6">
