@@ -22,6 +22,7 @@ import {
   Car, // Mecánica
   Scissors, // Estética y Moda
   Home, // Inmobiliaria y Propiedades
+  Megaphone, // Marketing Digital
 } from 'lucide-react';
 
 /**
@@ -62,6 +63,7 @@ const CATEGORY_ICONS: Record<string, React.ElementType> = {
   'Mecánica Automotor': Car,
   'Estética y Moda': Scissors,
   'Inmobiliaria y Propiedades': Home,
+  'Marketing Digital': Megaphone,
 };
 
 /**
