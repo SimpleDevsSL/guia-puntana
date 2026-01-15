@@ -79,28 +79,24 @@ export default function ClientFeedLogic({
    * @throws {Error} If metrics recording fails (logged to console, doesn't block contact)
    */
   const handleContact = async (service: ServiceWithProfile) => {
-    try {
-      const { error } = await supabase.from('metricas_clics').insert({
+    const metricsPromise = supabase
+      .from('metricas_clics')
+      .insert({
         servicio_id: service.id,
         proveedor_id: service.proveedor.id,
         tipo_contacto: 'whatsapp_directo',
+      })
+      .then(({ error }) => {
+        if (error) console.warn('Error métrica:', error.message);
       });
-
-      if (error) {
-        console.warn('Error al registrar métrica:', error.message);
-      }
-    } catch (e) {
-      console.error('Error en el sistema de métricas:', e);
-    }
 
     if (service.telefono) {
       const cleanPhone = service.telefono.replace(/\D/g, '');
-
       const text = `Hola ${service.proveedor.nombre_completo}, vi que ofreces el servicio de ${service.nombre} en Guía Puntana. Tengo una consulta...`;
-
       const encodedText = encodeURIComponent(text);
 
-      const url = `https://wa.me/${cleanPhone}?text=${encodedText}`;
+      // Es recomendable usar api.whatsapp.com en lugar de wa.me para mayor compatibilidad móvil
+      const url = `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodedText}`;
 
       window.open(url, '_blank');
     } else {

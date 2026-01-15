@@ -1,4 +1,5 @@
 import { ServiceFormData, Category } from '../form-schema';
+import { LocalidadAutocomplete } from '@/components/ui/LocalidadAutocomplete';
 
 interface Props {
   index: number;
@@ -147,16 +148,11 @@ export const ServiceCard = ({
         {/* Localidad */}
         <div>
           <label className={labelClass}>Localidad *</label>
-          <input
-            type="text"
+          <LocalidadAutocomplete
             value={data.localidad}
-            onChange={(e) => onChange(index, 'localidad', e.target.value)}
-            className={inputClass}
-            placeholder="Ej. San Luis Capital"
+            onChange={(value) => onChange(index, 'localidad', value)}
+            error={getError('localidad')}
           />
-          {getError('localidad') && (
-            <p className={errorClass}>{getError('localidad')}</p>
-          )}
         </div>
 
         {/* Barrio */}

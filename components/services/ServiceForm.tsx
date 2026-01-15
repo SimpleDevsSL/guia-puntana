@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { serviceSchema } from '@/components/profile/form-schema';
 import { ServiceWithProfile, Category } from '@/app/lib/definitions';
+import { LocalidadAutocomplete } from '@/components/ui/LocalidadAutocomplete';
 
 interface ServiceFormProps {
   serviceToEdit?: ServiceWithProfile | null;
@@ -27,7 +28,7 @@ export function ServiceForm({
     descripcion: serviceToEdit?.descripcion || '',
     telefono: serviceToEdit?.telefono || '',
     direccion: serviceToEdit?.direccion || '',
-    localidad: serviceToEdit?.localidad || 'San Luis',
+    localidad: serviceToEdit?.localidad || '',
     barrio: serviceToEdit?.barrio || '',
     redes: serviceToEdit?.redes || '',
   });
@@ -51,7 +52,7 @@ export function ServiceForm({
         descripcion: serviceToEdit.descripcion || '',
         telefono: serviceToEdit.telefono || '',
         direccion: serviceToEdit.direccion || '',
-        localidad: serviceToEdit.localidad || 'San Luis',
+        localidad: serviceToEdit.localidad || '',
         barrio: serviceToEdit.barrio || '',
         redes: serviceToEdit.redes || '',
       });
@@ -62,7 +63,7 @@ export function ServiceForm({
         descripcion: '',
         telefono: '',
         direccion: '',
-        localidad: 'San Luis',
+        localidad: '',
         barrio: '',
         redes: '',
       });
@@ -251,13 +252,10 @@ export function ServiceForm({
         </div>
         <div>
           <label className={labelClass}>Localidad *</label>
-          <input
-            type="text"
-            className={`${inputClass} ${errors.localidad ? 'border-red-500 ring-1 ring-red-200' : ''}`}
+          <LocalidadAutocomplete
             value={formData.localidad}
-            onChange={(e) =>
-              setFormData({ ...formData, localidad: e.target.value })
-            }
+            onChange={(value) => setFormData({ ...formData, localidad: value })}
+            error={errors.localidad}
           />
           {errors.localidad && (
             <p className="mt-1 text-xs font-bold text-red-500">
