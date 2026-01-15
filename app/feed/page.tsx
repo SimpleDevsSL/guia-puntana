@@ -43,7 +43,7 @@ export default async function FeedPage({ searchParams }: PageProps) {
     .from('servicios')
     .select(
       `
-        id, nombre, descripcion, localidad, barrio, telefono,
+        id, nombre, descripcion, localidad, barrio, telefono, redes,
         categoria:categorias(id, nombre),
         proveedor:perfiles(id, nombre_completo, foto_url, insignias)
       `

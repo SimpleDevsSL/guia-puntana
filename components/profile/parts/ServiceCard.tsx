@@ -170,6 +170,21 @@ export const ServiceCard = ({
             placeholder="Ej. Barrio Jardín"
           />
         </div>
+
+        <div className="md:col-span-2">
+          <label className={labelClass}>Redes o Sitio Web (Opcional)</label>
+          <input
+            type="text"
+            value={data.redes || ''}
+            onChange={(e) => onChange(index, 'redes', e.target.value)}
+            className={inputClass}
+            placeholder="Ej: @miusuario o https://instagram.com/..."
+          />
+          {/* Mostramos error si existe (validado por el schema que modificamos antes) */}
+          {getError('redes') && (
+            <p className={errorClass}>{getError('redes')}</p>
+          )}
+        </div>
       </div>
     </div>
   );

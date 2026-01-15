@@ -12,6 +12,7 @@ export interface ServiceWithProfile {
   direccion?: string;
   barrio?: string;
   telefono?: string;
+  redes?: string;
   categoria: {
     id: string;
     nombre: string;

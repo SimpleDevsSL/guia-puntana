@@ -29,6 +29,7 @@ export function ServiceForm({
     direccion: serviceToEdit?.direccion || '',
     localidad: serviceToEdit?.localidad || 'San Luis',
     barrio: serviceToEdit?.barrio || '',
+    redes: serviceToEdit?.redes || '',
   });
 
   useEffect(() => {
@@ -52,6 +53,7 @@ export function ServiceForm({
         direccion: serviceToEdit.direccion || '',
         localidad: serviceToEdit.localidad || 'San Luis',
         barrio: serviceToEdit.barrio || '',
+        redes: serviceToEdit.redes || '',
       });
     } else {
       setFormData({
@@ -62,6 +64,7 @@ export function ServiceForm({
         direccion: '',
         localidad: 'San Luis',
         barrio: '',
+        redes: '',
       });
     }
   }, [serviceToEdit]);
@@ -100,6 +103,7 @@ export function ServiceForm({
             direccion: formData.direccion,
             localidad: formData.localidad,
             barrio: formData.barrio,
+            redes: formData.redes,
             updated_at: new Date().toISOString(),
             updated_by: user.id,
           })
@@ -122,6 +126,7 @@ export function ServiceForm({
           direccion: formData.direccion,
           localidad: formData.localidad,
           barrio: formData.barrio,
+          redes: formData.redes,
           created_by: user.id,
         });
         if (error) throw error;
@@ -276,6 +281,23 @@ export function ServiceForm({
             </p>
           )}
         </div>{' '}
+        <div className="md:col-span-2">
+          <label className={labelClass}>Redes o Sitio Web (Opcional)</label>
+          <input
+            type="text"
+            placeholder="Ej: @miusuario o https://instagram.com/..."
+            className={`${inputClass} ${errors.redes ? 'border-red-500 ring-1 ring-red-200' : ''}`}
+            value={formData.redes}
+            onChange={(e) =>
+              setFormData({ ...formData, redes: e.target.value })
+            }
+          />
+          {errors.redes && (
+            <p className="mt-1 text-xs font-bold text-red-500">
+              {errors.redes}
+            </p>
+          )}
+        </div>
       </div>
 
       <div className="space-y-1">

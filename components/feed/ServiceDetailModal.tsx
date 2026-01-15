@@ -1,6 +1,13 @@
 import React from 'react';
 import { ServiceWithProfile } from '../../app/lib/definitions';
-import { MapPin, BadgeCheck, MessageSquare, X, Phone } from 'lucide-react';
+import {
+  MapPin,
+  BadgeCheck,
+  MessageSquare,
+  X,
+  Phone,
+  Globe,
+} from 'lucide-react';
 
 /**
  * Props for the ServiceDetailModal component
@@ -154,6 +161,38 @@ const ServiceDetailModal: React.FC<Props> = ({
                   </p>
                 </div>
               </div>
+
+              {service.redes && (
+                <div className="flex items-center gap-3 rounded-2xl bg-slate-50 p-4 dark:bg-gray-800/50 md:col-span-2">
+                  <div className="rounded-lg bg-white p-2 text-orange-600 shadow-sm dark:bg-gray-800">
+                    <Globe size={20} />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-xs font-bold uppercase text-gray-500">
+                      Más información
+                    </p>
+                    {service.redes.startsWith('http') ||
+                    service.redes.startsWith('www') ? (
+                      <a
+                        href={
+                          service.redes.startsWith('www')
+                            ? `https://${service.redes}`
+                            : service.redes
+                        }
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-1 inline-block font-bold text-orange-600 underline decoration-2 underline-offset-2 transition-colors hover:text-orange-800 dark:text-orange-400 dark:hover:text-orange-300"
+                      >
+                        Visitar enlace externo
+                      </a>
+                    ) : (
+                      <p className="font-medium text-gray-900 dark:text-white">
+                        {service.redes}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
