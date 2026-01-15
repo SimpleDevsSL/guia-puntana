@@ -15,7 +15,8 @@ import {
   Droplets, // Piletas
   Utensils, // Comida
   ShoppingBag, // Productos Regionales
-  HeartPulse, // Enfermería
+  HeartPulse, // Salud 
+  Bandage, // Enfermería 
   Activity, // Kinesiología
   PawPrint, // Mascotas
   Calculator, // Contaduría
@@ -46,15 +47,16 @@ interface CategoryListProps {
  */
 const CATEGORY_ICONS: Record<string, React.ElementType> = {
   'Plomería y Gas': Wrench,
-  Electricidad: Zap,
+  'Electricidad': Zap,
   'Albañilería y Pintura': Paintbrush,
   'Jardinería y Paisajismo': Leaf,
   'Mantenimiento de Piletas': Droplets,
   'Viandas y Comida Casera': Utensils,
   'Productos Regionales': ShoppingBag,
-  'Enfermería y Cuidadores': HeartPulse,
+  'Enfermería y Cuidadores': Bandage,
+  'Salud': HeartPulse,
   'Kinesiología y Masajes': Activity,
-  Mascotas: PawPrint,
+  'Mascotas': PawPrint,
   'Fletes y Mudanzas': Truck,
   'Servicio Técnico': Monitor,
   'Apoyo Escolar': GraduationCap,
