@@ -10,6 +10,7 @@ interface LocalidadAutocompleteProps {
   className?: string;
   placeholder?: string;
   disabled?: boolean;
+  transparent?: boolean;
 }
 
 export const LocalidadAutocomplete = ({
@@ -19,6 +20,7 @@ export const LocalidadAutocomplete = ({
   className = '',
   placeholder = 'Ej. San Luis Capital',
   disabled = false,
+  transparent = false,
 }: LocalidadAutocompleteProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
@@ -80,11 +82,10 @@ export const LocalidadAutocomplete = ({
     }
   };
 
-  const inputClass = `w-full p-3 rounded-xl border border-gray-200 dark:border-gray-700 
-    bg-white dark:bg-gray-950 text-gray-900 dark:text-white 
-    focus:ring-2 focus:ring-orange-500 outline-none transition-all
-    ${error ? 'border-red-500 ring-1 ring-red-200' : ''}
-    ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`;
+  const inputClass = `w-full bg-transparent p-3 focus:outline-none dark:text-white text-gray-900 ${className}
+    ${error ? 'border-red-500' : ''}
+    ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
+    ${!transparent ? 'rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 focus:ring-2 focus:ring-orange-500 transition-all' : ''}`;
 
   return (
     <div ref={containerRef} className="relative w-full">
@@ -102,7 +103,9 @@ export const LocalidadAutocomplete = ({
       />
 
       {isOpen && filteredOptions.length > 0 && (
-        <div className="absolute top-full z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
+        <div
+          className={`absolute top-full z-50 mt-1 w-full overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-800 dark:bg-gray-900 ${transparent ? '' : ''}`}
+        >
           {filteredOptions.map((option, index) => (
             <button
               key={option}
@@ -111,7 +114,7 @@ export const LocalidadAutocomplete = ({
               onMouseEnter={() => setHighlightedIndex(index)}
               className={`w-full px-4 py-2 text-left text-sm transition-colors ${
                 highlightedIndex === index
-                  ? 'bg-orange-100 text-orange-900 dark:bg-orange-900/30 dark:text-orange-300'
+                  ? 'bg-orange-100 text-orange-900 dark:bg-orange-900/40 dark:text-orange-200'
                   : 'text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800'
               }`}
             >

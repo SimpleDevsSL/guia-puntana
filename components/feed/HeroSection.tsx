@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Search, MapPin } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { LocalidadAutocomplete } from '@/components/ui/LocalidadAutocomplete';
 
 interface HeroSectionProps {
   initialQuery: string;
@@ -62,14 +63,15 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
           <div className="flex flex-1 items-center">
             <MapPin className="ml-2 text-orange-600" size={20} />
-            <input
-              type="text"
-              value={l}
-              onChange={(e) => setL(e.target.value)}
-              onKeyDown={handleKeyDown}
-              className="w-full bg-transparent p-3 focus:outline-none dark:text-white"
-              placeholder="Localidad"
-            />
+            <div className="w-full">
+              <LocalidadAutocomplete
+                value={l}
+                onChange={(value) => setL(value)}
+                placeholder="Localidad"
+                transparent={true}
+                className="!rounded-none !border-0 !p-3 !shadow-none"
+              />
+            </div>
           </div>
           <button
             onClick={handleSearch}
