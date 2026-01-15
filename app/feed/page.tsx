@@ -38,30 +38,18 @@ export default async function FeedPage({ searchParams }: PageProps) {
 
   const categories = (categoriesData as Category[]) || [];
 
-  // 2. Construir la consulta de servicios con filtros de URL
-  let query = supabase
-    .from('servicios')
-    .select(
-      `
-        id, nombre, descripcion, localidad, barrio, telefono, redes,
-        categoria:categorias(id, nombre),
-        proveedor:perfiles(id, nombre_completo, foto_url, insignias)
-      `
-    )
-    .eq('es_activo', true);
+  const { data: servicesData, error } = await supabase.rpc('buscar_servicios', {
+    query_text: params.q || '',
+    categoria_filtro: params.cat || null,
+    loc_filtro: params.l || null,
+  }).select(`
+      id, nombre, descripcion, localidad, barrio, direccion, telefono, redes,
+      categoria:categorias(id, nombre),
+      proveedor:perfiles(id, nombre_completo, foto_url, insignias)
+    `); // Hacemos el select aquí para traer las relaciones
 
-  if (params.cat) query = query.eq('categoria_id', params.cat);
+  if (error) console.error('Error buscando servicios:', error);
 
-  if (params.q) {
-    query = query.textSearch('fts', params.q, {
-      config: 'spanish', // Usa diccionario en español (ignora tildes, plurales, etc.)
-      type: 'websearch', // Permite usar "comillas" o -exclusiones como Google
-    });
-  }
-
-  if (params.l) query = query.ilike('localidad', `%${params.l}%`);
-
-  const { data: servicesData } = await query;
   const services = (servicesData as unknown as ServiceWithProfile[]) || [];
 
   // Determinar el nombre de la categoría activa para el título
