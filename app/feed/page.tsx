@@ -51,10 +51,14 @@ export default async function FeedPage({ searchParams }: PageProps) {
     .eq('es_activo', true);
 
   if (params.cat) query = query.eq('categoria_id', params.cat);
-  if (params.q)
-    query = query.or(
-      `nombre.ilike.%${params.q}%,descripcion.ilike.%${params.q}%`
-    );
+
+  if (params.q) {
+    query = query.textSearch('fts', params.q, {
+      config: 'spanish', // Usa diccionario en español (ignora tildes, plurales, etc.)
+      type: 'websearch', // Permite usar "comillas" o -exclusiones como Google
+    });
+  }
+
   if (params.l) query = query.ilike('localidad', `%${params.l}%`);
 
   const { data: servicesData } = await query;

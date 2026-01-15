@@ -1,8 +1,7 @@
-// components/feed/HeroSection.tsx
 'use client';
 import React, { useState } from 'react';
 import { Search, MapPin } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 interface HeroSectionProps {
   initialQuery: string;
@@ -16,12 +15,34 @@ const HeroSection: React.FC<HeroSectionProps> = ({
   const [q, setQ] = useState(initialQuery);
   const [l, setL] = useState(initialLocation);
   const router = useRouter();
+  const searchParams = useSearchParams(); // Hook para leer la URL actual
 
   const handleSearch = () => {
-    const params = new URLSearchParams();
-    if (q) params.set('q', q);
-    if (l) params.set('l', l);
+    // 1. Clonamos los parámetros actuales (esto mantiene 'cat' si existe)
+    const params = new URLSearchParams(searchParams.toString());
+
+    // 2. Actualizamos o borramos 'q' (búsqueda)
+    if (q.trim()) {
+      params.set('q', q);
+    } else {
+      params.delete('q');
+    }
+
+    // 3. Actualizamos o borramos 'l' (localidad)
+    if (l.trim()) {
+      params.set('l', l);
+    } else {
+      params.delete('l');
+    }
+
+    // 4. Navegamos conservando todo
     router.push(`/feed?${params.toString()}`);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
   };
 
   return (
@@ -34,6 +55,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
               type="text"
               value={q}
               onChange={(e) => setQ(e.target.value)}
+              onKeyDown={handleKeyDown}
               className="w-full bg-transparent p-3 focus:outline-none dark:text-white"
               placeholder="¿Qué servicio estás buscando?"
             />
@@ -44,13 +66,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({
               type="text"
               value={l}
               onChange={(e) => setL(e.target.value)}
+              onKeyDown={handleKeyDown}
               className="w-full bg-transparent p-3 focus:outline-none dark:text-white"
               placeholder="Localidad"
             />
           </div>
           <button
             onClick={handleSearch}
-            className="rounded-xl bg-orange-600 px-8 py-3 font-bold text-white"
+            className="rounded-xl bg-orange-600 px-8 py-3 font-bold text-white transition hover:bg-orange-700"
           >
             Buscar
           </button>

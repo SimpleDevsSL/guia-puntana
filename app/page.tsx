@@ -16,7 +16,7 @@ export default function Home() {
 
           <div className="relative z-10 mx-auto max-w-4xl px-4 text-center">
             <div className="mb-6 inline-block rounded-full border border-orange-100 bg-orange-50 px-4 py-1.5 text-sm font-medium text-orange-700 dark:border-orange-800 dark:bg-orange-900/30 dark:text-orange-300">
-              🌐 La comunidad de servicios de San Luis
+              🌐 La comunidad de servicios y emprendimientos de San Luis
             </div>
 
             <h1 className="mb-6 text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white md:text-7xl">
