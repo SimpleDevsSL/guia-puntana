@@ -66,6 +66,7 @@ const CATEGORY_ICONS: Record<string, React.ElementType> = {
   'Estética y Moda': Scissors,
   'Inmobiliaria y Propiedades': Home,
   'Marketing Digital': Megaphone,
+  Otro: Sparkles,
 };
 
 /**
