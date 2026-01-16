@@ -2,21 +2,19 @@
 
 import { useProfileForm } from './useProfileForm';
 import { ProfileInfo } from './parts/ProfileInfo';
-import { ServicesList } from './parts/ServicesList';
 
 /**
  * Profile completion form component for new users.
  *
- * This component manages the complete profile setup flow:
+ * This component manages the profile setup flow:
  * - User basic information (name, role, avatar)
- * - Service creation (if user selects provider role)
  * - Form validation and error display
  * - Server submission with file uploads
  *
  * Uses the `useProfileForm` hook for all form logic and state management.
  *
  * @component
- * @returns {React.ReactElement} A styled profile form with conditional service section
+ * @returns {React.ReactElement} A styled profile form
  *
  * @example
  * <ProfileForm />
@@ -25,18 +23,12 @@ export default function ProfileForm() {
   const {
     userId,
     loading,
-    categories,
     profileData,
-    servicesData,
     validationErrors,
-    serviceErrors,
     generalError,
     previewUrl,
     handleProfileChange,
     handleAvatarChange,
-    addService,
-    removeService,
-    handleServiceChange,
     handleSubmit,
   } = useProfileForm();
 
@@ -61,14 +53,11 @@ export default function ProfileForm() {
         />
 
         {profileData.rol === 'proveedor' && (
-          <ServicesList
-            services={servicesData}
-            categories={categories}
-            errors={serviceErrors}
-            onAdd={addService}
-            onRemove={removeService}
-            onChange={handleServiceChange}
-          />
+          <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-900 dark:bg-blue-900/20">
+            <p className="text-sm font-semibold text-blue-900 dark:text-blue-200">
+              💡 Dentro de la aplicación podrás cargar tus servicios
+            </p>
+          </div>
         )}
 
         {generalError && (

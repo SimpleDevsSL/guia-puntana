@@ -9,6 +9,25 @@ export type Category = {
 // RegEx para validar teléfonos (mínimo 10 dígitos, permite +, espacios y guiones)
 const phoneRegex = /^\+?[0-9\s-]{10,15}$/;
 
+// Schema para validar URLs de redes
+const networkUrlSchema = z.object({
+  url: z
+    .string()
+    .min(1, { message: 'La URL no puede estar vacía.' })
+    .refine(
+      (val) => {
+        // Valida URLs o menciones de usuario (@usuario)
+        const isUrl = val.startsWith('http://') || val.startsWith('https://');
+        const isHandle = /^@[a-zA-Z0-9_]{1,30}$/.test(val);
+        return isUrl || isHandle;
+      },
+      {
+        message:
+          'Ingresa una URL válida o un usuario (ej: @usuario o https://instagram.com/usuario)',
+      }
+    ),
+});
+
 export const serviceSchema = z.object({
   categoria_id: z
     .string()
@@ -32,10 +51,10 @@ export const serviceSchema = z.object({
   barrio: z.string().optional(),
 
   redes: z
-    .string()
-    .max(200, { message: 'El texto es demasiado largo.' })
+    .array(networkUrlSchema)
+    .max(3, { message: 'Máximo 3 redes permitidas.' })
     .optional()
-    .or(z.literal('')),
+    .default([]),
 });
 
 export const profileSchema = z.object({
@@ -54,3 +73,4 @@ export type ProfileFormData = z.infer<typeof profileSchema>;
 export type ServiceFormData = z.infer<typeof serviceSchema> & {
   tempId: number;
 };
+export type NetworkUrl = z.infer<typeof networkUrlSchema>;

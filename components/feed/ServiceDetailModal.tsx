@@ -162,37 +162,52 @@ const ServiceDetailModal: React.FC<Props> = ({
                 </div>
               </div>
 
-              {service.redes && (
-                <div className="flex items-center gap-3 rounded-2xl bg-slate-50 p-4 dark:bg-gray-800/50 md:col-span-2">
-                  <div className="rounded-lg bg-white p-2 text-orange-600 shadow-sm dark:bg-gray-800">
-                    <Globe size={20} />
-                  </div>
-                  <div className="flex-1">
+              {service.redes &&
+                Array.isArray(service.redes) &&
+                service.redes.length > 0 && (
+                  <div className="space-y-3 md:col-span-2">
                     <p className="text-xs font-bold uppercase text-gray-500">
-                      Más información
+                      Redes y Sitios Web
                     </p>
-                    {service.redes.startsWith('http') ||
-                    service.redes.startsWith('www') ? (
-                      <a
-                        href={
-                          service.redes.startsWith('www')
-                            ? `https://${service.redes}`
-                            : service.redes
-                        }
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-1 inline-block font-bold text-orange-600 underline decoration-2 underline-offset-2 transition-colors hover:text-orange-800 dark:text-orange-400 dark:hover:text-orange-300"
-                      >
-                        Visitar enlace externo
-                      </a>
-                    ) : (
-                      <p className="font-medium text-gray-900 dark:text-white">
-                        {service.redes}
-                      </p>
-                    )}
+                    {service.redes.map((red, idx) => {
+                      const url = red.url;
+                      const isUrl =
+                        url.startsWith('http://') ||
+                        url.startsWith('https://') ||
+                        url.startsWith('www');
+                      const isHandle = url.startsWith('@');
+
+                      return (
+                        <div
+                          key={idx}
+                          className="flex items-center gap-3 rounded-lg bg-slate-50 p-3 dark:bg-gray-800/50"
+                        >
+                          <div className="rounded-lg bg-white p-2 text-orange-600 shadow-sm dark:bg-gray-800">
+                            <Globe size={18} />
+                          </div>
+                          <div className="flex-1">
+                            {isUrl ? (
+                              <a
+                                href={
+                                  url.startsWith('www') ? `https://${url}` : url
+                                }
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-semibold text-orange-600 hover:text-orange-800 dark:text-orange-400 dark:hover:text-orange-300"
+                              >
+                                Visitar Red
+                              </a>
+                            ) : (
+                              <p className="font-semibold text-gray-900 dark:text-white">
+                                {url}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
-                </div>
-              )}
+                )}
             </div>
           </div>
 

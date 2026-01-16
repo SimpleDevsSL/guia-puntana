@@ -11,6 +11,7 @@ interface LocalidadAutocompleteProps {
   placeholder?: string;
   disabled?: boolean;
   transparent?: boolean;
+  maxHeight?: string;
 }
 
 export const LocalidadAutocomplete = ({
@@ -21,6 +22,7 @@ export const LocalidadAutocomplete = ({
   placeholder = 'Ej. San Luis Capital',
   disabled = false,
   transparent = false,
+  maxHeight = 'max-h-48',
 }: LocalidadAutocompleteProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
@@ -104,7 +106,7 @@ export const LocalidadAutocomplete = ({
 
       {isOpen && filteredOptions.length > 0 && (
         <div
-          className={`absolute top-full z-50 mt-1 w-full overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-800 dark:bg-gray-900 ${transparent ? '' : ''}`}
+          className={`absolute top-full z-50 mt-1 w-full ${maxHeight} overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-800 dark:bg-gray-900 ${transparent ? '' : ''}`}
         >
           {filteredOptions.map((option, index) => (
             <button
