@@ -79,7 +79,7 @@ export default function ClientFeedLogic({
    * @throws {Error} If metrics recording fails (logged to console, doesn't block contact)
    */
   const handleContact = async (service: ServiceWithProfile) => {
-    const metricsPromise = supabase
+    supabase
       .from('metricas_clics')
       .insert({
         servicio_id: service.id,

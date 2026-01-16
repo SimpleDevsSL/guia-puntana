@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { ServiceWithProfile } from '../../app/lib/definitions';
 import {
   MapPin,
@@ -87,10 +88,12 @@ const ServiceDetailModal: React.FC<Props> = ({
           {/* Encabezado con Foto y Nombre */}
           <div className="mb-8 flex flex-col items-center gap-6 md:flex-row md:items-start">
             {service.proveedor.foto_url ? (
-              <img
+              <Image
                 src={service.proveedor.foto_url}
                 alt={service.proveedor.nombre_completo}
                 className="h-32 w-32 rounded-2xl border-4 border-orange-50 object-cover shadow-lg dark:border-orange-900/30"
+                width={128}
+                height={128}
               />
             ) : (
               <div className="flex h-32 w-32 items-center justify-center rounded-2xl border-4 border-orange-50 bg-orange-100 text-4xl font-extrabold text-orange-600 shadow-lg dark:border-orange-900/30 dark:bg-orange-900/30 dark:text-orange-400">
@@ -175,7 +178,6 @@ const ServiceDetailModal: React.FC<Props> = ({
                         url.startsWith('http://') ||
                         url.startsWith('https://') ||
                         url.startsWith('www');
-                      const isHandle = url.startsWith('@');
 
                       return (
                         <div

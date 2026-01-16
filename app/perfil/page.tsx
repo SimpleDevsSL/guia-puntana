@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { Header } from '@/components/feed/Header';
 import { useProfileSettings } from './useProfileSettings';
 import {
@@ -73,10 +74,11 @@ export default function ProfilePage() {
               <div className="group relative">
                 <div className="flex h-32 w-32 items-center justify-center overflow-hidden rounded-2xl border-4 border-white bg-gray-200 shadow-lg dark:border-gray-900 dark:bg-gray-800">
                   {previewUrl || profileData.foto_url ? (
-                    <img
+                    <Image
                       src={previewUrl || profileData.foto_url}
                       alt="Avatar"
                       className="h-full w-full object-cover"
+                      fill
                     />
                   ) : (
                     <User size={48} className="text-gray-400" />

@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { ServiceWithProfile } from '../../app/lib/definitions';
 import { MapPin, BadgeCheck, MessageSquare } from 'lucide-react';
 import { Eye } from 'lucide-react';
@@ -28,10 +29,12 @@ const ProfessionalCard: React.FC<Props> = ({
           <div className="flex items-center gap-3">
             <div className="relative">
               {service.proveedor.foto_url ? (
-                <img
+                <Image
                   src={service.proveedor.foto_url}
                   alt={service.proveedor.nombre_completo}
                   className="h-14 w-14 rounded-full border-2 border-white object-cover shadow-sm dark:border-gray-800"
+                  width={56}
+                  height={56}
                 />
               ) : (
                 <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-white bg-orange-100 text-lg font-bold text-orange-600 shadow-sm dark:border-gray-800 dark:bg-orange-900/30 dark:text-orange-400">
