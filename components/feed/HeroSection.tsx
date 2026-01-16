@@ -7,37 +7,30 @@ import { LocalidadAutocomplete } from '@/components/ui/LocalidadAutocomplete';
 interface HeroSectionProps {
   initialQuery: string;
   initialLocation: string;
+  basePath?: string; // Prop para definir la ruta base
 }
 
 const HeroSection: React.FC<HeroSectionProps> = ({
   initialQuery,
   initialLocation,
+  basePath = '/feed', // Por defecto va al feed
 }) => {
   const [q, setQ] = useState(initialQuery);
   const [l, setL] = useState(initialLocation);
   const router = useRouter();
-  const searchParams = useSearchParams(); // Hook para leer la URL actual
+  const searchParams = useSearchParams();
 
   const handleSearch = () => {
-    // 1. Clonamos los parámetros actuales (esto mantiene 'cat' si existe)
     const params = new URLSearchParams(searchParams.toString());
 
-    // 2. Actualizamos o borramos 'q' (búsqueda)
-    if (q.trim()) {
-      params.set('q', q);
-    } else {
-      params.delete('q');
-    }
+    if (q.trim()) params.set('q', q);
+    else params.delete('q');
 
-    // 3. Actualizamos o borramos 'l' (localidad)
-    if (l.trim()) {
-      params.set('l', l);
-    } else {
-      params.delete('l');
-    }
+    if (l.trim()) params.set('l', l);
+    else params.delete('l');
 
-    // 4. Navegamos conservando todo
-    router.push(`/feed?${params.toString()}`);
+    // Usamos el basePath dinámico
+    router.push(`${basePath}?${params.toString()}`);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

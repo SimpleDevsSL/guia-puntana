@@ -19,7 +19,8 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'enujbercrmrmtvgbaswi.supabase.co',
-        pathname: '/storage/v1/object/public/**',
+        port: '',
+        pathname: '/**', // Permite cualquier ruta dentro de este dominio
       },
     ],
   },
