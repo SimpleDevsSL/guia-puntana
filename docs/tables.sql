@@ -26,8 +26,8 @@ CREATE TABLE public.metricas_clics (
   tipo_contacto text DEFAULT 'whatsapp'::text,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   CONSTRAINT metricas_clics_pkey PRIMARY KEY (id),
-  CONSTRAINT metricas_clics_servicio_id_fkey FOREIGN KEY (servicio_id) REFERENCES public.servicios(id),
-  CONSTRAINT metricas_clics_proveedor_id_fkey FOREIGN KEY (proveedor_id) REFERENCES public.perfiles(id)
+  CONSTRAINT metricas_clics_proveedor_id_fkey FOREIGN KEY (proveedor_id) REFERENCES public.perfiles(id),
+  CONSTRAINT metricas_clics_servicio_id_fkey FOREIGN KEY (servicio_id) REFERENCES public.servicios(id)
 );
 CREATE TABLE public.perfiles (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
@@ -42,9 +42,9 @@ CREATE TABLE public.perfiles (
   foto_url text,
   insignias ARRAY DEFAULT '{}'::text[],
   CONSTRAINT perfiles_pkey PRIMARY KEY (id),
+  CONSTRAINT perfiles_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES auth.users(id),
   CONSTRAINT perfiles_created_by_fkey FOREIGN KEY (created_by) REFERENCES auth.users(id),
-  CONSTRAINT perfiles_updated_by_fkey FOREIGN KEY (updated_by) REFERENCES auth.users(id),
-  CONSTRAINT perfiles_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES auth.users(id)
+  CONSTRAINT perfiles_updated_by_fkey FOREIGN KEY (updated_by) REFERENCES auth.users(id)
 );
 CREATE TABLE public.resenas (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
@@ -79,12 +79,13 @@ CREATE TABLE public.servicios (
   updated_by uuid,
   localidad text NOT NULL,
   barrio character varying,
+  fts tsvector DEFAULT to_tsvector('spanish'::regconfig, ((((((((nombre || ' '::text) || COALESCE(descripcion, ''::text)) || ' '::text) || (COALESCE(barrio, ''::character varying))::text) || ' '::text) || COALESCE(localidad, ''::text)) || ' '::text) || COALESCE(direccion, ''::text))),
   redes jsonb DEFAULT '[]'::jsonb,
   CONSTRAINT servicios_pkey PRIMARY KEY (id),
   CONSTRAINT servicios_categoria_id_fkey FOREIGN KEY (categoria_id) REFERENCES public.categorias(id),
   CONSTRAINT servicios_created_by_fkey FOREIGN KEY (created_by) REFERENCES auth.users(id),
-  CONSTRAINT servicios_updated_by_fkey FOREIGN KEY (updated_by) REFERENCES auth.users(id),
-  CONSTRAINT servicios_proveedor_id_fkey FOREIGN KEY (proveedor_id) REFERENCES public.perfiles(id)
+  CONSTRAINT servicios_proveedor_id_fkey FOREIGN KEY (proveedor_id) REFERENCES public.perfiles(id),
+  CONSTRAINT servicios_updated_by_fkey FOREIGN KEY (updated_by) REFERENCES auth.users(id)
 );
 CREATE TABLE public.solicitudes_presupuesto (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
