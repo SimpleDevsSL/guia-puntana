@@ -61,7 +61,7 @@ export default async function ProviderPage({
     return notFound();
   }
 
-  // 2. Obtener categorías (Solo para resolver el nombre)
+  // 2. Obtener categorías
   const { data: categoriesData } = await supabase
     .from('categorias')
     .select('id, nombre')
@@ -102,6 +102,13 @@ export default async function ProviderPage({
     categories.find((c) => c.id === urlParams.cat)?.nombre ||
     'Servicios del Proveedor';
 
+  // --- LÓGICA DEL MENSAJE DE WHATSAPP ---
+  const whatsappMessage = `Hola ${profile.nombre_completo}, vi tu perfil en Guía Puntana y quisiera hacerte una consulta.`;
+  const whatsappLink = contactPhone
+    ? `https://wa.me/${contactPhone.replace(/\D/g, '')}?text=${encodeURIComponent(whatsappMessage)}`
+    : null;
+  // -------------------------------------
+
   return (
     <div className="flex min-h-screen flex-col bg-slate-50 font-sans dark:bg-gray-950">
       <Header />
@@ -111,7 +118,6 @@ export default async function ProviderPage({
         <section className="border-b bg-white dark:border-gray-800 dark:bg-gray-900">
           <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
             <div className="flex flex-col items-center gap-6 md:flex-row md:items-start md:gap-10">
-              {/* Lógica de Foto o Iniciales */}
               <div className="relative h-32 w-32 shrink-0 overflow-hidden rounded-full border-4 border-white shadow-lg dark:border-gray-800">
                 {profile.foto_url ? (
                   <Image
@@ -144,9 +150,9 @@ export default async function ProviderPage({
                 </p>
 
                 <div className="mt-6 flex flex-wrap justify-center gap-3 md:justify-start">
-                  {contactPhone ? (
+                  {whatsappLink ? (
                     <a
-                      href={`https://wa.me/${contactPhone.replace(/\D/g, '')}`}
+                      href={whatsappLink}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-5 py-2.5 font-bold text-white shadow-sm transition hover:bg-green-700"
