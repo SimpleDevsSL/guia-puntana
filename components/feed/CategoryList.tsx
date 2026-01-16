@@ -35,6 +35,8 @@ interface CategoryListProps {
   categories: Category[];
   /** ID of currently active/selected category (null for "all") */
   activeCategoryId: string | null;
+
+  basePath?: string;
 }
 
 /**
@@ -95,12 +97,13 @@ const CATEGORY_ICONS: Record<string, React.ElementType> = {
 const CategoryList: React.FC<CategoryListProps> = ({
   categories,
   activeCategoryId,
+  basePath = '/feed', // Por defecto al feed
 }) => {
   return (
     <div className="mx-auto mt-8 max-w-7xl px-4">
       <div className="no-scrollbar flex space-x-6 overflow-x-auto border-b pb-4 dark:border-gray-800">
         <Link
-          href="/feed"
+          href={basePath} // Usar basePath
           className={`flex items-center gap-2 whitespace-nowrap border-b-2 pb-2 text-sm font-medium transition-colors ${
             !activeCategoryId
               ? 'border-orange-600 text-orange-600'
@@ -110,15 +113,13 @@ const CategoryList: React.FC<CategoryListProps> = ({
           <LayoutGrid size={22} /> Todos
         </Link>
 
-        {/* Individual category links */}
         {categories.map((cat) => {
-          // Retrieve icon from map, fallback to Sparkles if not found
           const IconComponent = CATEGORY_ICONS[cat.nombre] || Sparkles;
 
           return (
             <Link
               key={cat.id}
-              href={`/feed?cat=${cat.id}`}
+              href={`${basePath}?cat=${cat.id}`} // Usar basePath
               className={`flex items-center gap-2 whitespace-nowrap border-b-2 pb-2 text-sm font-medium transition-colors ${
                 activeCategoryId === cat.id
                   ? 'border-orange-600 text-orange-600'
