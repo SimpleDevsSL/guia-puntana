@@ -1,7 +1,9 @@
 import React from 'react';
+import Image from 'next/image';
 import { ServiceWithProfile } from '../../app/lib/definitions';
 import { MapPin, BadgeCheck, MessageSquare } from 'lucide-react';
 import { Eye } from 'lucide-react';
+import Link from 'next/link';
 
 interface Props {
   service: ServiceWithProfile;
@@ -27,31 +29,51 @@ const ProfessionalCard: React.FC<Props> = ({
         <div className="mb-4 flex items-start justify-between">
           <div className="flex items-center gap-3">
             <div className="relative">
-              {service.proveedor.foto_url ? (
-                <img
-                  src={service.proveedor.foto_url}
-                  alt={service.proveedor.nombre_completo}
-                  className="h-14 w-14 rounded-full border-2 border-white object-cover shadow-sm dark:border-gray-800"
-                />
-              ) : (
-                <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-white bg-orange-100 text-lg font-bold text-orange-600 shadow-sm dark:border-gray-800 dark:bg-orange-900/30 dark:text-orange-400">
-                  {getInitials(service.proveedor.nombre_completo)}
-                </div>
-              )}
+              {/* Avatar clickeable -> Va al perfil */}
+              <Link href={`/proveedor/${service.proveedor.id}`}>
+                {service.proveedor.foto_url ? (
+                  <Image
+                    src={service.proveedor.foto_url}
+                    alt={service.proveedor.nombre_completo}
+                    width={56}
+                    height={56}
+                    className="h-14 w-14 rounded-full border-2 border-white object-cover shadow-sm transition-transform hover:scale-105 dark:border-gray-800"
+                  />
+                ) : (
+                  <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-white bg-orange-100 text-lg font-bold text-orange-600 shadow-sm transition-transform hover:scale-105 dark:border-gray-800 dark:bg-orange-900/30 dark:text-orange-400">
+                    {getInitials(service.proveedor.nombre_completo)}
+                  </div>
+                )}
+              </Link>
             </div>
             <div>
-              <h3 className="text-lg font-bold leading-tight text-gray-900 transition-colors group-hover:text-orange-600 dark:text-white">
+              {/* Nombre del Servicio -> Abre el modal de detalles */}
+              <h3
+                onClick={() => onViewDetail(service)}
+                className="cursor-pointer text-lg font-bold leading-tight text-gray-900 transition-colors hover:text-orange-600 dark:text-white"
+              >
                 {service.nombre}
               </h3>
 
+              {/* Nombre del Proveedor -> Va al perfil */}
               <p className="mt-0.5 text-sm font-medium text-gray-500 dark:text-gray-400">
-                Por {service.proveedor.nombre_completo}
+                Por{' '}
+                <Link
+                  href={`/proveedor/${service.proveedor.id}`}
+                  className="hover:text-orange-600 hover:underline"
+                >
+                  {service.proveedor.nombre_completo}
+                </Link>
               </p>
             </div>
           </div>
         </div>
 
-        <p className="mb-5 line-clamp-3 flex-grow text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+        {/* Descripción también clickeable (opcional, mejora UX) */}
+        <p
+          onClick={() => onViewDetail(service)}
+          className="mb-5 line-clamp-3 flex-grow cursor-pointer text-sm leading-relaxed text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300"
+        >
           {service.descripcion}
         </p>
 
