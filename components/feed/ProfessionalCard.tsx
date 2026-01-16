@@ -32,9 +32,11 @@ const ProfessionalCard: React.FC<Props> = ({
               {/* Avatar clickeable -> Va al perfil */}
               <Link href={`/proveedor/${service.proveedor.id}`}>
                 {service.proveedor.foto_url ? (
-                  <img
+                  <Image
                     src={service.proveedor.foto_url}
                     alt={service.proveedor.nombre_completo}
+                    width={56}
+                    height={56}
                     className="h-14 w-14 rounded-full border-2 border-white object-cover shadow-sm transition-transform hover:scale-105 dark:border-gray-800"
                   />
                 ) : (

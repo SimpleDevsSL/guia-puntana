@@ -45,9 +45,11 @@ const ServiceDetailModal: React.FC<Props> = ({
           <div className="mb-8 flex flex-col items-center gap-6 md:flex-row md:items-start">
             <Link href={`/proveedor/${service.proveedor.id}`}>
               {service.proveedor.foto_url ? (
-                <img
+                <Image
                   src={service.proveedor.foto_url}
                   alt={service.proveedor.nombre_completo}
+                  width={128}
+                  height={128}
                   className="h-32 w-32 rounded-2xl border-4 border-orange-50 object-cover shadow-lg transition-transform hover:scale-105 dark:border-orange-900/30"
                 />
               ) : (
