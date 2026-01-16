@@ -14,6 +14,16 @@ const withPWA = withPWAInit({
 
 const nextConfig: NextConfig = {
   turbopack: {},
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'enujbercrmrmtvgbaswi.supabase.co',
+        port: '',
+        pathname: '/**', // Permite cualquier ruta dentro de este dominio
+      },
+    ],
+  },
 };
 
 export default withPWA(nextConfig);
