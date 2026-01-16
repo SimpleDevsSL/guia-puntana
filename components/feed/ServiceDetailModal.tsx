@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { ServiceWithProfile } from '../../app/lib/definitions';
 import {
   MapPin,
@@ -140,7 +141,6 @@ const ServiceDetailModal: React.FC<Props> = ({
                         url.startsWith('http://') ||
                         url.startsWith('https://') ||
                         url.startsWith('www');
-                      const isHandle = url.startsWith('@');
 
                       return (
                         <div

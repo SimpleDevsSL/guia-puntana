@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { ServiceWithProfile } from '../../app/lib/definitions';
 import { MapPin, BadgeCheck, MessageSquare } from 'lucide-react';
 import { Eye } from 'lucide-react';

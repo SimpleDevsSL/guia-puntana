@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { Header } from '@/components/feed/Header';
 import { useProfileSettings } from './useProfileSettings';
 import {
@@ -40,6 +41,11 @@ export default function ProfilePage() {
     handleBecomeProvider,
   } = useProfileSettings();
 
+  // Detectar si el usuario es de Google
+  const isGoogleUser =
+    userData?.app_metadata?.provider === 'google' ||
+    userData?.app_metadata?.providers?.includes('google');
+
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-950">
@@ -68,10 +74,11 @@ export default function ProfilePage() {
               <div className="group relative">
                 <div className="flex h-32 w-32 items-center justify-center overflow-hidden rounded-2xl border-4 border-white bg-gray-200 shadow-lg dark:border-gray-900 dark:bg-gray-800">
                   {previewUrl || profileData.foto_url ? (
-                    <img
+                    <Image
                       src={previewUrl || profileData.foto_url}
                       alt="Avatar"
                       className="h-full w-full object-cover"
+                      fill
                     />
                   ) : (
                     <User size={48} className="text-gray-400" />
@@ -97,6 +104,11 @@ export default function ProfilePage() {
                 <p className="text-gray-500 dark:text-gray-400">
                   {userData?.email}
                 </p>
+                {isGoogleUser && (
+                  <span className="mt-2 inline-block rounded-full bg-blue-100 px-3 py-1 text-xs font-bold text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+                    Cuenta de Google
+                  </span>
+                )}
               </div>
             </div>
 
@@ -158,101 +170,111 @@ export default function ProfilePage() {
               </section>
             )}
 
-            {/* Sección Seguridad */}
+            {/* Sección Seguridad: Siempre renderizamos el contenedor para mantener el borde superior */}
             <section className="mt-12 space-y-8 border-t border-gray-100 pt-12 dark:border-gray-800">
-              <div className="flex items-center gap-2">
-                <ShieldCheck size={24} className="text-orange-600" />
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                  Seguridad de la Cuenta
-                </h2>
-              </div>
+              {/* Bloque de gestión de contraseñas/email: Oculto para Google */}
+              {!isGoogleUser && (
+                <>
+                  <div className="flex items-center gap-2">
+                    <ShieldCheck size={24} className="text-orange-600" />
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                      Seguridad de la Cuenta
+                    </h2>
+                  </div>
 
-              {/* Aviso Confirmación Doble */}
-              <div className="flex gap-3 rounded-r-xl border-l-4 border-blue-500 bg-blue-50 p-4 dark:bg-blue-900/20">
-                <Info size={20} className="shrink-0 text-blue-600" />
-                <p className="text-sm text-blue-700 dark:text-blue-300">
-                  <strong>Aviso de Email:</strong> Se enviará un link de
-                  verificación a tu correo actual y otro al nuevo. Debes
-                  confirmar ambos para completar el cambio.
-                </p>
-              </div>
+                  {/* Aviso Confirmación Doble */}
+                  <div className="flex gap-3 rounded-r-xl border-l-4 border-blue-500 bg-blue-50 p-4 dark:bg-blue-900/20">
+                    <Info size={20} className="shrink-0 text-blue-600" />
+                    <p className="text-sm text-blue-700 dark:text-blue-300">
+                      <strong>Aviso de Email:</strong> Se enviará un link de
+                      verificación a tu correo actual y otro al nuevo. Debes
+                      confirmar ambos para completar el cambio.
+                    </p>
+                  </div>
 
-              {/* Input Contraseña Actual Obligatorio */}
-              <div className="rounded-2xl border border-dashed border-orange-200 bg-orange-50/50 p-6 dark:border-orange-800 dark:bg-orange-900/10">
-                <label className="mb-2 block text-sm font-bold text-orange-700 dark:text-orange-400">
-                  Contraseña Actual para Validación
-                </label>
-                <input
-                  type="password"
-                  placeholder="Ingresa tu clave actual para cambios sensibles"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                  className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 outline-none focus:ring-2 focus:ring-orange-500 dark:border-gray-700 dark:bg-gray-900"
-                />
-              </div>
+                  {/* Input Contraseña Actual Obligatorio */}
+                  <div className="rounded-2xl border border-dashed border-orange-200 bg-orange-50/50 p-6 dark:border-orange-800 dark:bg-orange-900/10">
+                    <label className="mb-2 block text-sm font-bold text-orange-700 dark:text-orange-400">
+                      Contraseña Actual para Validación
+                    </label>
+                    <input
+                      type="password"
+                      placeholder="Ingresa tu clave actual para cambios sensibles"
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                      className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 outline-none focus:ring-2 focus:ring-orange-500 dark:border-gray-700 dark:bg-gray-900"
+                    />
+                  </div>
 
-              {/* Actualizar Email */}
-              <div className="grid grid-cols-1 items-end gap-4 md:grid-cols-3">
-                <div className="md:col-span-2">
-                  <label className="mb-2 block text-sm font-bold text-gray-700 dark:text-gray-300">
-                    Nuevo Email
-                  </label>
-                  <input
-                    type="email"
-                    value={newEmail}
-                    onChange={(e) => setNewEmail(e.target.value)}
-                    className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800"
-                  />
-                </div>
-                <button
-                  onClick={handleUpdateEmail}
-                  disabled={!currentPassword || !newEmail || saving}
-                  className="rounded-xl bg-gray-900 px-6 py-3 font-bold text-white transition-all hover:bg-orange-600 disabled:opacity-50 dark:bg-gray-800"
-                >
-                  Cambiar Email
-                </button>
-              </div>
+                  {/* Actualizar Email */}
+                  <div className="grid grid-cols-1 items-end gap-4 md:grid-cols-3">
+                    <div className="md:col-span-2">
+                      <label className="mb-2 block text-sm font-bold text-gray-700 dark:text-gray-300">
+                        Nuevo Email
+                      </label>
+                      <input
+                        type="email"
+                        value={newEmail}
+                        onChange={(e) => setNewEmail(e.target.value)}
+                        className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800"
+                      />
+                    </div>
+                    <button
+                      onClick={handleUpdateEmail}
+                      disabled={!currentPassword || !newEmail || saving}
+                      className="rounded-xl bg-gray-900 px-6 py-3 font-bold text-white transition-all hover:bg-orange-600 disabled:opacity-50 dark:bg-gray-800"
+                    >
+                      Cambiar Email
+                    </button>
+                  </div>
 
-              {/* Actualizar Contraseña */}
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <div>
-                  <label className="mb-2 block text-sm font-bold text-gray-700 dark:text-gray-300">
-                    Nueva Contraseña
-                  </label>
-                  <input
-                    type="password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800"
-                  />
-                </div>
-                <div>
-                  <label className="mb-2 block text-sm font-bold text-gray-700 dark:text-gray-300">
-                    Confirmar Nueva Contraseña
-                  </label>
-                  <input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800"
-                  />
-                </div>
-                <button
-                  onClick={handleUpdatePassword}
-                  disabled={
-                    !currentPassword ||
-                    !newPassword ||
-                    newPassword !== confirmPassword ||
-                    saving
-                  }
-                  className="rounded-xl bg-gray-900 px-6 py-3 font-bold text-white transition-all hover:bg-orange-600 disabled:opacity-50 dark:bg-gray-800 md:col-span-2"
-                >
-                  Actualizar Contraseña
-                </button>
-              </div>
+                  {/* Actualizar Contraseña */}
+                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <div>
+                      <label className="mb-2 block text-sm font-bold text-gray-700 dark:text-gray-300">
+                        Nueva Contraseña
+                      </label>
+                      <input
+                        type="password"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800"
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-2 block text-sm font-bold text-gray-700 dark:text-gray-300">
+                        Confirmar Nueva Contraseña
+                      </label>
+                      <input
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800"
+                      />
+                    </div>
+                    <button
+                      onClick={handleUpdatePassword}
+                      disabled={
+                        !currentPassword ||
+                        !newPassword ||
+                        newPassword !== confirmPassword ||
+                        saving
+                      }
+                      className="rounded-xl bg-gray-900 px-6 py-3 font-bold text-white transition-all hover:bg-orange-600 disabled:opacity-50 dark:bg-gray-800 md:col-span-2"
+                    >
+                      Actualizar Contraseña
+                    </button>
+                  </div>
+                </>
+              )}
 
-              {/* Eliminar Cuenta */}
-              <div className="flex justify-center border-t border-red-100 pt-8 dark:border-red-900/30">
+              <div
+                className={`flex justify-center pt-8 ${
+                  !isGoogleUser
+                    ? 'border-t border-red-100 dark:border-red-900/30'
+                    : ''
+                }`}
+              >
                 <button
                   onClick={handleDeleteAccount}
                   className="flex items-center gap-2 rounded-xl px-6 py-3 font-bold text-red-600 transition-colors hover:bg-red-50 dark:hover:bg-red-900/10"
