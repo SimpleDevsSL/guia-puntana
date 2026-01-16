@@ -79,6 +79,7 @@ CREATE TABLE public.servicios (
   updated_by uuid,
   localidad text NOT NULL,
   barrio character varying,
+  redes jsonb DEFAULT '[]'::jsonb,
   CONSTRAINT servicios_pkey PRIMARY KEY (id),
   CONSTRAINT servicios_categoria_id_fkey FOREIGN KEY (categoria_id) REFERENCES public.categorias(id),
   CONSTRAINT servicios_created_by_fkey FOREIGN KEY (created_by) REFERENCES auth.users(id),

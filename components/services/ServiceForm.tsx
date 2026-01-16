@@ -2,7 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
-import { serviceSchema } from '@/components/profile/form-schema';
+import {
+  serviceSchema,
+  type NetworkUrl,
+} from '@/components/profile/form-schema';
 import { ServiceWithProfile, Category } from '@/app/lib/definitions';
 import { LocalidadAutocomplete } from '@/components/ui/LocalidadAutocomplete';
 
@@ -30,7 +33,7 @@ export function ServiceForm({
     direccion: serviceToEdit?.direccion || '',
     localidad: serviceToEdit?.localidad || '',
     barrio: serviceToEdit?.barrio || '',
-    redes: serviceToEdit?.redes || '',
+    redes: (serviceToEdit?.redes || []) as NetworkUrl[],
   });
 
   useEffect(() => {
@@ -54,7 +57,7 @@ export function ServiceForm({
         direccion: serviceToEdit.direccion || '',
         localidad: serviceToEdit.localidad || '',
         barrio: serviceToEdit.barrio || '',
-        redes: serviceToEdit.redes || '',
+        redes: (serviceToEdit.redes || []) as NetworkUrl[],
       });
     } else {
       setFormData({
@@ -65,7 +68,7 @@ export function ServiceForm({
         direccion: '',
         localidad: '',
         barrio: '',
-        redes: '',
+        redes: [],
       });
     }
   }, [serviceToEdit]);
@@ -281,20 +284,52 @@ export function ServiceForm({
         </div>{' '}
         <div className="md:col-span-2">
           <label className={labelClass}>Redes o Sitio Web (Opcional)</label>
-          <input
-            type="text"
-            placeholder="Ej: @miusuario o https://instagram.com/..."
-            className={`${inputClass} ${errors.redes ? 'border-red-500 ring-1 ring-red-200' : ''}`}
-            value={formData.redes}
-            onChange={(e) =>
-              setFormData({ ...formData, redes: e.target.value })
-            }
-          />
-          {errors.redes && (
-            <p className="mt-1 text-xs font-bold text-red-500">
-              {errors.redes}
-            </p>
-          )}
+          <div className="space-y-3">
+            {formData.redes.map((red, idx) => (
+              <div key={idx} className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="Ej: @miusuario o https://instagram.com/..."
+                  className={`${inputClass} ${errors[`redes.${idx}.url`] ? 'border-red-500 ring-1 ring-red-200' : ''}`}
+                  value={red.url}
+                  onChange={(e) => {
+                    const newRedes = [...formData.redes];
+                    newRedes[idx].url = e.target.value;
+                    setFormData({ ...formData, redes: newRedes });
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newRedes = formData.redes.filter((_, i) => i !== idx);
+                    setFormData({ ...formData, redes: newRedes });
+                  }}
+                  className="rounded-xl bg-red-50 px-3 py-3 text-red-600 hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+            {formData.redes.length < 3 && (
+              <button
+                type="button"
+                onClick={() => {
+                  setFormData({
+                    ...formData,
+                    redes: [...formData.redes, { url: '' }],
+                  });
+                }}
+                className="w-full rounded-xl border-2 border-dashed border-orange-300 bg-orange-50 py-3 font-semibold text-orange-600 transition-all hover:border-orange-400 hover:bg-orange-100 dark:border-orange-900/50 dark:bg-orange-900/10 dark:text-orange-400"
+              >
+                + Agregar Red
+              </button>
+            )}
+            {errors.redes && (
+              <p className="mt-1 text-xs font-bold text-red-500">
+                {errors.redes}
+              </p>
+            )}
+          </div>
         </div>
       </div>
 

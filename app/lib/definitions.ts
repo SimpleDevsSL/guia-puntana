@@ -4,6 +4,10 @@ export interface Category {
   descripcion?: string;
 }
 
+export interface NetworkUrl {
+  url: string;
+}
+
 export interface ServiceWithProfile {
   id: string;
   nombre: string;
@@ -12,7 +16,7 @@ export interface ServiceWithProfile {
   direccion?: string;
   barrio?: string;
   telefono?: string;
-  redes?: string;
+  redes?: NetworkUrl[];
   categoria: {
     id: string;
     nombre: string;
