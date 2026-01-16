@@ -45,7 +45,7 @@ const ProfessionalCard: React.FC<Props> = ({
             </div>
             <div>
               {/* Nombre del Servicio -> Abre el modal de detalles */}
-              <h3 
+              <h3
                 onClick={() => onViewDetail(service)}
                 className="cursor-pointer text-lg font-bold leading-tight text-gray-900 transition-colors hover:text-orange-600 dark:text-white"
               >
@@ -67,7 +67,7 @@ const ProfessionalCard: React.FC<Props> = ({
         </div>
 
         {/* Descripción también clickeable (opcional, mejora UX) */}
-        <p 
+        <p
           onClick={() => onViewDetail(service)}
           className="mb-5 line-clamp-3 flex-grow cursor-pointer text-sm leading-relaxed text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300"
         >

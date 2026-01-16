@@ -59,7 +59,7 @@ const ServiceDetailModal: React.FC<Props> = ({
               <span className="mb-2 inline-block rounded-full bg-orange-100 px-3 py-1 text-xs font-bold uppercase tracking-wider text-orange-600 dark:bg-orange-900/30 dark:text-orange-400">
                 {service.categoria.nombre}
               </span>
-              
+
               <h2 className="mb-2 text-3xl font-extrabold text-gray-900 dark:text-white">
                 <Link
                   href={`/proveedor/${service.proveedor.id}`}
