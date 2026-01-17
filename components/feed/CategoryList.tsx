@@ -70,7 +70,7 @@ const CATEGORY_ICONS: Record<string, React.ElementType> = {
   'Marketing Digital': Megaphone,
   Otro: Sparkles,
   'Personal Trainer': Dumbbell,
-  'Suplementos deportivos': Milk,
+  'Suplementos Deportivos': Milk,
 };
 
 // IDs de categorías que no tienen servicios aún (para mostrarlas al final, antes de "Otro")
