@@ -24,6 +24,7 @@ import {
   Scissors, // Estética y Moda
   Home, // Inmobiliaria y Propiedades
   Megaphone, // Marketing Digital
+  Dumbbell, // Personal Trainer
 } from 'lucide-react';
 
 /**
@@ -69,6 +70,7 @@ const CATEGORY_ICONS: Record<string, React.ElementType> = {
   'Inmobiliaria y Propiedades': Home,
   'Marketing Digital': Megaphone,
   Otro: Sparkles,
+  'Personal Trainer': Dumbbell,
 };
 
 /**
