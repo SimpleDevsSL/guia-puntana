@@ -39,7 +39,6 @@ interface CategoryListProps {
   basePath?: string;
 }
 
-// 1. Mapa de Iconos
 const CATEGORY_ICONS: Record<string, React.ElementType> = {
   'Plomería y Gas': Wrench,
   Electricidad: Zap,
@@ -65,7 +64,6 @@ const CATEGORY_ICONS: Record<string, React.ElementType> = {
   Otro: Sparkles,
 };
 
-// 2. Definición de Grupos
 const GROUP_DEFINITIONS = {
   OFICIOS: [
     'Plomería y Gas',
@@ -88,7 +86,12 @@ const GROUP_DEFINITIONS = {
     'Inmobiliaria y Propiedades',
     'Marketing Digital',
     'Personal Trainer',
+  ],
+  OTROS: [
     'Viandas y Comida Casera',
+    'Mascotas',
+    'Suplementos Deportivos',
+    'Otro',
   ],
 };
 
@@ -100,7 +103,6 @@ const CategoryList: React.FC<CategoryListProps> = ({
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // 3. Clasificación y Ordenamiento
   const groupedCategories = useMemo(() => {
     const groups = {
       OFICIOS: [] as Category[],
@@ -118,11 +120,28 @@ const CategoryList: React.FC<CategoryListProps> = ({
       }
     });
 
-    Object.keys(groups).forEach((key) => {
-      groups[key as keyof typeof groups].sort((a, b) =>
-        a.nombre.localeCompare(b.nombre)
-      );
-    });
+    // Ordenamiento Personalizado
+    const sortList = (list: Category[], definition: string[]) => {
+      list.sort((a, b) => {
+        const indexA = definition.indexOf(a.nombre);
+        const indexB = definition.indexOf(b.nombre);
+
+        // Si ambos están en la lista definida, usar ese orden
+        if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+
+        // Si uno está y el otro no, el que está tiene prioridad
+        if (indexA !== -1) return -1;
+        if (indexB !== -1) return 1;
+
+        // Si ninguno está en la lista usar alfabético
+        return a.nombre.localeCompare(b.nombre);
+      });
+    };
+
+    // Aplicar el orden a cada grupo
+    sortList(groups.OFICIOS, GROUP_DEFINITIONS.OFICIOS);
+    sortList(groups.SERVICIOS, GROUP_DEFINITIONS.SERVICIOS);
+    sortList(groups.OTROS, GROUP_DEFINITIONS.OTROS);
 
     return groups;
   }, [categories]);
@@ -161,8 +180,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
     if (items.length === 0) return null;
 
     return (
-      <div className="relative min-w-[140px] flex-1">
-        {' '}
+      <div className="static min-w-[140px] flex-1 sm:relative">
         <button
           onClick={() => toggleDropdown(groupKey)}
           className={`flex w-full items-center justify-center gap-3 rounded-2xl border-2 px-4 py-4 text-base font-bold shadow-sm transition-all hover:shadow-lg active:scale-95 sm:text-lg ${
@@ -178,9 +196,9 @@ const CategoryList: React.FC<CategoryListProps> = ({
             className={`shrink-0 opacity-70 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
           />
         </button>
-        {/* --- MENÚ DESPLEGABLE --- */}
+
         {isOpen && (
-          <div className="animate-in fade-in zoom-in-95 absolute left-0 z-50 mt-2 w-full min-w-[260px] origin-top-left duration-100 sm:w-72">
+          <div className="animate-in fade-in zoom-in-95 absolute left-0 z-50 mt-2 w-full origin-top duration-100 sm:left-0 sm:w-72">
             <div className="max-h-80 overflow-y-auto rounded-2xl border border-gray-100 bg-white p-2 shadow-2xl ring-1 ring-black/5 dark:border-gray-700 dark:bg-gray-900 dark:ring-white/10">
               {items.map((cat) => {
                 const IconComponent = CATEGORY_ICONS[cat.nombre] || Sparkles;
@@ -216,8 +234,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
 
   return (
     <div className="mx-auto mt-8 w-full max-w-5xl px-4" ref={containerRef}>
-      {/* Contenedor Flex para botones grandes */}
-      <div className="flex flex-wrap gap-3 sm:gap-4">
+      <div className="relative flex flex-wrap gap-3 sm:gap-4">
         <Link
           href={basePath}
           onClick={() => setOpenDropdown(null)}
@@ -231,7 +248,6 @@ const CategoryList: React.FC<CategoryListProps> = ({
           <span>Todos</span>
         </Link>
 
-        {/* Botones de Grupos */}
         <DropdownButton
           label="Oficios"
           groupKey="OFICIOS"
