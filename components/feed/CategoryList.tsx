@@ -14,7 +14,6 @@ import {
   LayoutGrid, // Todos
   Droplets, // Piletas
   Utensils, // Comida
-  ShoppingBag, // Productos Regionales
   HeartPulse, // Salud
   Bandage, // Enfermería
   Activity, // Kinesiología
@@ -25,6 +24,7 @@ import {
   Home, // Inmobiliaria y Propiedades
   Megaphone, // Marketing Digital
   Dumbbell, // Personal Trainer
+  Milk, // Suplementos
 } from 'lucide-react';
 
 /**
@@ -55,7 +55,6 @@ const CATEGORY_ICONS: Record<string, React.ElementType> = {
   'Jardinería y Paisajismo': Leaf,
   'Mantenimiento de Piletas': Droplets,
   'Viandas y Comida Casera': Utensils,
-  'Productos Regionales': ShoppingBag,
   'Enfermería y Cuidadores': Bandage,
   Salud: HeartPulse,
   'Kinesiología y Masajes': Activity,
@@ -71,6 +70,7 @@ const CATEGORY_ICONS: Record<string, React.ElementType> = {
   'Marketing Digital': Megaphone,
   Otro: Sparkles,
   'Personal Trainer': Dumbbell,
+  'Suplementos deportivos': Milk,
 };
 
 /**
