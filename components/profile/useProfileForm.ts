@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
-import { profileSchema, type ProfileFormData } from './form-schema';
+import {
+  profileSchema,
+  type ProfileFormData,
+  serviceSchema,
+} from './form-schema';
 
 /**
  * Custom hook for managing profile creation/editing form state.
@@ -12,6 +16,7 @@ import { profileSchema, type ProfileFormData } from './form-schema';
  * - Avatar file upload to Supabase storage
  * - Form validation using Zod schemas
  * - Profile persistence to database
+ * - Service creation for providers (up to 3 services)
  *
  * @returns {Object} Profile form state and handler functions
  */
@@ -30,6 +35,22 @@ export function useProfileForm() {
     foto_url: '',
     insignias: [],
   });
+
+  // State for services (for providers)
+  const [services, setServices] = useState<
+    Array<{
+      tempId: number;
+      categoria_id: string;
+      nombre: string;
+      descripcion: string;
+      telefono: string;
+      direccion: string;
+      localidad: string;
+      barrio: string;
+      redes: Array<{ url: string }>;
+    }>
+  >([]);
+  const [nextServiceTempId, setNextServiceTempId] = useState(1);
 
   // Estado específico para el archivo de imagen nuevo
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
@@ -128,6 +149,45 @@ export function useProfileForm() {
   };
 
   /**
+   * Adds a new empty service form
+   */
+  const addService = () => {
+    if (services.length < 3) {
+      setServices([
+        ...services,
+        {
+          tempId: nextServiceTempId,
+          categoria_id: '',
+          nombre: '',
+          descripcion: '',
+          telefono: '',
+          direccion: '',
+          localidad: '',
+          barrio: '',
+          redes: [],
+        },
+      ]);
+      setNextServiceTempId(nextServiceTempId + 1);
+    }
+  };
+
+  /**
+   * Removes a service by tempId
+   */
+  const removeService = (tempId: number) => {
+    setServices(services.filter((s) => s.tempId !== tempId));
+  };
+
+  /**
+   * Updates a service field
+   */
+  const updateService = (tempId: number, field: string, value: unknown) => {
+    setServices(
+      services.map((s) => (s.tempId === tempId ? { ...s, [field]: value } : s))
+    );
+  };
+
+  /**
    * Validates and submits the profile form.
    */
   const handleSubmit = async (e: React.FormEvent) => {
@@ -153,16 +213,47 @@ export function useProfileForm() {
       return;
     }
 
+    // 2. Validar servicios si es proveedor
+    if (profileData.rol === 'proveedor' && services.length > 0) {
+      const serviceErrors: Record<string, string> = {};
+      services.forEach((service) => {
+        const sVal = serviceSchema.safeParse({
+          categoria_id: service.categoria_id,
+          nombre: service.nombre,
+          descripcion: service.descripcion,
+          telefono: service.telefono,
+          direccion: service.direccion,
+          localidad: service.localidad,
+          barrio: service.barrio,
+          redes: service.redes,
+        });
+
+        if (!sVal.success) {
+          sVal.error.issues.forEach((issue) => {
+            const field = issue.path[0];
+            serviceErrors[`service_${service.tempId}_${String(field)}`] =
+              issue.message;
+          });
+        }
+      });
+
+      if (Object.keys(serviceErrors).length > 0) {
+        setValidationErrors(serviceErrors);
+        setLoading(false);
+        return;
+      }
+    }
+
     try {
-      // 2. Subir imagen si existe nueva
+      // 3. Subir imagen si existe nueva
       let finalFotoUrl = profileData.foto_url;
       if (avatarFile) {
         const url = await uploadAvatar(avatarFile, userId);
         if (url) finalFotoUrl = url;
       }
 
-      // 3. Insertar/Actualizar perfil
-      const { error: pError } = await supabase
+      // 4. Insertar/Actualizar perfil
+      const { error: pError, data: profileResult } = await supabase
         .from('perfiles')
         .upsert(
           {
@@ -181,6 +272,32 @@ export function useProfileForm() {
         .single();
 
       if (pError) throw pError;
+
+      // 5. Create services if provider and services exist
+      if (
+        profileData.rol === 'proveedor' &&
+        services.length > 0 &&
+        profileResult
+      ) {
+        const servicesToCreate = services.map((service) => ({
+          proveedor_id: profileResult.id,
+          categoria_id: service.categoria_id,
+          nombre: service.nombre,
+          descripcion: service.descripcion,
+          telefono: service.telefono,
+          direccion: service.direccion,
+          localidad: service.localidad,
+          barrio: service.barrio,
+          redes: service.redes,
+          created_by: userId,
+        }));
+
+        const { error: sError } = await supabase
+          .from('servicios')
+          .insert(servicesToCreate);
+
+        if (sError) throw sError;
+      }
 
       router.push('/feed');
       router.refresh();
@@ -201,8 +318,12 @@ export function useProfileForm() {
     validationErrors,
     generalError,
     previewUrl,
+    services,
     handleProfileChange,
     handleAvatarChange,
     handleSubmit,
+    addService,
+    removeService,
+    updateService,
   };
 }
