@@ -173,7 +173,6 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
   );
 };
 
-
 const CategoryList: React.FC<CategoryListProps> = ({
   categories,
   activeCategoryId,
