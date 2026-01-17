@@ -105,7 +105,7 @@ export default async function ProviderPage({
   // --- LÓGICA DEL MENSAJE DE WHATSAPP ---
   const whatsappMessage = `Hola ${profile.nombre_completo}, vi tu perfil en Guía Puntana y quisiera hacerte una consulta.`;
   const whatsappLink = contactPhone
-    ? `https://wa.me/${contactPhone.replace(/\D/g, '')}?text=${encodeURIComponent(whatsappMessage)}`
+    ? `https://api.whatsapp.com/send?phone=${contactPhone.replace(/\D/g, '')}&text=${encodeURIComponent(whatsappMessage)}`
     : null;
   // -------------------------------------
 
