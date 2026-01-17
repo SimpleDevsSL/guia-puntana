@@ -95,6 +95,85 @@ const GROUP_DEFINITIONS = {
   ],
 };
 
+interface DropdownButtonProps {
+  label: string;
+  groupKey: string;
+  Icon: React.ElementType;
+  items: Category[];
+  isOpen: boolean;
+  activeCategoryId: string | null;
+  basePath: string;
+  onToggle: (key: string) => void;
+  onClose: () => void;
+}
+
+const DropdownButton: React.FC<DropdownButtonProps> = ({
+  label,
+  groupKey,
+  Icon,
+  items,
+  isOpen,
+  activeCategoryId,
+  basePath,
+  onToggle,
+  onClose,
+}) => {
+  const isGroupActive = items.some((item) => item.id === activeCategoryId);
+
+  if (items.length === 0) return null;
+
+  return (
+    <div className="static min-w-[140px] flex-1 sm:relative">
+      <button
+        onClick={() => onToggle(groupKey)}
+        className={`flex w-full items-center justify-center gap-3 rounded-2xl border-2 px-4 py-4 text-base font-bold shadow-sm transition-all hover:shadow-lg active:scale-95 sm:text-lg ${
+          isGroupActive || isOpen
+            ? 'border-orange-600 bg-orange-600 text-white shadow-orange-200 ring-2 ring-orange-200 ring-offset-1 dark:ring-orange-900 dark:ring-offset-gray-900'
+            : 'border-gray-100 bg-white text-gray-700 hover:border-orange-300 hover:text-orange-600 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-200'
+        }`}
+      >
+        <Icon size={24} className="shrink-0" />
+        <span className="truncate">{label}</span>
+        <ChevronDown
+          size={20}
+          className={`shrink-0 opacity-70 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+        />
+      </button>
+
+      {isOpen && (
+        <div className="animate-in fade-in zoom-in-95 absolute left-0 z-50 mt-2 w-full origin-top duration-100 sm:left-0 sm:w-72">
+          <div className="max-h-80 overflow-y-auto rounded-2xl border border-gray-100 bg-white p-2 shadow-2xl ring-1 ring-black/5 dark:border-gray-700 dark:bg-gray-900 dark:ring-white/10">
+            {items.map((cat) => {
+              const IconComponent = CATEGORY_ICONS[cat.nombre] || Sparkles;
+              const isSelected = activeCategoryId === cat.id;
+
+              return (
+                <Link
+                  key={cat.id}
+                  href={`${basePath}?cat=${cat.id}`}
+                  onClick={onClose}
+                  className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors ${
+                    isSelected
+                      ? 'bg-orange-50 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400'
+                      : 'text-gray-600 hover:bg-gray-50 hover:text-orange-600 dark:text-gray-300 dark:hover:bg-gray-800'
+                  }`}
+                >
+                  <IconComponent
+                    size={20}
+                    className={isSelected ? 'text-orange-600' : 'text-gray-400'}
+                  />
+                  {cat.nombre}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+
 const CategoryList: React.FC<CategoryListProps> = ({
   categories,
   activeCategoryId,
@@ -120,25 +199,19 @@ const CategoryList: React.FC<CategoryListProps> = ({
       }
     });
 
-    // Ordenamiento Personalizado
     const sortList = (list: Category[], definition: string[]) => {
       list.sort((a, b) => {
         const indexA = definition.indexOf(a.nombre);
         const indexB = definition.indexOf(b.nombre);
 
-        // Si ambos están en la lista definida, usar ese orden
         if (indexA !== -1 && indexB !== -1) return indexA - indexB;
-
-        // Si uno está y el otro no, el que está tiene prioridad
         if (indexA !== -1) return -1;
         if (indexB !== -1) return 1;
 
-        // Si ninguno está en la lista usar alfabético
         return a.nombre.localeCompare(b.nombre);
       });
     };
 
-    // Aplicar el orden a cada grupo
     sortList(groups.OFICIOS, GROUP_DEFINITIONS.OFICIOS);
     sortList(groups.SERVICIOS, GROUP_DEFINITIONS.SERVICIOS);
     sortList(groups.OTROS, GROUP_DEFINITIONS.OTROS);
@@ -163,73 +236,8 @@ const CategoryList: React.FC<CategoryListProps> = ({
     setOpenDropdown(openDropdown === key ? null : key);
   };
 
-  const DropdownButton = ({
-    label,
-    groupKey,
-    Icon,
-    items,
-  }: {
-    label: string;
-    groupKey: string;
-    Icon: React.ElementType;
-    items: Category[];
-  }) => {
-    const isOpen = openDropdown === groupKey;
-    const isGroupActive = items.some((item) => item.id === activeCategoryId);
-
-    if (items.length === 0) return null;
-
-    return (
-      <div className="static min-w-[140px] flex-1 sm:relative">
-        <button
-          onClick={() => toggleDropdown(groupKey)}
-          className={`flex w-full items-center justify-center gap-3 rounded-2xl border-2 px-4 py-4 text-base font-bold shadow-sm transition-all hover:shadow-lg active:scale-95 sm:text-lg ${
-            isGroupActive || isOpen
-              ? 'border-orange-600 bg-orange-600 text-white shadow-orange-200 ring-2 ring-orange-200 ring-offset-1 dark:ring-orange-900 dark:ring-offset-gray-900'
-              : 'border-gray-100 bg-white text-gray-700 hover:border-orange-300 hover:text-orange-600 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-200'
-          }`}
-        >
-          <Icon size={24} className="shrink-0" />
-          <span className="truncate">{label}</span>
-          <ChevronDown
-            size={20}
-            className={`shrink-0 opacity-70 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-          />
-        </button>
-
-        {isOpen && (
-          <div className="animate-in fade-in zoom-in-95 absolute left-0 z-50 mt-2 w-full origin-top duration-100 sm:left-0 sm:w-72">
-            <div className="max-h-80 overflow-y-auto rounded-2xl border border-gray-100 bg-white p-2 shadow-2xl ring-1 ring-black/5 dark:border-gray-700 dark:bg-gray-900 dark:ring-white/10">
-              {items.map((cat) => {
-                const IconComponent = CATEGORY_ICONS[cat.nombre] || Sparkles;
-                const isSelected = activeCategoryId === cat.id;
-
-                return (
-                  <Link
-                    key={cat.id}
-                    href={`${basePath}?cat=${cat.id}`}
-                    onClick={() => setOpenDropdown(null)}
-                    className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors ${
-                      isSelected
-                        ? 'bg-orange-50 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400'
-                        : 'text-gray-600 hover:bg-gray-50 hover:text-orange-600 dark:text-gray-300 dark:hover:bg-gray-800'
-                    }`}
-                  >
-                    <IconComponent
-                      size={20}
-                      className={
-                        isSelected ? 'text-orange-600' : 'text-gray-400'
-                      }
-                    />
-                    {cat.nombre}
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        )}
-      </div>
-    );
+  const closeDropdown = () => {
+    setOpenDropdown(null);
   };
 
   return (
@@ -237,7 +245,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
       <div className="relative flex flex-wrap gap-3 sm:gap-4">
         <Link
           href={basePath}
-          onClick={() => setOpenDropdown(null)}
+          onClick={closeDropdown}
           className={`flex min-w-[140px] flex-1 items-center justify-center gap-3 rounded-2xl border-2 px-4 py-4 text-base font-bold shadow-sm transition-all hover:shadow-lg active:scale-95 sm:text-lg ${
             !activeCategoryId
               ? 'border-orange-600 bg-orange-600 text-white shadow-orange-200 ring-2 ring-orange-200 ring-offset-1 dark:ring-orange-900 dark:ring-offset-gray-900'
@@ -253,18 +261,33 @@ const CategoryList: React.FC<CategoryListProps> = ({
           groupKey="OFICIOS"
           Icon={Briefcase}
           items={groupedCategories.OFICIOS}
+          isOpen={openDropdown === 'OFICIOS'}
+          activeCategoryId={activeCategoryId}
+          basePath={basePath}
+          onToggle={toggleDropdown}
+          onClose={closeDropdown}
         />
         <DropdownButton
           label="Servicios"
           groupKey="SERVICIOS"
           Icon={Users}
           items={groupedCategories.SERVICIOS}
+          isOpen={openDropdown === 'SERVICIOS'}
+          activeCategoryId={activeCategoryId}
+          basePath={basePath}
+          onToggle={toggleDropdown}
+          onClose={closeDropdown}
         />
         <DropdownButton
           label="Otros"
           groupKey="OTROS"
           Icon={MoreHorizontal}
           items={groupedCategories.OTROS}
+          isOpen={openDropdown === 'OTROS'}
+          activeCategoryId={activeCategoryId}
+          basePath={basePath}
+          onToggle={toggleDropdown}
+          onClose={closeDropdown}
         />
       </div>
     </div>
