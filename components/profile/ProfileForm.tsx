@@ -2,6 +2,8 @@
 
 import { useProfileForm } from './useProfileForm';
 import { ProfileInfo } from './parts/ProfileInfo';
+import { ServiceFormInProfile } from './parts/ServiceFormInProfile';
+import { Plus } from 'lucide-react';
 
 /**
  * Profile completion form component for new users.
@@ -27,9 +29,13 @@ export default function ProfileForm() {
     validationErrors,
     generalError,
     previewUrl,
+    services,
     handleProfileChange,
     handleAvatarChange,
     handleSubmit,
+    addService,
+    removeService,
+    updateService,
   } = useProfileForm();
 
   return (
@@ -53,10 +59,37 @@ export default function ProfileForm() {
         />
 
         {profileData.rol === 'proveedor' && (
-          <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-900 dark:bg-blue-900/20">
+          <div className="space-y-4 rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-900 dark:bg-blue-900/20">
             <p className="text-sm font-semibold text-blue-900 dark:text-blue-200">
-              💡 Dentro de la aplicación podrás cargar tus servicios
+              💡 Puedes cargar hasta 3 servicios aquí. También podrás agregar
+              más en la sección de servicios después de crear tu cuenta.
             </p>
+
+            <div className="space-y-4">
+              {services.map((service, idx) => (
+                <ServiceFormInProfile
+                  key={service.tempId}
+                  service={service}
+                  onUpdate={(field, value) =>
+                    updateService(service.tempId, field, value)
+                  }
+                  onRemove={() => removeService(service.tempId)}
+                  errors={validationErrors}
+                  index={idx}
+                  totalServices={services.length}
+                />
+              ))}
+
+              {services.length < 3 && (
+                <button
+                  type="button"
+                  onClick={addService}
+                  className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-blue-300 bg-blue-100/50 py-3 font-semibold text-blue-700 transition-all hover:border-blue-400 hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-900/20 dark:text-blue-300"
+                >
+                  <Plus size={20} /> Agregar Servicio ({services.length}/3)
+                </button>
+              )}
+            </div>
           </div>
         )}
 
