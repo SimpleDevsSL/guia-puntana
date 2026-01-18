@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { Category } from '../../app/lib/definitions';
 import {
   Sparkles,
@@ -118,7 +119,15 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
   onToggle,
   onClose,
 }) => {
+  const searchParams = useSearchParams(); // Added hook
   const isGroupActive = items.some((item) => item.id === activeCategoryId);
+
+  // Helper to preserve params
+  const createCategoryLink = (categoryId: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('cat', categoryId);
+    return `${basePath}?${params.toString()}`;
+  };
 
   if (items.length === 0) return null;
 
@@ -150,7 +159,7 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
               return (
                 <Link
                   key={cat.id}
-                  href={`${basePath}?cat=${cat.id}`}
+                  href={createCategoryLink(cat.id)}
                   onClick={onClose}
                   className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors ${
                     isSelected
@@ -180,6 +189,14 @@ const CategoryList: React.FC<CategoryListProps> = ({
 }) => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const searchParams = useSearchParams(); // Added hook
+
+  // Helper for 'Todos' button (clears category but keeps others)
+  const createAllLink = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('cat');
+    return `${basePath}?${params.toString()}`;
+  };
 
   const groupedCategories = useMemo(() => {
     const groups = {
@@ -243,7 +260,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
     <div className="mx-auto mt-8 w-full max-w-5xl px-4" ref={containerRef}>
       <div className="relative flex flex-wrap gap-3 sm:gap-4">
         <Link
-          href={basePath}
+          href={createAllLink()}
           onClick={closeDropdown}
           className={`flex min-w-[140px] flex-1 items-center justify-center gap-3 rounded-2xl border-2 px-4 py-4 text-base font-bold shadow-sm transition-all hover:shadow-lg active:scale-95 sm:text-lg ${
             !activeCategoryId

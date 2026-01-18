@@ -4,6 +4,7 @@ import CategoryList from '@/components/feed/CategoryList';
 import { Header } from '@/components/feed/Header';
 import { ServiceWithProfile, Category } from '../lib/definitions';
 import ClientFeedLogic from './ClientFeedLogic';
+import { Footer } from '@/components/Footer';
 import { Metadata } from 'next';
 
 interface PageProps {
@@ -46,7 +47,7 @@ export default async function FeedPage({ searchParams }: PageProps) {
       id, nombre, descripcion, localidad, barrio, direccion, telefono, redes,
       categoria:categorias(id, nombre),
       proveedor:perfiles(id, nombre_completo, foto_url, insignias)
-    `); // Hacemos el select aquí para traer las relaciones
+    `); // Hacemos el select aca para traer las relaciones
 
   if (error) console.error('Error buscando servicios:', error);
 
@@ -75,15 +76,11 @@ export default async function FeedPage({ searchParams }: PageProps) {
           services={services}
           activeCategoryName={activeCatName}
           searchQuery={params.q || ''}
+          searchLocation={params.l || ''}
         />
       </main>
 
-      <footer className="border-t border-gray-100 bg-white py-12 text-center dark:border-gray-800 dark:bg-gray-900">
-        <p className="text-sm text-gray-400">
-          &copy; {new Date().getFullYear()} SimpleDevs. Guía Puntana. Hecho con
-          ❤️ en San Luis.
-        </p>
-      </footer>
+      <Footer />
     </div>
   );
 }

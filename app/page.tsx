@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Header } from '@/components/feed/Header';
+import { Footer } from '@/components/Footer';
 
 export default function Home() {
   return (
@@ -165,12 +166,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="border-t border-gray-100 bg-white py-12 text-center transition-colors dark:border-gray-800 dark:bg-gray-900">
-        <p className="text-sm text-gray-400">
-          &copy; {new Date().getFullYear()} SimpleDevs. Guía Puntana. Hecho con
-          ❤️ en San Luis.
-        </p>
-      </footer>
+      <Footer />
     </div>
   );
 }
