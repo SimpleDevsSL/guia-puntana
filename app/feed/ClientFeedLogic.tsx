@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { ServiceWithProfile } from '../lib/definitions';
 import ResultsGrid from '@/components/feed/ResultsGrid';
 import ServiceDetailModal from '@/components/feed/ServiceDetailModal';
+import ActiveFilters from '@/components/feed/ActiveFilters';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
 
@@ -18,6 +19,8 @@ interface ClientFeedLogicProps {
   activeCategoryName: string;
   /** Current search query for filtering services */
   searchQuery: string;
+  /** Current location filter */
+  searchLocation: string;
 }
 
 /**
@@ -45,6 +48,7 @@ export default function ClientFeedLogic({
   services,
   activeCategoryName,
   searchQuery,
+  searchLocation,
 }: ClientFeedLogicProps) {
   const router = useRouter();
   const supabase = createClient();
@@ -106,6 +110,11 @@ export default function ClientFeedLogic({
 
   return (
     <>
+      <ActiveFilters
+        activeCategoryName={activeCategoryName}
+        searchQuery={searchQuery}
+        searchLocation={searchLocation}
+      />
       <ResultsGrid
         loading={loading}
         services={services}

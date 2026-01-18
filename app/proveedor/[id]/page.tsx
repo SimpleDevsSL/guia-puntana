@@ -6,6 +6,7 @@ import { Header } from '@/components/feed/Header';
 import HeroSection from '@/components/feed/HeroSection';
 import ClientFeedLogic from '@/app/feed/ClientFeedLogic';
 import ProviderContactButton from '@/components/proveedor/ProviderContactButton';
+import { Footer } from '@/components/Footer';
 import { ServiceWithProfile, Category } from '@/app/lib/definitions';
 
 interface PageProps {
@@ -173,15 +174,12 @@ export default async function ProviderPage({
             services={services}
             activeCategoryName={activeCatName}
             searchQuery={urlParams.q || ''}
+            searchLocation={urlParams.l || ''}
           />
         </div>
       </main>
 
-      <footer className="border-t border-gray-100 bg-white py-12 text-center dark:border-gray-800 dark:bg-gray-900">
-        <p className="text-sm text-gray-400">
-          &copy; {new Date().getFullYear()} SimpleDevs. Guía Puntana.
-        </p>
-      </footer>
+      <Footer />
     </div>
   );
 }
