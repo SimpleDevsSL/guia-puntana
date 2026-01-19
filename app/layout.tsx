@@ -55,6 +55,10 @@ export const metadata: Metadata = {
   formatDetection: {
     telephone: false,
   },
+
+  verification: {
+    google: 'sE7JCuCEWydZKmldgZq6IYfndWKi-00hVJB5_RnoQGw',
+  },
 };
 
 export const viewport: Viewport = {
