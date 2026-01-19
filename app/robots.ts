@@ -1,12 +1,14 @@
 import { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-  return {
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://guia-puntana.vercel.app';
+
+return {
     rules: {
       userAgent: '*',
       allow: '/',
       disallow: ['/perfil/', '/api/'],
     },
-    sitemap: 'https://guiapuntana.com/sitemap.xml',
+    sitemap: `${baseUrl}/sitemap.xml`,
   };
 }

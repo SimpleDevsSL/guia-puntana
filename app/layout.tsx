@@ -7,7 +7,7 @@ import InstallPrompt from '@/components/pwa/InstallPrompt';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://guiapuntana.vercel.app'),
+  metadataBase: new URL('https://guia-puntana.vercel.app'),
 
   title: {
     default: 'Guía Puntana | Servicios en San Luis',
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Guía Puntana',
     description: 'La comunidad de servicios y emprendimientos de San Luis.',
-    url: 'https://guiapuntana.com',
+    url: 'https://guia-puntana.vercel.app',
     siteName: 'Guía Puntana',
     locale: 'es_AR',
     type: 'website',
