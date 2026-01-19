@@ -1,9 +1,10 @@
 import { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://guia-puntana.vercel.app';
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL || 'https://guia-puntana.vercel.app';
 
-return {
+  return {
     rules: {
       userAgent: '*',
       allow: '/',
