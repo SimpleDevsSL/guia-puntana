@@ -3,8 +3,29 @@ import { Header } from '@/components/feed/Header';
 import { Footer } from '@/components/Footer';
 
 export default function Home() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Guía Puntana',
+    url: 'https://guiapuntana.com',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: 'https://guiapuntana.com/feed?q={search_term_string}',
+      'query-input': 'required name=search_term_string',
+    },
+    description:
+      'Directorio de servicios y oficios en la provincia de San Luis, Argentina.',
+    areaServed: {
+      '@type': 'State',
+      name: 'San Luis',
+    },
+  };
   return (
     <div className="flex min-h-screen flex-col font-sans">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Header />
 
       <main className="grow pt-16">
