@@ -48,8 +48,7 @@ export default async function FeedPage({ searchParams }: PageProps) {
     : null;
 
   // Determinar el nombre de la categoría para pasar al componente hijo
-  const activeCatName =
-    categories.find((c) => c.id === params.cat)?.nombre || 'Todos';
+  const activeCatName = params.cat || 'Todos';
 
   const activeCatId = selectedCategory ? selectedCategory.id : null;
 
