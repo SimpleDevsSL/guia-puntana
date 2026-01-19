@@ -3,7 +3,7 @@
 
 CREATE TABLE public.categorias (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
-  nombre text NOT NULL,
+  nombre text NOT NULL UNIQUE,
   descripcion text,
   es_activa boolean DEFAULT true,
   created_at timestamp with time zone NOT NULL DEFAULT now(),

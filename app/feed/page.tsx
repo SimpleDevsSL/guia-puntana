@@ -21,9 +21,10 @@ export async function generateMetadata({
   searchParams,
 }: PageProps): Promise<Metadata> {
   const params = await searchParams;
-  const categoryName = params.cat ? 'Servicios' : 'Profesionales'; // O busca el nombre real
+  const categoryName = params.cat || 'Servicios';
+
   return {
-    title: `${params.q || categoryName} en San Luis | Guía Puntana`,
+    title: `${params.q || (params.cat ? categoryName : 'Profesionales')} en San Luis | Guía Puntana`,
     description: `Encuentra los mejores ${params.q || 'profesionales'} en ${params.l || 'San Luis'}.`,
   };
 }
@@ -41,9 +42,16 @@ export default async function FeedPage({ searchParams }: PageProps) {
 
   const categories = (categoriesData as Category[]) || [];
 
+  // Encontrar la categoría seleccionada basándonos en el NOMBRE (params.cat)
+  const selectedCategory = params.cat
+    ? categories.find((c) => c.nombre === params.cat)
+    : null;
+
   // Determinar el nombre de la categoría para pasar al componente hijo
   const activeCatName =
     categories.find((c) => c.id === params.cat)?.nombre || 'Todos';
+
+  const activeCatId = selectedCategory ? selectedCategory.id : null;
 
   return (
     <div className="flex min-h-screen flex-col bg-white font-sans dark:bg-gray-950">
@@ -56,7 +64,7 @@ export default async function FeedPage({ searchParams }: PageProps) {
 
         <CategoryList
           categories={categories}
-          activeCategoryId={params.cat || null}
+          activeCategoryName={params.cat || null}
         />
 
         {/* Streaming Boundary: El usuario ve todo lo de arriba mientras esto carga */}
@@ -64,6 +72,7 @@ export default async function FeedPage({ searchParams }: PageProps) {
           <FeedResults
             searchParams={params}
             activeCategoryName={activeCatName}
+            categoryId={activeCatId}
           />
         </Suspense>
       </main>
