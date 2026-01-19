@@ -2,16 +2,27 @@
 
 import { useState, useEffect } from 'react';
 
+interface BeforeInstallPromptEvent extends Event {
+  readonly platforms: string[];
+  readonly userChoice: Promise<{
+    outcome: 'accepted' | 'dismissed';
+    platform: string;
+  }>;
+  prompt(): Promise<void>;
+}
+
 export default function InstallPrompt() {
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [deferredPrompt, setDeferredPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const handler = (e: Event) => {
+      const promptEvent = e as BeforeInstallPromptEvent;
       // 1. Prevenir que el navegador muestre su prompt nativo (que suele ser ignorado)
       e.preventDefault();
       // 2. Guardar el evento para dispararlo después
-      setDeferredPrompt(e);
+      setDeferredPrompt(promptEvent);
       // 3. Mostrar nuestro botón personalizado
       setIsVisible(true);
     };
