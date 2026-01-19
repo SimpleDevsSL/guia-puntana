@@ -3,12 +3,50 @@ import './globals.css';
 import { Inter } from 'next/font/google';
 import type { Metadata, Viewport } from 'next';
 import { Analytics } from '@vercel/analytics/next';
-
+import InstallPrompt from '@/components/pwa/InstallPrompt';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Guía Puntana',
-  description: 'Tu guía de San Luis',
+  metadataBase: new URL('https://guiapuntana.vercel.app'),
+
+  title: {
+    default: 'Guía Puntana | Servicios en San Luis',
+    template: '%s | Guía Puntana',
+  },
+  description:
+    'Conectá con emprendedores y servicios locales de San Luis de forma directa y gratuita.',
+
+  // 2. Palabras clave para San Luis
+  keywords: [
+    'San Luis',
+    'Servicios',
+    'Oficios',
+    'Plomeros',
+    'Electricistas',
+    'Guía',
+    'Puntana',
+    'Juana Koslay',
+    'Potrero de los Funes',
+  ],
+
+  // 3. Open Graph (Cómo se ve en Facebook/WhatsApp)
+  openGraph: {
+    title: 'Guía Puntana',
+    description: 'La comunidad de servicios y emprendimientos de San Luis.',
+    url: 'https://guiapuntana.com',
+    siteName: 'Guía Puntana',
+    locale: 'es_AR',
+    type: 'website',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Guía Puntana - Servicios en San Luis',
+      },
+    ],
+  },
+
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
@@ -44,6 +82,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <InstallPrompt />
           <Analytics />
         </ThemeProvider>
       </body>
