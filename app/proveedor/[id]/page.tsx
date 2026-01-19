@@ -8,6 +8,7 @@ import ClientFeedLogic from '@/app/feed/ClientFeedLogic';
 import ProviderContactButton from '@/components/proveedor/ProviderContactButton';
 import { Footer } from '@/components/Footer';
 import { ServiceWithProfile, Category } from '@/app/lib/definitions';
+import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -18,6 +19,25 @@ interface PageProps {
   }>;
 }
 
+// 1. Agregar esta configuración para revalidar cada 1 hora (ISR)
+export const revalidate = 3600;
+
+// 2. Generar los parámetros estáticos (Prerenderizar los 50 o 100 proveedores más importantes)
+export async function generateStaticParams() {
+  const supabaseStatic = createSupabaseClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+
+  const { data: profiles } = await supabaseStatic
+    .from('perfiles')
+    .select('id')
+    .limit(30); // Limitamos para no sobrecargar el build
+
+  return (profiles || []).map((p) => ({
+    id: p.id,
+  }));
+}
 // Función auxiliar para obtener iniciales
 const getInitials = (name: string) => {
   if (!name) return '';
@@ -104,8 +124,26 @@ export default async function ProviderPage({
     categories.find((c) => c.id === urlParams.cat)?.nombre ||
     'Servicios del Proveedor';
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ProfessionalService',
+    name: profile.nombre_completo,
+    image: profile.foto_url,
+    telephone: contactPhone,
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: urlParams?.l || 'San Luis',
+      addressCountry: 'AR',
+    },
+    url: `https://guiapuntana.com/proveedor/${providerId}`,
+  };
+
   return (
     <div className="flex min-h-screen flex-col bg-slate-50 font-sans dark:bg-gray-950">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Header />
 
       <main className="grow pt-16">

@@ -2,10 +2,12 @@ import { createClient } from '@/utils/supabase/server';
 import HeroSection from '@/components/feed/HeroSection';
 import CategoryList from '@/components/feed/CategoryList';
 import { Header } from '@/components/feed/Header';
-import { ServiceWithProfile, Category } from '../lib/definitions';
-import ClientFeedLogic from './ClientFeedLogic';
+import { Category } from '../lib/definitions';
 import { Footer } from '@/components/Footer';
 import { Metadata } from 'next';
+import { Suspense } from 'react';
+import FeedResults from '@/components/feed/FeedResults';
+import FeedSkeleton from '@/components/feed/FeedSkeleton';
 
 interface PageProps {
   searchParams: Promise<{
@@ -39,21 +41,7 @@ export default async function FeedPage({ searchParams }: PageProps) {
 
   const categories = (categoriesData as Category[]) || [];
 
-  const { data: servicesData, error } = await supabase.rpc('buscar_servicios', {
-    query_text: params.q || '',
-    categoria_filtro: params.cat || null,
-    loc_filtro: params.l || null,
-  }).select(`
-      id, nombre, descripcion, localidad, barrio, direccion, telefono, redes,
-      categoria:categorias(id, nombre),
-      proveedor:perfiles(id, nombre_completo, foto_url, insignias)
-    `); // Hacemos el select aca para traer las relaciones
-
-  if (error) console.error('Error buscando servicios:', error);
-
-  const services = (servicesData as unknown as ServiceWithProfile[]) || [];
-
-  // Determinar el nombre de la categoría activa para el título
+  // Determinar el nombre de la categoría para pasar al componente hijo
   const activeCatName =
     categories.find((c) => c.id === params.cat)?.nombre || 'Todos';
 
@@ -71,13 +59,13 @@ export default async function FeedPage({ searchParams }: PageProps) {
           activeCategoryId={params.cat || null}
         />
 
-        {/* Pasamos los datos del servidor al componente lógico del cliente */}
-        <ClientFeedLogic
-          services={services}
-          activeCategoryName={activeCatName}
-          searchQuery={params.q || ''}
-          searchLocation={params.l || ''}
-        />
+        {/* Streaming Boundary: El usuario ve todo lo de arriba mientras esto carga */}
+        <Suspense fallback={<FeedSkeleton />}>
+          <FeedResults
+            searchParams={params}
+            activeCategoryName={activeCatName}
+          />
+        </Suspense>
       </main>
 
       <Footer />
