@@ -36,7 +36,7 @@ import {
 
 interface CategoryListProps {
   categories: Category[];
-  activeCategoryId: string | null;
+  activeCategoryName: string | null;
   basePath?: string;
 }
 
@@ -102,7 +102,7 @@ interface DropdownButtonProps {
   Icon: React.ElementType;
   items: Category[];
   isOpen: boolean;
-  activeCategoryId: string | null;
+  activeCategoryName: string | null;
   basePath: string;
   onToggle: (key: string) => void;
   onClose: () => void;
@@ -114,18 +114,20 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
   Icon,
   items,
   isOpen,
-  activeCategoryId,
+  activeCategoryName,
   basePath,
   onToggle,
   onClose,
 }) => {
-  const searchParams = useSearchParams(); // Added hook
-  const isGroupActive = items.some((item) => item.id === activeCategoryId);
+  const searchParams = useSearchParams();
+  const isGroupActive = items.some(
+    (item) => item.nombre === activeCategoryName
+  );
 
-  // Helper to preserve params
-  const createCategoryLink = (categoryId: string) => {
+  // Helper to preserve params but using NAME instead of ID
+  const createCategoryLink = (categoryName: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set('cat', categoryId);
+    params.set('cat', categoryName);
     return `${basePath}?${params.toString()}`;
   };
 
@@ -154,12 +156,11 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
           <div className="max-h-80 overflow-y-auto rounded-2xl border border-gray-100 bg-white p-2 shadow-2xl ring-1 ring-black/5 dark:border-gray-700 dark:bg-gray-900 dark:ring-white/10">
             {items.map((cat) => {
               const IconComponent = CATEGORY_ICONS[cat.nombre] || Sparkles;
-              const isSelected = activeCategoryId === cat.id;
-
+              const isSelected = activeCategoryName === cat.nombre;
               return (
                 <Link
                   key={cat.id}
-                  href={createCategoryLink(cat.id)}
+                  href={createCategoryLink(cat.nombre)}
                   onClick={onClose}
                   className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors ${
                     isSelected
@@ -184,12 +185,12 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
 
 const CategoryList: React.FC<CategoryListProps> = ({
   categories,
-  activeCategoryId,
+  activeCategoryName,
   basePath = '/feed',
 }) => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const searchParams = useSearchParams(); // Added hook
+  const searchParams = useSearchParams();
 
   // Helper for 'Todos' button (clears category but keeps others)
   const createAllLink = () => {
@@ -263,7 +264,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
           href={createAllLink()}
           onClick={closeDropdown}
           className={`flex min-w-[140px] flex-1 items-center justify-center gap-3 rounded-2xl border-2 px-4 py-4 text-base font-bold shadow-sm transition-all hover:shadow-lg active:scale-95 sm:text-lg ${
-            !activeCategoryId
+            !activeCategoryName
               ? 'border-orange-600 bg-orange-600 text-white shadow-orange-200 ring-2 ring-orange-200 ring-offset-1 dark:ring-orange-900 dark:ring-offset-gray-900'
               : 'border-gray-100 bg-white text-gray-700 hover:border-orange-300 hover:text-orange-600 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-200'
           }`}
@@ -278,7 +279,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
           Icon={Briefcase}
           items={groupedCategories.OFICIOS}
           isOpen={openDropdown === 'OFICIOS'}
-          activeCategoryId={activeCategoryId}
+          activeCategoryName={activeCategoryName}
           basePath={basePath}
           onToggle={toggleDropdown}
           onClose={closeDropdown}
@@ -289,7 +290,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
           Icon={Users}
           items={groupedCategories.SERVICIOS}
           isOpen={openDropdown === 'SERVICIOS'}
-          activeCategoryId={activeCategoryId}
+          activeCategoryName={activeCategoryName}
           basePath={basePath}
           onToggle={toggleDropdown}
           onClose={closeDropdown}
@@ -300,7 +301,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
           Icon={MoreHorizontal}
           items={groupedCategories.OTROS}
           isOpen={openDropdown === 'OTROS'}
-          activeCategoryId={activeCategoryId}
+          activeCategoryName={activeCategoryName}
           basePath={basePath}
           onToggle={toggleDropdown}
           onClose={closeDropdown}
