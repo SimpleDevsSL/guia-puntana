@@ -3,14 +3,17 @@ import { Header } from '@/components/feed/Header';
 import { Footer } from '@/components/Footer';
 
 export default function Home() {
+  const baseUrl = 'https://guia-puntana.vercel.app';
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'Guía Puntana',
-    url: 'https://guiapuntana.com',
+    url: baseUrl,
     potentialAction: {
       '@type': 'SearchAction',
-      target: 'https://guiapuntana.com/feed?q={search_term_string}',
+      // CORRECCIÓN: El target debe coincidir con tu dominio actual
+      target: `${baseUrl}/feed?q={search_term_string}`,
       'query-input': 'required name=search_term_string',
     },
     description:
@@ -20,6 +23,7 @@ export default function Home() {
       name: 'San Luis',
     },
   };
+
   return (
     <div className="flex min-h-screen flex-col font-sans">
       <script

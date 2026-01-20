@@ -124,18 +124,21 @@ export default async function ProviderPage({
     categories.find((c) => c.id === urlParams.cat)?.nombre ||
     'Servicios del Proveedor';
 
+  const baseUrl = 'https://guia-puntana.vercel.app';
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'ProfessionalService',
     name: profile.nombre_completo,
-    image: profile.foto_url,
-    telephone: contactPhone,
+    image: profile.foto_url || undefined,
+    telephone: contactPhone || undefined,
     address: {
       '@type': 'PostalAddress',
       addressLocality: urlParams?.l || 'San Luis',
       addressCountry: 'AR',
     },
-    url: `https://guiapuntana.com/proveedor/${providerId}`,
+    url: `${baseUrl}/proveedor/${providerId}`,
+    priceRange: 'Consultar',
   };
 
   return (
