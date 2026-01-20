@@ -74,7 +74,7 @@ export default function InstallPrompt() {
             Instalar Guía Puntana
           </h3>
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            Añade la app a tu inicio para acceder más rápido y usarla offline.
+            Añade la app a tu inicio para acceder más rápido.
           </p>
           <div className="mt-4 flex gap-3">
             <button
