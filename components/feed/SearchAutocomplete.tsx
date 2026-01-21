@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -59,7 +58,8 @@ export const SearchAutocomplete: React.FC<SearchAutocompleteProps> = ({
   }, [debouncedQuery, supabase]);
 
   if (debouncedQuery.length < 2 && !loading) return null;
-  if (!loading && results.length === 0 && debouncedQuery.length >= 2) return null;
+  if (!loading && results.length === 0 && debouncedQuery.length >= 2)
+    return null;
 
   // Grouping results
   const categories = results.filter((r) => r.tipo === 'categoria');
@@ -93,7 +93,9 @@ export const SearchAutocomplete: React.FC<SearchAutocompleteProps> = ({
                 ))}
               </ul>
             ) : (
-                <p className="px-2 text-sm text-gray-400 italic">Sin resultados</p>
+              <p className="px-2 text-sm italic text-gray-400">
+                Sin resultados
+              </p>
             )}
           </div>
 
@@ -121,7 +123,9 @@ export const SearchAutocomplete: React.FC<SearchAutocompleteProps> = ({
                 ))}
               </ul>
             ) : (
-                <p className="px-2 text-sm text-gray-400 italic">Sin resultados</p>
+              <p className="px-2 text-sm italic text-gray-400">
+                Sin resultados
+              </p>
             )}
           </div>
 
@@ -144,7 +148,9 @@ export const SearchAutocomplete: React.FC<SearchAutocompleteProps> = ({
                 ))}
               </ul>
             ) : (
-                <p className="px-2 text-sm text-gray-400 italic">Sin resultados</p>
+              <p className="px-2 text-sm italic text-gray-400">
+                Sin resultados
+              </p>
             )}
           </div>
         </div>

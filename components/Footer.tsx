@@ -23,17 +23,23 @@ export const Footer = () => {
             <Mail size={24} />
           </a>
         </div>
-        
+
         <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-4">
           <p className="text-sm text-gray-400">
             SimpleDevs. Guía Puntana. Hecho con ❤️ en San Luis.
           </p>
           <span className="hidden text-gray-300 sm:inline">|</span>
           <div className="flex gap-4 text-sm text-gray-400">
-            <a href="/about" className="hover:text-blue-600 hover:underline dark:hover:text-blue-400">
+            <a
+              href="/about"
+              className="hover:text-blue-600 hover:underline dark:hover:text-blue-400"
+            >
               Términos y Condiciones
             </a>
-            <a href="/license" className="hover:text-blue-600 hover:underline dark:hover:text-blue-400">
+            <a
+              href="/license"
+              className="hover:text-blue-600 hover:underline dark:hover:text-blue-400"
+            >
               MIT License
             </a>
           </div>

@@ -5,7 +5,6 @@ import { getCachedCategories } from '@/app/lib/data';
 import FeedResults from '@/components/feed/FeedResults';
 import FeedSkeleton from '@/components/feed/FeedSkeleton';
 import HeroSection from '@/components/feed/HeroSection';
-import CategoryList from '@/components/feed/CategoryList';
 import { Header } from '@/components/feed/Header';
 import { Footer } from '@/components/Footer';
 
@@ -80,10 +79,6 @@ export default async function CategoryPage({
         <HeroSection initialQuery="" initialLocation={feedParams.l || ''} />
 
         {/* Pasamos el slug activo a CategoryList para que sepa cuál resaltar */}
-        <CategoryList
-          categories={categories}
-          activeCategoryName={currentCategory.nombre}
-        />
 
         <div className="container mx-auto px-4 py-8">
           <Suspense fallback={<FeedSkeleton />}>

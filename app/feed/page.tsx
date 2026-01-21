@@ -1,6 +1,5 @@
 import { createClient } from '@/utils/supabase/server';
 import HeroSection from '@/components/feed/HeroSection';
-import CategoryList from '@/components/feed/CategoryList';
 import { Header } from '@/components/feed/Header';
 import { Category } from '../lib/definitions';
 import { Footer } from '@/components/Footer';
@@ -65,10 +64,6 @@ export default async function FeedPage({ searchParams }: PageProps) {
           initialLocation={params.l || ''}
         />
 
-        <CategoryList
-          categories={categories}
-          activeCategoryName={params.cat || null}
-        />
 
         {/* Streaming Boundary: El usuario ve todo lo de arriba mientras esto carga */}
         <Suspense fallback={<FeedSkeleton />}>
