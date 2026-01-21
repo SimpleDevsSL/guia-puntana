@@ -13,7 +13,7 @@ import { createClient } from '@/utils/supabase/client';
  * @interface ClientFeedLogicProps
  */
 interface ClientFeedLogicProps {
-  initialServices: ServiceWithProfile[]; // Renombrado de services
+  initialServices: ServiceWithProfile[];
   activeCategoryName: string;
   searchQuery: string;
   searchLocation: string;

@@ -8,6 +8,7 @@ import { Metadata } from 'next';
 import { Suspense } from 'react';
 import FeedResults from '@/components/feed/FeedResults';
 import FeedSkeleton from '@/components/feed/FeedSkeleton';
+import { getCachedCategories } from '../lib/data';
 
 interface PageProps {
   searchParams: Promise<{
@@ -40,7 +41,10 @@ export default async function FeedPage({ searchParams }: PageProps) {
     .eq('es_activa', true)
     .throwOnError();
 
-  const categories = (categoriesData as Category[]) || [];
+  //const categories = (categoriesData as Category[]) || [];
+
+  // 1. Obtener categorías CACHEADAS (Súper rápido ⚡)
+  const categories = await getCachedCategories();
 
   // Encontrar la categoría seleccionada basándonos en el NOMBRE (params.cat)
   const selectedCategory = params.cat
