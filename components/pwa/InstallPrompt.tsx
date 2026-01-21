@@ -41,6 +41,13 @@ function detectBrowser(): BrowserType {
   return 'other';
 }
 
+function isMobileDevice(): boolean {
+  const ua = navigator.userAgent.toLowerCase();
+  return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
+    ua
+  );
+}
+
 function isAppInstalled(): boolean {
   // Para iOS
   if (
@@ -66,6 +73,11 @@ export default function InstallPrompt() {
   const browserType = useMemo(() => detectBrowser(), []);
 
   useEffect(() => {
+    // Solo mostrar en dispositivos móviles
+    if (!isMobileDevice()) {
+      return;
+    }
+
     // Si la app ya está instalada, no mostrar el prompt
     if (isAppInstalled()) {
       return;
