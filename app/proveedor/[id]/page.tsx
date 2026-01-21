@@ -9,6 +9,7 @@ import ProviderContactButton from '@/components/proveedor/ProviderContactButton'
 import { Footer } from '@/components/Footer';
 import { ServiceWithProfile, Category } from '@/app/lib/definitions';
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
+import { BadgeCheck } from 'lucide-react';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -178,11 +179,20 @@ export default async function ProviderPage({
                   <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
                     {profile.nombre_completo}
                   </h1>
-                  {profile.insignias && profile.insignias.length > 0 && (
-                    <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
-                      Verificado
-                    </span>
-                  )}
+                  <div className="flex flex-wrap gap-2">
+                    {profile.insignias?.map((badge: string, idx: number) => (
+                      <span
+                        key={idx}
+                        className="flex items-center gap-1 rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-700 dark:bg-orange-900/30 dark:text-orange-400"
+                      >
+                        <BadgeCheck
+                          size={14}
+                          className="text-orange-600 dark:text-orange-500"
+                        />
+                        {badge}
+                      </span>
+                    ))}
+                  </div>
                 </div>
 
                 <p className="mt-2 text-lg text-gray-500 dark:text-gray-400">
