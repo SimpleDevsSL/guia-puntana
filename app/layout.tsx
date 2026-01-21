@@ -4,19 +4,27 @@ import { Inter } from 'next/font/google';
 import type { Metadata, Viewport } from 'next';
 import { Analytics } from '@vercel/analytics/next';
 import InstallPrompt from '@/components/pwa/InstallPrompt';
+
 const inter = Inter({ subsets: ['latin'] });
 
+// URL base segura (usa variable de entorno o fallback a producción)
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://guia-puntana.vercel.app';
+
 export const metadata: Metadata = {
-  metadataBase: new URL('https://guia-puntana.vercel.app'),
+  metadataBase: new URL(BASE_URL),
 
   title: {
     default: 'Guía Puntana | Servicios en San Luis',
     template: '%s | Guía Puntana',
   },
   description:
-    'Conectá con emprendedores y servicios locales de San Luis de forma directa y gratuita.',
+    'Conectá con emprendedores y servicios locales de San Luis de forma directa y gratuita. Plomeros, electricistas y más.',
 
-  // 2. Palabras clave para San Luis
+  // Metadatos de Autoridad
+  applicationName: 'Guía Puntana',
+  authors: [{ name: 'SimpleDevs' }],
+  creator: 'SimpleDevs',
+
   keywords: [
     'San Luis',
     'Servicios',
@@ -27,13 +35,14 @@ export const metadata: Metadata = {
     'Puntana',
     'Juana Koslay',
     'Potrero de los Funes',
+    'Profesionales',
   ],
 
-  // 3. Open Graph (Cómo se ve en Facebook/WhatsApp)
+  // Open Graph optimizado
   openGraph: {
     title: 'Guía Puntana',
     description: 'La comunidad de servicios y emprendimientos de San Luis.',
-    url: 'https://guia-puntana.vercel.app',
+    url: BASE_URL,
     siteName: 'Guía Puntana',
     locale: 'es_AR',
     type: 'website',
@@ -45,6 +54,19 @@ export const metadata: Metadata = {
         alt: 'Guía Puntana - Servicios en San Luis',
       },
     ],
+  },
+
+  // Directivas para Robots (Nuevo)
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 
   appleWebApp: {
@@ -73,7 +95,6 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <head>
-        {/* Enlace opcional para iconos de Apple */}
         <link rel="apple-touch-icon" href="/icon-192x192.png" />
       </head>
       <body
