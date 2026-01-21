@@ -151,8 +151,8 @@ export default function InstallPrompt() {
               <p className="font-semibold">Pasos:</p>
               <ol className="list-inside list-decimal space-y-1">
                 <li>Abre el menú (tres líneas)</li>
-                <li>Busca "Instalar aplicación" o "Install app"</li>
-                <li>Sigue las instrucciones</li>
+                <li>Busca "Agregar app a la pantalla principal"</li>
+                <li>Toca en "Agregar"</li>
               </ol>
             </div>
           ),
