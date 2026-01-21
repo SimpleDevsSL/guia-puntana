@@ -82,6 +82,12 @@ export const metadata: Metadata = {
   verification: {
     google: 'sE7JCuCEWydZKmldgZq6IYfndWKi-00hVJB5_RnoQGw',
   },
+
+  icons: {
+    icon: '/favicon.ico', // O un png de alta resolución si tienes
+    shortcut: '/favicon-96x96.png',
+    apple: '/apple-touch-icon.png', // Next.js generará el tag <link rel="apple-touch-icon">
+  },
 };
 
 export const viewport: Viewport = {
@@ -95,9 +101,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" suppressHydrationWarning>
-      <head>
-        <link rel="apple-touch-icon" href="/icon-192x192.png" />
-      </head>
       <body
         className={`${inter.className} bg-white text-gray-900 antialiased transition-colors duration-300 ease-in-out dark:bg-gray-950 dark:text-gray-100`}
       >
