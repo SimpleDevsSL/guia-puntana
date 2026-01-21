@@ -41,8 +41,15 @@ export default async function FeedResults({
   }
   const services = (servicesData as unknown as ServiceWithProfile[]) || [];
 
+  const filterKey = JSON.stringify({
+    q: searchParams.q,
+    l: searchParams.l,
+    c: categoriaFiltro,
+  });
+
   return (
     <ClientFeedLogic
+      key={filterKey}
       initialServices={services}
       activeCategoryName={activeCategoryName}
       searchQuery={searchParams.q || ''}
