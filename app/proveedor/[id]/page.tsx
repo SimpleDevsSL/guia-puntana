@@ -38,6 +38,7 @@ export async function generateStaticParams() {
     id: p.id,
   }));
 }
+
 // Función auxiliar para obtener iniciales
 const getInitials = (name: string) => {
   if (!name) return '';
@@ -116,6 +117,7 @@ export default async function ProviderPage({
     query = query.eq('categoria_id', urlParams.cat);
   }
 
+  // Aquí obtenemos TODOS los servicios del proveedor (sin paginación para evitar problemas con loadMore global)
   const { data: servicesData } = await query;
   const services = (servicesData as unknown as ServiceWithProfile[]) || [];
 
@@ -140,6 +142,8 @@ export default async function ProviderPage({
     url: `${baseUrl}/proveedor/${providerId}`,
     priceRange: 'Consultar',
   };
+
+  const itemsPerPage = services.length + 1;
 
   return (
     <div className="flex min-h-screen flex-col bg-slate-50 font-sans dark:bg-gray-950">
@@ -212,10 +216,12 @@ export default async function ProviderPage({
           />
 
           <ClientFeedLogic
-            services={services}
+            initialServices={services} // RENOMBRADO: services -> initialServices
             activeCategoryName={activeCatName}
             searchQuery={urlParams.q || ''}
             searchLocation={urlParams.l || ''}
+            categoryId={urlParams.cat || null} // NUEVO PROP
+            itemsPerPage={itemsPerPage} // NUEVO PROP (Configurado para desactivar Load More)
           />
         </div>
       </main>

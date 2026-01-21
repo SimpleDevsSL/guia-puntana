@@ -12,6 +12,8 @@ interface FeedResultsProps {
   categoryId?: string | null;
 }
 
+const ITEMS_PER_PAGE = 12;
+
 export default async function FeedResults({
   searchParams,
   activeCategoryName,
@@ -21,10 +23,13 @@ export default async function FeedResults({
 
   const categoriaFiltro = categoryId || null;
 
+  // Carga inicial: Solo los primeros ITEMS_PER_PAGE
   const { data: servicesData, error } = await supabase.rpc('buscar_servicios', {
     query_text: searchParams.q || '',
     categoria_filtro: categoriaFiltro,
     loc_filtro: searchParams.l || null,
+    limit_val: ITEMS_PER_PAGE, // Límite inicial
+    offset_val: 0, // Desde el principio
   }).select(`
       id, nombre, descripcion, localidad, barrio, direccion, telefono, redes,
       categoria:categorias(id, nombre),
@@ -36,13 +41,14 @@ export default async function FeedResults({
   }
   const services = (servicesData as unknown as ServiceWithProfile[]) || [];
 
-  // Retornamos la lógica cliente que ya tenías, pero ahora con datos cargados
   return (
     <ClientFeedLogic
-      services={services}
+      initialServices={services}
       activeCategoryName={activeCategoryName}
       searchQuery={searchParams.q || ''}
       searchLocation={searchParams.l || ''}
+      categoryId={categoriaFiltro}
+      itemsPerPage={ITEMS_PER_PAGE}
     />
   );
 }
