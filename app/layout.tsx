@@ -8,7 +8,8 @@ import InstallPrompt from '@/components/pwa/InstallPrompt';
 const inter = Inter({ subsets: ['latin'] });
 
 // URL base segura (usa variable de entorno o fallback a producción)
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://guia-puntana.vercel.app';
+const BASE_URL =
+  process.env.NEXT_PUBLIC_BASE_URL || 'https://guia-puntana.vercel.app';
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),

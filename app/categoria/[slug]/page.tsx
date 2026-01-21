@@ -24,7 +24,9 @@ export async function generateStaticParams() {
 }
 
 // 2. METADATA: Buscamos por slug
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const categories = await getCachedCategories();
   const category = categories.find((c) => c.slug === slug);
@@ -45,10 +47,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 // 3. PÁGINA PRINCIPAL
-export default async function CategoryPage({ params, searchParams }: PageProps) {
+export default async function CategoryPage({
+  params,
+  searchParams,
+}: PageProps) {
   const { slug } = await params;
   const resolvedSearchParams = await searchParams;
-  
+
   const categories = await getCachedCategories();
   // Búsqueda exacta por slug (mucho más seguro que decodeURIComponent)
   const currentCategory = categories.find((c) => c.slug === slug);
@@ -73,21 +78,21 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
       <Header />
       <main className="grow pt-16">
         <HeroSection initialQuery="" initialLocation={feedParams.l || ''} />
-        
+
         {/* Pasamos el slug activo a CategoryList para que sepa cuál resaltar */}
         <CategoryList
           categories={categories}
-          activeCategoryName={currentCategory.nombre} 
+          activeCategoryName={currentCategory.nombre}
         />
 
         <div className="container mx-auto px-4 py-8">
-            <Suspense fallback={<FeedSkeleton />}>
-              <FeedResults
-                searchParams={feedParams}
-                activeCategoryName={currentCategory.nombre}
-                categoryId={currentCategory.id}
-              />
-            </Suspense>
+          <Suspense fallback={<FeedSkeleton />}>
+            <FeedResults
+              searchParams={feedParams}
+              activeCategoryName={currentCategory.nombre}
+              categoryId={currentCategory.id}
+            />
+          </Suspense>
         </div>
       </main>
       <Footer />

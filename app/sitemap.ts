@@ -1,7 +1,8 @@
 import { MetadataRoute } from 'next';
 import { getCachedCategories } from './lib/data';
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://guia-puntana.vercel.app';
+const BASE_URL =
+  process.env.NEXT_PUBLIC_BASE_URL || 'https://guia-puntana.vercel.app';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // 1. Obtener categorías dinámicas
