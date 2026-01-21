@@ -41,6 +41,22 @@ function detectBrowser(): BrowserType {
   return 'other';
 }
 
+function isAppInstalled(): boolean {
+  // Para iOS
+  if (
+    navigator.userAgent.includes('iphone') ||
+    navigator.userAgent.includes('ipad')
+  ) {
+    return (
+      (window.navigator as Navigator & { standalone?: boolean }).standalone ===
+      true
+    );
+  }
+
+  // Para Android y otros
+  return window.matchMedia('(display-mode: standalone)').matches;
+}
+
 export default function InstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] =
     useState<BeforeInstallPromptEvent | null>(null);
@@ -50,6 +66,11 @@ export default function InstallPrompt() {
   const browserType = useMemo(() => detectBrowser(), []);
 
   useEffect(() => {
+    // Si la app ya está instalada, no mostrar el prompt
+    if (isAppInstalled()) {
+      return;
+    }
+
     const handler = (e: Event) => {
       const promptEvent = e as BeforeInstallPromptEvent;
       // 1. Prevenir que el navegador muestre su prompt nativo
@@ -141,7 +162,7 @@ export default function InstallPrompt() {
         return {
           title: 'Instalar Guía Puntana',
           description:
-            'Abre el menú y selecciona "Instalar sitio web" o "Instalar aplicación"',
+            'Abre el menú (Los 3 puntitos) y selecciona "Añadir a.." Luego "Añadir a pantalla de inicio"',
           instructions: (
             <div className="mt-3 space-y-2 text-xs text-gray-600 dark:text-gray-400">
               <p className="font-semibold">Pasos:</p>
