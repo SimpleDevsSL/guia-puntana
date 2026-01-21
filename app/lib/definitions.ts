@@ -29,3 +29,11 @@ export interface ServiceWithProfile {
     insignias: string[];
   };
 }
+
+export interface AutocompleteResult {
+  tipo: 'categoria' | 'servicio' | 'perfil';
+  id: string;
+  label: string;
+  categoria_id: string | null;
+  localidad: string | null;
+}
