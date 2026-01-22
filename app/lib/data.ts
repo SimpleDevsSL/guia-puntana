@@ -13,11 +13,21 @@ export const getCachedCategories = unstable_cache(
       .from('categorias')
       .select('id, nombre, slug') // <--- 1. AGREGAMOS EL SLUG AQUÍ
       .eq('es_activa', true)
+      .order('created_at', { ascending: true })
       .throwOnError();
+
+    // Reorganizar para que 'Otro' quede al final
+    if (data) {
+      const otraIndex = data.findIndex((cat) => cat.nombre === 'Otro');
+      if (otraIndex > -1) {
+        const [otra] = data.splice(otraIndex, 1);
+        data.push(otra);
+      }
+    }
 
     return (data as Category[]) || [];
   },
-  ['categories-list-v3'], // <--- 2. CAMBIAMOS LA KEY (Truco para forzar actualización inmediata)
+  ['categories-list-v4'], // <--- 2. CAMBIAMOS LA KEY (Truco para forzar actualización inmediata)
   {
     revalidate: 3600 * 4, // 4 horas
     tags: ['categories'],

@@ -89,8 +89,16 @@ export default async function ProviderPage({
   const { data: categoriesData } = await supabase
     .from('categorias')
     .select('id, nombre')
-    .eq('es_activa', true);
+    .eq('es_activa', true)
+    .order('created_at', { ascending: true });
+
   const categories = (categoriesData as Category[]) || [];
+  // Reorganizar para que 'Otro' quede al final
+  const otraIndex = categories.findIndex((cat) => cat.nombre === 'Otro');
+  if (otraIndex > -1) {
+    const [otra] = categories.splice(otraIndex, 1);
+    categories.push(otra);
+  }
 
   // 3. Construir query de Servicios
   let query = supabase

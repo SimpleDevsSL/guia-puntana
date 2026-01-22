@@ -41,8 +41,18 @@ export function ServiceFormInProfile({
       const { data } = await supabase
         .from('categorias')
         .select('id, nombre')
-        .eq('es_activa', true);
-      if (data) setCategories(data);
+        .eq('es_activa', true)
+        .order('created_at', { ascending: true });
+
+      if (data) {
+        // Reorganizar para que 'Otro' quede al final
+        const otraIndex = data.findIndex((cat) => cat.nombre === 'Otro');
+        if (otraIndex > -1) {
+          const [otra] = data.splice(otraIndex, 1);
+          data.push(otra);
+        }
+        setCategories(data);
+      }
     };
     fetchCats();
   }, [supabase]);
