@@ -84,9 +84,22 @@ export const metadata: Metadata = {
   },
 
   icons: {
-    icon: '/faviconn.ico', // O un png de alta resolución si tienes
+    // Dale prioridad al PNG para que Google lo tome para los resultados
+    icon: [
+      { url: '/favicon-96x96.png', sizes: '96x96', type: 'image/png' },
+      { url: '/faviconn.ico' }, // Fallback
+    ],
     shortcut: '/favicon-96x96.png',
-    apple: '/apple-touch-icon.png', // Next.js generará el tag <link rel="apple-touch-icon">
+    apple: '/apple-touch-icon.png',
+    // Opcional: define explícitamente el de Google si quieres asegurar
+    other: [
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '192x192',
+        url: '/icon-192x192.png',
+      },
+    ],
   },
 };
 

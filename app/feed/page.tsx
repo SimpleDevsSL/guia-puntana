@@ -1,7 +1,5 @@
-import { createClient } from '@/utils/supabase/server';
 import HeroSection from '@/components/feed/HeroSection';
 import { Header } from '@/components/feed/Header';
-import { Category } from '../lib/definitions';
 import { Footer } from '@/components/Footer';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
@@ -31,16 +29,6 @@ export async function generateMetadata({
 
 export default async function FeedPage({ searchParams }: PageProps) {
   const params = await searchParams;
-  const supabase = await createClient();
-
-  // 1. Obtener categorías para la lista superior (SSR)
-  const { data: categoriesData } = await supabase
-    .from('categorias')
-    .select('id, nombre')
-    .eq('es_activa', true)
-    .throwOnError();
-
-  //const categories = (categoriesData as Category[]) || [];
 
   // 1. Obtener categorías CACHEADAS (Súper rápido ⚡)
   const categories = await getCachedCategories();

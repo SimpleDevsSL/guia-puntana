@@ -7,21 +7,44 @@ export default function Home() {
 
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: 'Guía Puntana',
-    url: baseUrl,
-    potentialAction: {
-      '@type': 'SearchAction',
-      // CORRECCIÓN: El target debe coincidir con tu dominio actual
-      target: `${baseUrl}/feed?q={search_term_string}`,
-      'query-input': 'required name=search_term_string',
-    },
-    description:
-      'Directorio de servicios y oficios en la provincia de San Luis, Argentina.',
-    areaServed: {
-      '@type': 'State',
-      name: 'San Luis',
-    },
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        name: 'Guía Puntana',
+        url: baseUrl,
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: `${baseUrl}/feed?q={search_term_string}`,
+          'query-input': 'required name=search_term_string',
+        },
+        description:
+          'Directorio de servicios y oficios en la provincia de San Luis, Argentina.',
+        areaServed: {
+          '@type': 'State',
+          name: 'San Luis',
+        },
+      },
+      {
+        '@type': 'Organization',
+        name: 'Guía Puntana',
+        url: baseUrl,
+        logo: {
+          '@type': 'ImageObject',
+          url: `${baseUrl}/icon-512x512.png`,
+          width: 512,
+          height: 512,
+        },
+        sameAs: [
+          'https://www.instagram.com/simpledevs_sl',
+          // Agrega aquí otras redes si tienes (Facebook, LinkedIn, etc.)
+        ],
+        contactPoint: {
+          '@type': 'ContactPoint',
+          contactType: 'customer support',
+          email: 'simpledevs.sl@gmail.com',
+        },
+      },
+    ],
   };
 
   return (
@@ -98,7 +121,7 @@ export default function Home() {
                   Búsqueda localizada
                 </h3>
                 <p className="leading-relaxed text-gray-600 dark:text-gray-300">
-                  Filtrá por localidad o barrio. Encontrá servicios cerca de tu
+                  Filtrá por localidad. Encontrá servicios cerca de tu
                   ubicación.
                 </p>
               </div>
