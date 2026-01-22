@@ -23,3 +23,25 @@ export const getCachedCategories = unstable_cache(
     tags: ['categories'],
   }
 );
+
+// Nueva función para obtener IDs de proveedores para el Sitemap
+export const getAllProvidersForSitemap = unstable_cache(
+  async () => {
+    // ⚠️ Asegúrate de usar el nombre correcto de tu tabla de perfiles/proveedores
+    // Asumo que es 'perfiles' y que tienen un campo 'id'.
+    // Si solo quieres mostrar los que ofrecen servicios, quizás debas filtrar.
+    const { data } = await supabase
+      .from('perfiles')
+      .select('id, updated_at') // Traemos updated_at para decirle a Google cuán fresco es
+      .eq('es_activo', true) // Solo activos
+      .eq('rol', 'proveedor') // Solo proveedores
+      .throwOnError();
+
+    return data || [];
+  },
+  ['providers-sitemap-list'],
+  {
+    revalidate: 3600 * 24, // Cache de 24 horas (no cambian tan seguido)
+    tags: ['providers-sitemap'],
+  }
+);

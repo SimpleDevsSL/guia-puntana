@@ -24,7 +24,7 @@ export async function generateMetadata({
   const categoryName = params.cat || 'Servicios';
 
   return {
-    title: `${params.q || (params.cat ? categoryName : 'Profesionales')} en San Luis | Guía Puntana`,
+    title: `${params.q || (params.cat ? categoryName : 'Profesionales')} en San Luis`,
     description: `Encuentra los mejores ${params.q || 'profesionales'} en ${params.l || 'San Luis'}.`,
   };
 }
@@ -63,7 +63,6 @@ export default async function FeedPage({ searchParams }: PageProps) {
           initialQuery={params.q || ''}
           initialLocation={params.l || ''}
         />
-
 
         {/* Streaming Boundary: El usuario ve todo lo de arriba mientras esto carga */}
         <Suspense fallback={<FeedSkeleton />}>
