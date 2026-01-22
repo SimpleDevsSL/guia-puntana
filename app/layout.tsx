@@ -84,7 +84,7 @@ export const metadata: Metadata = {
   },
 
   icons: {
-    icon: '/favicon.ico', // O un png de alta resolución si tienes
+    icon: '/faviconn.ico', // O un png de alta resolución si tienes
     shortcut: '/favicon-96x96.png',
     apple: '/apple-touch-icon.png', // Next.js generará el tag <link rel="apple-touch-icon">
   },

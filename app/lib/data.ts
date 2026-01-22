@@ -31,7 +31,7 @@ export const getAllProvidersForSitemap = unstable_cache(
     // Asumo que es 'perfiles' y que tienen un campo 'id'.
     // Si solo quieres mostrar los que ofrecen servicios, quizás debas filtrar.
     const { data } = await supabase
-      .from('perfiles') 
+      .from('perfiles')
       .select('id, updated_at') // Traemos updated_at para decirle a Google cuán fresco es
       .eq('es_activo', true) // Solo activos
       .eq('rol', 'proveedor') // Solo proveedores
@@ -39,7 +39,7 @@ export const getAllProvidersForSitemap = unstable_cache(
 
     return data || [];
   },
-  ['providers-sitemap-list'], 
+  ['providers-sitemap-list'],
   {
     revalidate: 3600 * 24, // Cache de 24 horas (no cambian tan seguido)
     tags: ['providers-sitemap'],
