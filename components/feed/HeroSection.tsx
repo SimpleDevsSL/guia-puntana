@@ -3,6 +3,10 @@ import React, { useState } from 'react';
 import { Search, MapPin } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { LocalidadAutocomplete } from '@/components/ui/LocalidadAutocomplete';
+import { SearchAutocomplete } from './SearchAutocomplete';
+import { AutocompleteResult } from '@/app/lib/definitions';
+
+import { CATEGORIES } from './CategoryList';
 
 interface HeroSectionProps {
   initialQuery: string;
@@ -19,12 +23,35 @@ const HeroSection: React.FC<HeroSectionProps> = ({
   const [l, setL] = useState(initialLocation);
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [isFocused, setIsFocused] = useState(false);
 
   const handleSearch = () => {
     const params = new URLSearchParams(searchParams.toString());
+    const query = q.trim();
 
-    if (q.trim()) params.set('q', q);
-    else params.delete('q');
+    // Lógica para detectar si es categoría
+    let categoryMatch = null;
+    if (query) {
+      // Buscamos exact match o case insensitive
+      categoryMatch = CATEGORIES.find(
+        (cat) => cat.toLowerCase() === query.toLowerCase()
+      );
+    }
+
+    if (categoryMatch) {
+      // Si coincide con categoría, seteamos 'cat' y borramos 'q'
+      // (Para que funcione como los botones antiguos de filtros)
+      params.set('cat', categoryMatch);
+      params.delete('q');
+    } else {
+      // Si no es categoría, búsqueda normal
+      if (query) params.set('q', query);
+      else params.delete('q');
+
+      if (!categoryMatch) {
+        params.delete('cat');
+      }
+    }
 
     if (l.trim()) params.set('l', l);
     else params.delete('l');
@@ -36,13 +63,37 @@ const HeroSection: React.FC<HeroSectionProps> = ({
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleSearch();
+      setIsFocused(false);
     }
   };
+
+  const handleAutocompleteSelect = (result: AutocompleteResult) => {
+    setQ(result.label);
+
+    // Si es categoría, SOLO llenamos el input, no navegamos aún.
+    if (result.tipo === 'categoria') {
+      setIsFocused(false);
+    } else if (result.tipo === 'perfil') {
+      // Si es un perfil, navegamos a su página de detalle
+      router.push(`/proveedor/${result.id}`);
+      setIsFocused(false);
+    } else {
+      // En otros casos (servicio), navegamos automáticamente a la búsqueda
+      const params = new URLSearchParams();
+      params.set('q', result.label);
+      if (l.trim()) params.set('l', l);
+
+      router.push(`${basePath}?${params.toString()}`);
+      setIsFocused(false);
+    }
+  };
+
+  // Handler para cuando se hace click en un item del autocomplete
 
   return (
     <div className="relative bg-white px-4 pb-16 pt-12 dark:bg-gray-950">
       <div className="mx-auto flex max-w-4xl flex-col items-center">
-        <div className="flex w-full max-w-3xl flex-col gap-2 rounded-2xl border bg-white p-2 shadow-lg dark:border-gray-800 dark:bg-gray-900 md:flex-row">
+        <div className="relative flex w-full max-w-3xl flex-col gap-2 rounded-2xl border bg-white p-2 shadow-lg dark:border-gray-800 dark:bg-gray-900 md:flex-row">
           <div className="flex flex-[2] items-center">
             <Search className="ml-4 h-5 w-5 text-gray-400" />
             <input
@@ -50,8 +101,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({
               value={q}
               onChange={(e) => setQ(e.target.value)}
               onKeyDown={handleKeyDown}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => {
+                setTimeout(() => setIsFocused(false), 200);
+              }}
               className="w-full bg-transparent p-3 focus:outline-none dark:text-white"
-              placeholder="¿Qué servicio estás buscando?"
+              placeholder="¿Qué estás buscando?"
             />
           </div>
           <div className="flex flex-1 items-center">
@@ -72,6 +127,21 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           >
             Buscar
           </button>
+
+          {/* Autocomplete Dropdown */}
+          {isFocused && (
+            <div
+              className="absolute left-0 top-full z-50 w-full"
+              onMouseDown={(e) => {
+                e.preventDefault();
+              }}
+            >
+              <SearchAutocomplete
+                query={q}
+                onSelect={handleAutocompleteSelect}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>
