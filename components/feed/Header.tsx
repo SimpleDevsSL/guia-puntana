@@ -106,7 +106,7 @@ export const Header: React.FC = () => {
   };
 
   const buttonStyle =
-    'bg-orange-600 hover:bg-orange-700 text-white transition-all shadow-md rounded-full text-sm font-bold flex items-center gap-2';
+    'bg-orange-600 hover:bg-orange-700 text-white transition-all shadow-md rounded-full text-sm font-bold flex items-center justify-center gap-2 touch-manipulation min-h-[44px] min-w-[44px]';
 
   return (
     <header className="fixed top-0 z-50 w-full border-b border-gray-100 bg-white/80 backdrop-blur-md transition-colors dark:border-gray-800 dark:bg-gray-950/80">
@@ -159,8 +159,9 @@ export const Header: React.FC = () => {
               {/* Profile link */}
               <Link
                 href="/perfil"
-                className={`${buttonStyle} p-2 sm:px-5 sm:py-2`}
+                className={`${buttonStyle} p-3 sm:px-5 sm:py-2`}
                 title="Ver mi perfil"
+                aria-label="Ver mi perfil"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
