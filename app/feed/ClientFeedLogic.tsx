@@ -112,6 +112,7 @@ export default function ClientFeedLogic({
    */
   const handleRetry = () => {
     router.refresh();
+    router.push('/feed');
   };
   /**
    * Handles user contact action for a service.

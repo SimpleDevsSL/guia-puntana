@@ -50,7 +50,7 @@ const ProfessionalCard: React.FC<Props> = ({
               {/* Nombre del Servicio -> Abre el modal de detalles */}
               <h3
                 onClick={() => onViewDetail(service)}
-                className="cursor-pointer text-lg font-bold leading-tight text-gray-900 transition-colors hover:text-orange-600 dark:text-white"
+                className="cursor-pointer text-lg font-bold leading-tight text-gray-900 transition-colors hover:text-orange-700 dark:text-white"
               >
                 {service.nombre}
               </h3>
@@ -60,7 +60,7 @@ const ProfessionalCard: React.FC<Props> = ({
                 Por{' '}
                 <Link
                   href={`/proveedor/${service.proveedor.id}`}
-                  className="hover:text-orange-600 hover:underline"
+                  className="hover:text-orange-700 hover:underline"
                 >
                   {service.proveedor.nombre_completo}
                 </Link>

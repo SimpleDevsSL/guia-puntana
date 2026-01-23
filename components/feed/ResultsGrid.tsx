@@ -12,6 +12,56 @@ interface ResultsGridProps {
   onRetry: () => void;
 }
 
+// 1. Definimos las Props que necesita EmptyState
+interface EmptyStateProps {
+  searchQuery: string;
+  onRetry: () => void;
+}
+
+// 2. Movemos el componente AFUERA de ResultsGrid
+const EmptyState: React.FC<EmptyStateProps> = ({ searchQuery, onRetry }) => (
+  <div className="col-span-full flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50/50 px-4 py-16 text-center dark:border-gray-800 dark:bg-gray-900/50">
+    <div className="mb-4 rounded-full bg-gray-100 p-4 dark:bg-gray-800">
+      <svg
+        className="h-8 w-8 text-gray-400"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        aria-hidden="true"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+        />
+      </svg>
+    </div>
+
+    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+      {searchQuery
+        ? `No encontramos "${searchQuery}"`
+        : 'No hay profesionales en esta categoría aún'}
+    </h3>
+
+    <p className="mt-2 max-w-sm text-sm text-gray-500 dark:text-gray-400">
+      {searchQuery
+        ? 'Intenta con términos más generales o busca por categoría.'
+        : '¿Eres un experto en este rubro? Sé el primero en aparecer aquí.'}
+    </p>
+
+    <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+      <button
+        onClick={onRetry}
+        className="rounded-full bg-white px-6 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-white dark:ring-gray-700 dark:hover:bg-gray-700"
+      >
+        Ver todos los profesionales
+      </button>
+    </div>
+  </div>
+);
+
+// 3. Componente Principal
 const ResultsGrid: React.FC<ResultsGridProps> = ({
   loading,
   services,
@@ -67,17 +117,8 @@ const ResultsGrid: React.FC<ResultsGridProps> = ({
             />
           ))}
           {services.length === 0 && (
-            <div className="col-span-full rounded-2xl border border-dashed border-gray-300 bg-white py-20 text-center dark:border-gray-700 dark:bg-gray-900">
-              <p className="mb-4 text-lg text-gray-500 dark:text-gray-400">
-                No se encontraron resultados.
-              </p>
-              <button
-                onClick={onRetry}
-                className="font-bold text-orange-600 hover:underline"
-              >
-                Ver todos los profesionales
-              </button>
-            </div>
+            // 4. Usamos el componente pasándole las props
+            <EmptyState searchQuery={searchQuery} onRetry={onRetry} />
           )}
         </div>
       )}
