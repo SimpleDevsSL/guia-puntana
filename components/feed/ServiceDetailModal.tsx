@@ -30,15 +30,15 @@ const ServiceDetailModal: React.FC<Props> = ({
   onContact,
 }) => {
   return (
-    <div className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm duration-200">
-      <div className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl border bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-900">
-        <button
-          onClick={onClose}
-          className="absolute right-4 top-4 rounded-full bg-gray-100 p-2 text-gray-500 transition-colors hover:text-gray-900 dark:bg-gray-800 dark:hover:text-white"
+    <div className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm duration-200" onClick={onClose}>
+      <div className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl border bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-900" onClick={(e) => e.stopPropagation()}>
+        <div
+          onClick={() => console.log('Denunciado Lince')}
+          className="absolute right-4 top-4 p-2 text-gray-500 transition-colors hover:text-orange-600 hover:cursor-pointer dark:hover:text-white"
           aria-label="Close modal"
         >
-          <X size={20} />
-        </button>
+          denunciar
+        </div>
 
         <div className="p-8">
           {/* Encabezado con Foto y Nombre */}
