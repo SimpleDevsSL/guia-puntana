@@ -2,6 +2,8 @@ import { MetadataRoute } from 'next';
 // Importamos la nueva función
 import { getCachedCategories, getAllProvidersForSitemap } from './lib/data';
 
+export const revalidate = 86400;
+
 const BASE_URL =
   process.env.NEXT_PUBLIC_BASE_URL || 'https://guia-puntana.vercel.app';
 
