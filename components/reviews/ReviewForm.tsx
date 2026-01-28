@@ -22,30 +22,44 @@ export default function ReviewForm({ servicioId, onSuccess }: ReviewFormProps) {
     
     setLoading(true);
 
-    //  Obtener usuario actual
-    const { data: { user } } = await supabase.auth.getUser();
+    // PASO 1: Obtener usuario de Auth
+    console.log("--- INICIO DEBUG ---");
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
 
-    if (!user) {
+    if (authError || !user) {
+      console.error("Error Paso 1: No hay usuario de Auth", authError);
       setLoading(false);
-      return alert('Tenes que iniciar sesión para dejar una reseña');
+      return alert('Debes iniciar sesión');
     }
+    console.log("Paso 1 OK. Auth User ID:", user.id);
 
-    // Buscar id perfilk
-    const { data: profile } = await supabase
+    // PASO 2: Buscar el Perfil Público
+    // Buscamos la fila en 'perfiles' donde usuario_id coincida con el que acabamos de obtener
+    const { data: profile, error: profileError } = await supabase
       .from('perfiles')
-      .select('id')
+      .select('id, nombre_completo') // Traemos nombre también para verificar
       .eq('usuario_id', user.id)
       .single();
 
+    if (profileError) {
+      console.error("Error Paso 2: Falló la búsqueda del perfil", profileError);
+     
+    }
+    
+    console.log("Paso 2 Resultado. Perfil encontrado:", profile);
+
     if (!profile) {
       setLoading(false);
-      return alert('Error: No tenes un perfil creado');
+      console.error("CRITICO: El usuario existe en Auth pero NO se recuperó el perfil.");
+      return alert('Error: El sistema no encuentra tu perfil de usuario.');
     }
 
-    //  Guardar reseña
+    // PASO 3: Intentar Guardar
+    console.log("Paso 3: Intentando insertar reseña con autor_id:", profile.id);
+
     const { error } = await supabase.from('resenas').insert({
       servicio_id: servicioId,
-      autor_id: profile.id,
+      autor_id: profile.id, 
       calificacion: rating,
       comentario: comment,
     });
@@ -53,13 +67,15 @@ export default function ReviewForm({ servicioId, onSuccess }: ReviewFormProps) {
     setLoading(false);
 
     if (error) {
-      console.error(error);
-      alert('Error al guardar la reseña');
+      console.error("Error Paso 3 (Final): Supabase rechazó el insert", error);
+      alert('Error al guardar: ' + error.message);
     } else {
+      console.log("¡ÉXITO! Reseña guardada.");
       setComment('');
       setRating(0);
-      onSuccess(); // Avisamos al padre que actualice la lista
+      onSuccess();
     }
+    console.log("--- FIN DEBUG ---");
   };
 
   return (
