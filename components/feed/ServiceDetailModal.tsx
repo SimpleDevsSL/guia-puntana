@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { ServiceWithProfile } from '../../app/lib/definitions';
 import {
@@ -9,7 +9,10 @@ import {
   Phone,
   Globe,
 } from 'lucide-react';
-import Link from 'next/link'; // [!code ++]
+import Link from 'next/link';
+
+//Formulario de reseñas
+import ReviewForm from '@/components/reviews/ReviewForm';
 
 interface Props {
   service: ServiceWithProfile;
@@ -41,7 +44,7 @@ const ServiceDetailModal: React.FC<Props> = ({
         </button>
 
         <div className="p-8">
-          {/* Encabezado con Foto y Nombre */}
+          
           <div className="mb-8 flex flex-col items-center gap-6 md:flex-row md:items-start">
             <Link href={`/proveedor/${service.proveedor.id}`}>
               {service.proveedor.foto_url ? (
@@ -88,7 +91,6 @@ const ServiceDetailModal: React.FC<Props> = ({
 
           <hr className="mb-8 border-gray-100 dark:border-gray-800" />
 
-          {/* Información del Servicio */}
           <div className="space-y-6">
             <div>
               <h3 className="mb-3 flex items-center gap-2 text-lg font-bold text-gray-900 dark:text-white">
@@ -178,7 +180,6 @@ const ServiceDetailModal: React.FC<Props> = ({
             </div>
           </div>
 
-          {/* Acción Principal */}
           <div className="mt-10">
             <button
               onClick={() => onContact(service)}
@@ -187,13 +188,33 @@ const ServiceDetailModal: React.FC<Props> = ({
               <MessageSquare size={22} />
               Contactar por WhatsApp
             </button>
-            <button
-              onClick={onClose}
-              className="mt-4 w-full font-medium text-gray-500 hover:underline dark:text-gray-400"
-            >
-              Volver a la búsqueda
-            </button>
           </div>
+
+          {/* --- Formulario (prueba) --- */}
+          <div className="mt-10 border-t border-gray-100 pt-8 dark:border-gray-800">
+            <h3 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">
+              Deja tu Reseña
+            </h3>
+
+       
+            <div className="mt-8">
+              <ReviewForm
+                servicioId={service.id}
+                onSuccess={() => {
+             
+                  alert('¡Reseña guardada con éxito!');
+                  console.log('Reseña guardada');
+                }}
+              />
+            </div>
+          </div>
+
+          <button
+            onClick={onClose}
+            className="mt-8 w-full font-medium text-gray-500 hover:underline dark:text-gray-400"
+          >
+            Volver a la búsqueda
+          </button>
         </div>
       </div>
     </div>
