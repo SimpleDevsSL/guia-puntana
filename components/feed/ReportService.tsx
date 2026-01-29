@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { ServiceWithProfile } from '../../app/lib/definitions';
+import { useBodyScrollLock } from '@/utils/hooks/useBodyScrollLock';
 
 
 interface Props {
@@ -18,6 +19,9 @@ const ReportService: React.FC<Props> = ({ service }) => {
 
     const [showReport, setShowReport] = useState(false);
     const [reason, setReason] = useState('');
+
+    // Bloquear el scroll del body cuando el modal de reporte está abierto
+    useBodyScrollLock(showReport);
 
     function onClose(): void {
         setShowReport(false);
@@ -37,7 +41,7 @@ const ReportService: React.FC<Props> = ({ service }) => {
             { //render condicional del popup de reporte
                 showReport && (
                     <div className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm duration-200 py-5 " onClick={onClose}>
-                        <div className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl border bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-900" onClick={(e) => e.stopPropagation()}>
+                        <div className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl border bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-900 overscroll-contain" onClick={(e) => e.stopPropagation()}>
                             <div>
                                 <h2 className="mb-2 text-3xl font-extrabold text-gray-900 dark:text-white px-6 pt-6 mb-4">
                                     Estas seguro de que deseas denunciar <span className='text-orange-600'>{service.nombre.trimEnd()}</span>, publicado por <span className='text-orange-600'>{service.proveedor.nombre_completo.trimEnd()}</span>?
