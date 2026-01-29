@@ -10,6 +10,7 @@ import {
   Globe,
 } from 'lucide-react';
 import Link from 'next/link'; // [!code ++]
+import ReportService from './ReportService';
 
 interface Props {
   service: ServiceWithProfile;
@@ -30,15 +31,9 @@ const ServiceDetailModal: React.FC<Props> = ({
   onContact,
 }) => {
   return (
-    <div className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm duration-200">
-      <div className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl border bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-900">
-        <button
-          onClick={onClose}
-          className="absolute right-4 top-4 rounded-full bg-gray-100 p-2 text-gray-500 transition-colors hover:text-gray-900 dark:bg-gray-800 dark:hover:text-white"
-          aria-label="Close modal"
-        >
-          <X size={20} />
-        </button>
+    <div className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm duration-200" onClick={onClose}>
+      <div className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl border bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-900" onClick={(e) => e.stopPropagation()}>
+
 
         <div className="p-8">
           {/* Encabezado con Foto y Nombre */}
@@ -91,10 +86,17 @@ const ServiceDetailModal: React.FC<Props> = ({
           {/* Información del Servicio */}
           <div className="space-y-6">
             <div>
-              <h3 className="mb-3 flex items-center gap-2 text-lg font-bold text-gray-900 dark:text-white">
-                Sobre el servicio:{' '}
-                <span className="text-orange-600">{service.nombre}</span>
-              </h3>
+              <div
+                className="flex items-center justify-between"
+              >
+                <h3 className="mb-3 flex items-center gap-2 text-lg font-bold text-gray-900 dark:text-white">
+                  Sobre el servicio:{' '}
+                  <span className="text-orange-600">{service.nombre}</span>
+                </h3>
+                <ReportService
+                  service={service}
+                />
+              </div>
               <p className="text-lg leading-relaxed text-gray-600 dark:text-gray-400">
                 {service.descripcion}
               </p>
