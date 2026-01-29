@@ -9,7 +9,7 @@ import {
   Phone,
   Globe,
 } from 'lucide-react';
-import Link from 'next/link'; // [!code ++]
+import Link from 'next/link';
 import ReportService from './ReportService';
 import { useBodyScrollLock } from '@/utils/hooks/useBodyScrollLock';
 
@@ -33,6 +33,7 @@ const ServiceDetailModal: React.FC<Props> = ({
 }) => {
   // Bloquear el scroll del body cuando el modal está abierto
   useBodyScrollLock(true);
+
   return (
     <div className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm duration-200" onClick={onClose}>
       <div className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl border bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-900 overscroll-contain" onClick={(e) => e.stopPropagation()}>

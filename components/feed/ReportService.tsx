@@ -40,7 +40,7 @@ const ReportService: React.FC<Props> = ({ service }) => {
         <>
             { //render condicional del popup de reporte
                 showReport && (
-                    <div className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm duration-200 py-5 " onClick={onClose}>
+                    <div className="animate-in fade-in fixed inset-0 z-[60] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm duration-200" onClick={onClose}>
                         <div className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl border bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-900 overscroll-contain" onClick={(e) => e.stopPropagation()}>
                             <div>
                                 <h2 className="mb-2 text-3xl font-extrabold text-gray-900 dark:text-white px-6 pt-6 mb-4">
@@ -88,7 +88,7 @@ const ReportService: React.FC<Props> = ({ service }) => {
                 className=" mr-6 mb-3 text-gray-500 transition-colors hover:text-orange-600 hover:cursor-pointer dark:hover:text-white"
                 aria-label="Close modal"
             >
-                denunciar
+                Denunciar
             </div>
         </>
     )
