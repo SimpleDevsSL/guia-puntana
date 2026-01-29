@@ -40,7 +40,7 @@ export const Footer = () => {
               href="/license"
               className="hover:text-blue-600 hover:underline dark:hover:text-blue-400"
             >
-              MIT License
+              GNU Affero General Public License v3.0
             </a>
           </div>
         </div>

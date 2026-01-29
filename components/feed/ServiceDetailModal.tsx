@@ -1,14 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { ServiceWithProfile } from '../../app/lib/definitions';
-import {
-  MapPin,
-  BadgeCheck,
-  MessageSquare,
-  X,
-  Phone,
-  Globe,
-} from 'lucide-react';
+import { MapPin, BadgeCheck, MessageSquare, Phone, Globe } from 'lucide-react';
 import Link from 'next/link';
 import ReportService from './ReportService';
 import { useBodyScrollLock } from '@/utils/hooks/useBodyScrollLock';
@@ -35,10 +28,14 @@ const ServiceDetailModal: React.FC<Props> = ({
   useBodyScrollLock(true);
 
   return (
-    <div className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm duration-200" onClick={onClose}>
-      <div className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl border bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-900 overscroll-contain" onClick={(e) => e.stopPropagation()}>
-
-
+    <div
+      className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm duration-200"
+      onClick={onClose}
+    >
+      <div
+        className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto overscroll-contain rounded-3xl border bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-900"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="p-8">
           {/* Encabezado con Foto y Nombre */}
           <div className="mb-8 flex flex-col items-center gap-6 md:flex-row md:items-start">
@@ -90,16 +87,12 @@ const ServiceDetailModal: React.FC<Props> = ({
           {/* Información del Servicio */}
           <div className="space-y-6">
             <div>
-              <div
-                className="flex items-center justify-between"
-              >
+              <div className="flex items-center justify-between">
                 <h3 className="mb-3 flex items-center gap-2 text-lg font-bold text-gray-900 dark:text-white">
                   Sobre el servicio:{' '}
                   <span className="text-orange-600">{service.nombre}</span>
                 </h3>
-                <ReportService
-                  service={service}
-                />
+                <ReportService service={service} />
               </div>
               <p className="text-lg leading-relaxed text-gray-600 dark:text-gray-400">
                 {service.descripcion}

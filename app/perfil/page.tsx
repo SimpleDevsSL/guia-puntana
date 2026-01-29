@@ -148,10 +148,10 @@ export default function ProfilePage() {
             </section>
 
             {userData?.id && (
-               <VerificationUpload 
-                 userId={userData.id} 
-                 insignias={profileData.insignias} 
-               />
+              <VerificationUpload
+                userId={userData.id}
+                insignias={profileData.insignias}
+              />
             )}
 
             {role === 'user' && (
