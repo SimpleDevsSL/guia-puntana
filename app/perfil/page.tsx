@@ -148,7 +148,7 @@ export default function ProfilePage() {
             </section>
 
             {/* Verificación de Identidad - Solo para Proveedores */}
-            {role === 'provider' && userData?.id && (
+            {role === 'proveedor' && userData?.id && (
               <VerificationUpload
                 userId={userData.id}
                 insignias={profileData.insignias}
