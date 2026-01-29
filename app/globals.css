@@ -17,3 +17,10 @@ body {
     background-color 0.3s ease,
     color 0.3s ease;
 }
+
+/* Previene el scroll del body cuando un modal está abierto */
+body.no-scroll {
+  overflow: hidden;
+  /* Compensa el ancho de la scrollbar para evitar el salto del layout */
+  padding-right: var(--scrollbar-width, 0px);
+}

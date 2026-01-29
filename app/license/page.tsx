@@ -3,37 +3,71 @@ import React from 'react';
 export default function LicensePage() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8">
-      <h1 className="mb-6 text-3xl font-bold">MIT License</h1>
+      <h1 className="mb-6 text-3xl font-bold">
+        GNU Affero General Public License v3.0
+      </h1>
 
       <div className="prose dark:prose-invert max-w-none rounded-lg border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800">
-        <p className="mb-4">
+        <p className="mb-4 font-bold">
           Copyright (c) {new Date().getFullYear()} SimpleDevs
         </p>
 
         <p className="mb-4">
-          Permission is hereby granted, free of charge, to any person obtaining
-          a copy of this software and associated documentation files (the
-          "Software"), to deal in the Software without restriction, including
-          without limitation the rights to use, copy, modify, merge, publish,
-          distribute, sublicense, and/or sell copies of the Software, and to
-          permit persons to whom the Software is furnished to do so, subject to
-          the following conditions:
+          This program is free software: you can redistribute it and/or modify
+          it under the terms of the GNU Affero General Public License as
+          published by the Free Software Foundation, either version 3 of the
+          License, or (at your option) any later version.
         </p>
 
         <p className="mb-4">
-          The above copyright notice and this permission notice shall be
-          included in all copies or substantial portions of the Software.
+          This program is distributed in the hope that it will be useful, but
+          WITHOUT ANY WARRANTY; without even the implied warranty of
+          MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+          Affero General Public License for more details.
         </p>
 
-        <p className="mb-4 font-semibold">
-          THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-          EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-          MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-          IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-          CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-          TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-          SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+        <p className="mb-4">
+          You should have received a copy of the GNU Affero General Public
+          License along with this program. If not, see{' '}
+          <a
+            href="https://www.gnu.org/licenses/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-orange-600 hover:underline"
+          >
+            https://www.gnu.org/licenses/
+          </a>
+          .
         </p>
+
+        <hr className="my-6 border-gray-300 dark:border-gray-600" />
+
+        <h3 className="mb-2 text-lg font-bold">Key Permissions:</h3>
+        <ul className="mb-4 list-disc space-y-1 pl-5">
+          <li>Commercial use</li>
+          <li>Modification</li>
+          <li>Distribution</li>
+          <li>Patent use</li>
+          <li>Private use</li>
+        </ul>
+
+        <h3 className="mb-2 text-lg font-bold">Key Conditions:</h3>
+        <ul className="mb-4 list-disc space-y-1 pl-5">
+          <li>License and copyright notice</li>
+          <li>State changes</li>
+          <li>Disclose source</li>
+          <li>
+            Network use is distribution (if you run it on a server, users must
+            have access to source)
+          </li>
+          <li>Same license (AGPL v3)</li>
+        </ul>
+
+        <h3 className="mb-2 text-lg font-bold">Key Limitations:</h3>
+        <ul className="mb-4 list-disc space-y-1 pl-5">
+          <li>Liability</li>
+          <li>Warranty</li>
+        </ul>
       </div>
     </div>
   );

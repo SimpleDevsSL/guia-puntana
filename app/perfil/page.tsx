@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { Header } from '@/components/feed/Header';
+import VerificationUpload from '@/components/profile/VerificationUpload';
 import { useProfileSettings } from './useProfileSettings';
 import {
   ArrowLeft,
@@ -146,6 +147,14 @@ export default function ProfilePage() {
               </button>
             </section>
 
+            {/* Verificación de Identidad - Solo para Proveedores */}
+            {role === 'provider' && userData?.id && (
+              <VerificationUpload
+                userId={userData.id}
+                insignias={profileData.insignias}
+              />
+            )}
+
             {role === 'user' && (
               <section className="mb-8 mt-8 rounded-2xl border border-orange-200 bg-gradient-to-r from-orange-50 to-white p-6 dark:border-orange-900/50 dark:from-orange-900/10 dark:to-gray-900">
                 <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
@@ -269,11 +278,10 @@ export default function ProfilePage() {
               )}
 
               <div
-                className={`flex justify-center pt-8 ${
-                  !isGoogleUser
+                className={`flex justify-center pt-8 ${!isGoogleUser
                     ? 'border-t border-red-100 dark:border-red-900/30'
                     : ''
-                }`}
+                  }`}
               >
                 <button
                   onClick={handleDeleteAccount}
