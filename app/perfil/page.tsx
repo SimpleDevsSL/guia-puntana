@@ -147,7 +147,8 @@ export default function ProfilePage() {
               </button>
             </section>
 
-            {userData?.id && (
+            {/* Verificación de Identidad - Solo para Proveedores */}
+            {role === 'provider' && userData?.id && (
               <VerificationUpload
                 userId={userData.id}
                 insignias={profileData.insignias}
@@ -277,11 +278,10 @@ export default function ProfilePage() {
               )}
 
               <div
-                className={`flex justify-center pt-8 ${
-                  !isGoogleUser
+                className={`flex justify-center pt-8 ${!isGoogleUser
                     ? 'border-t border-red-100 dark:border-red-900/30'
                     : ''
-                }`}
+                  }`}
               >
                 <button
                   onClick={handleDeleteAccount}
