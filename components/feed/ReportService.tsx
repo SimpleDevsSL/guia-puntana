@@ -13,8 +13,6 @@ interface Report {
 }
 
 const ReportService: React.FC<Props> = ({ service }) => {
-    console.log('ReportService for service:', service);
-
     const supabase = createClient();
 
 
@@ -26,14 +24,11 @@ const ReportService: React.FC<Props> = ({ service }) => {
         setReason('');
     }
     async function handleReport(): Promise<void> {
-        console.log('Reported for reason:', reason);
-        // Aquí iría la lógica para enviar el reporte al servidor
         const report: Report = { motivo: reason, servicios_id: service.id };
         const { data, error } = await supabase.from('reportes').insert([report]);
         if (error) {
-            console.error('Error reporting service:', error);
-        } else {
-            console.log('Service reported successfully:', data);
+            // Manejo de errores comentado para que el cliente final no vea detalles técnicos, descomentar para debuggear!
+            // console.error('Error reporting service:', error);
         }
         onClose();
     }
@@ -45,7 +40,7 @@ const ReportService: React.FC<Props> = ({ service }) => {
                         <div className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl border bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-900" onClick={(e) => e.stopPropagation()}>
                             <div>
                                 <h2 className="mb-2 text-3xl font-extrabold text-gray-900 dark:text-white px-6 pt-6 mb-4">
-                                    Estas seguro de que deseas denunciar <span className='text-orange-600'>{service.nombre}</span>, publicado por <span className='text-orange-600'>{service.proveedor.nombre_completo}</span>?
+                                    Estas seguro de que deseas denunciar <span className='text-orange-600'>{service.nombre.trimEnd()}</span>, publicado por <span className='text-orange-600'>{service.proveedor.nombre_completo.trimEnd()}</span>?
                                 </h2>
                             </div>
                             <div>
