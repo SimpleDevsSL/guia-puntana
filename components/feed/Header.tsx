@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { Logo } from '@/components/ui/Logo';
+import { DonateModal } from '@/components/DonateModal';
 import Link from 'next/link';
 import { createClient } from '@/utils/supabase/client';
 import { User } from '@supabase/supabase-js';
@@ -37,6 +38,7 @@ export const Header: React.FC = () => {
   const [userRole, setUserRole] = useState<string | null>(null);
   // Loading state while fetching initial auth data
   const [isLoading, setIsLoading] = useState(true);
+  const [isDonateModalOpen, setIsDonateModalOpen] = useState(false);
 
   const supabase = createClient();
   const router = useRouter();
@@ -123,6 +125,12 @@ export const Header: React.FC = () => {
 
         {/* Right side: Theme toggle and auth actions */}
         <div className="flex items-center gap-2 sm:gap-4">
+          <button
+            onClick={() => setIsDonateModalOpen(true)}
+            className="hidden rounded-full bg-red-400 px-4 py-2 text-sm font-bold text-white shadow-md transition-all hover:scale-105 hover:bg-red-500 hover:shadow-lg hover:shadow-red-500/25 sm:block"
+          >
+            Donar! 🤍
+          </button>
           <ThemeToggle />
 
           {/* Conditional rendering based on loading state */}
@@ -210,6 +218,10 @@ export const Header: React.FC = () => {
           )}
         </div>
       </div>
+      <DonateModal
+        isOpen={isDonateModalOpen}
+        onClose={() => setIsDonateModalOpen(false)}
+      />
     </header>
   );
 };
