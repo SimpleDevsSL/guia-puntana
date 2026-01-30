@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ServiceWithProfile } from '../lib/definitions';
 import ResultsGrid from '@/components/feed/ResultsGrid';
 import ServiceDetailModal from '@/components/feed/ServiceDetailModal';
@@ -67,6 +67,33 @@ export default function ClientFeedLogic({
     useState<ServiceWithProfile | null>(null);
 
   const [loading] = useState(false);
+
+  // Detectar ID en la URL al cargar o al actualizar servicios
+  useEffect(() => {
+    // Obtenemos el hash sin el símbolo #
+    const hashId = window.location.hash.replace('#', '');
+
+    if (hashId && services.length > 0) {
+      // Buscamos el servicio correspondiente en la lista actual
+      const foundService = services.find((s) => s.id === hashId);
+      if (foundService) {
+        setShowDetailModal(foundService);
+      }
+    }
+  }, [services]);
+
+  // Funciones para manejar el modal y la URL
+  const handleOpenModal = (service: ServiceWithProfile) => {
+    setShowDetailModal(service);
+    // Agrega el hash a la URL sin recargar
+    window.history.pushState(null, '', `#${service.id}`);
+  };
+
+  const handleCloseModal = () => {
+    setShowDetailModal(null);
+    // Limpia el hash manteniendo los otros parámetros de búsqueda
+    window.history.pushState(null, '', window.location.pathname + window.location.search);
+  };
 
   // Función para cargar la siguiente página
   const loadMoreServices = async () => {

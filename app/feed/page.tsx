@@ -12,6 +12,7 @@ interface PageProps {
     q?: string; // Búsqueda por texto
     l?: string; // Localidad
     cat?: string; // ID de Categoría
+    service?: string; // ID de Servicio
   }>;
 }
 
@@ -30,7 +31,7 @@ export async function generateMetadata({
 export default async function FeedPage({ searchParams }: PageProps) {
   const params = await searchParams;
 
-  // 1. Obtener categorías CACHEADAS (Súper rápido ⚡)
+  // 1. Obtener categorías CACHEADAS
   const categories = await getCachedCategories();
 
   // Encontrar la categoría seleccionada basándonos en el NOMBRE (params.cat)
@@ -58,6 +59,7 @@ export default async function FeedPage({ searchParams }: PageProps) {
             searchParams={params}
             activeCategoryName={activeCatName}
             categoryId={activeCatId}
+            serviceId={params.service || null}
           />
         </Suspense>
       </main>

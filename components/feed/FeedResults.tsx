@@ -10,6 +10,7 @@ interface FeedResultsProps {
   };
   activeCategoryName: string;
   categoryId?: string | null;
+  serviceId: string | null;
 }
 
 const ITEMS_PER_PAGE = 12;
