@@ -66,6 +66,9 @@ export default async function CategoryPage({
     return param;
   };
 
+  // [!code ++] Extraemos el serviceId de los parámetros
+  const serviceId = getStringParam(resolvedSearchParams.service) || null;
+
   const feedParams = {
     q: getStringParam(resolvedSearchParams.q),
     l: getStringParam(resolvedSearchParams.l),
@@ -86,6 +89,7 @@ export default async function CategoryPage({
               searchParams={feedParams}
               activeCategoryName={currentCategory.nombre}
               categoryId={currentCategory.id}
+              serviceId={serviceId} // [!code ++] Pasamos la propiedad faltante
             />
           </Suspense>
         </div>

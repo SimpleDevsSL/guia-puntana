@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { ServiceWithProfile } from '../../app/lib/definitions';
-import { MapPin, BadgeCheck, MessageSquare, Phone, Globe, Share2, Check } from 'lucide-react';
+import {
+  MapPin,
+  BadgeCheck,
+  MessageSquare,
+  Phone,
+  Globe,
+  Share2,
+  Check,
+} from 'lucide-react';
 import Link from 'next/link';
 import ReportService from './ReportService';
 import { useBodyScrollLock } from '@/utils/hooks/useBodyScrollLock';
@@ -42,14 +50,18 @@ const ServiceDetailModal: React.FC<Props> = ({
           text: `Te recomiendo este servicio...`,
           url: url,
         });
-      } catch (err) { console.error(err); }
+      } catch (err) {
+        console.error(err);
+      }
     } else {
       // Opción B: Computadoras (copia al portapapeles)
       try {
         await navigator.clipboard.writeText(url);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000); // Reset a los 2 seg
-      } catch (err) { console.error(err); }
+      } catch (err) {
+        console.error(err);
+      }
     }
   };
 

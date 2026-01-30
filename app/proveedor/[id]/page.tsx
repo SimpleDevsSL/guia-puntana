@@ -17,6 +17,7 @@ interface PageProps {
     q?: string;
     l?: string;
     cat?: string;
+    service?: string; // [!code ++] Agregamos el parámetro service
   }>;
 }
 
@@ -234,12 +235,13 @@ export default async function ProviderPage({
           />
 
           <ClientFeedLogic
-            initialServices={services} // RENOMBRADO: services -> initialServices
+            initialServices={services}
             activeCategoryName={activeCatName}
             searchQuery={urlParams.q || ''}
             searchLocation={urlParams.l || ''}
-            categoryId={urlParams.cat || null} // NUEVO PROP
-            itemsPerPage={itemsPerPage} // NUEVO PROP (Configurado para desactivar Load More)
+            categoryId={urlParams.cat || null}
+            itemsPerPage={itemsPerPage}
+            initialServiceId={urlParams.service || null} // [!code ++] Pasamos la propiedad faltante
           />
         </div>
       </main>

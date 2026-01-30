@@ -1,17 +1,13 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react'; // [!code --] Ya no necesitamos useEffect
 import { ServiceWithProfile } from '../lib/definitions';
 import ResultsGrid from '@/components/feed/ResultsGrid';
 import ServiceDetailModal from '@/components/feed/ServiceDetailModal';
 import ActiveFilters from '@/components/feed/ActiveFilters';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation'; // [!code ++] Importar useSearchParams
 import { createClient } from '@/utils/supabase/client';
 
-/**
- * Props for the ClientFeedLogic component
- * @interface ClientFeedLogicProps
- */
 interface ClientFeedLogicProps {
   initialServices: ServiceWithProfile[];
   activeCategoryName: string;
@@ -19,28 +15,9 @@ interface ClientFeedLogicProps {
   searchLocation: string;
   categoryId: string | null;
   itemsPerPage: number;
+  initialServiceId: string | null; // [!code ++] Nueva prop
 }
-/**
- * Client-side component for managing the service feed interaction logic.
- *
- * This component handles:
- * - Displaying services in a grid with real-time filtering
- * - Managing service detail modal state
- * - Recording contact click metrics to Supabase
- * - Opening WhatsApp conversations with pre-filled messages
- * - User experience feedback and error handling
- *
- * @component
- * @param {ClientFeedLogicProps} props - Component props
- * @returns {React.ReactElement} The feed UI with modal for service details
- *
- * @example
- * <ClientFeedLogic
- *   services={allServices}
- *   activeCategoryName="Plomería"
- *   searchQuery=""
- * />
- */
+
 export default function ClientFeedLogic({
   initialServices,
   activeCategoryName,
@@ -48,8 +25,10 @@ export default function ClientFeedLogic({
   searchLocation,
   categoryId,
   itemsPerPage,
+  initialServiceId, // [!code ++]
 }: ClientFeedLogicProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const supabase = createClient();
 
   // Estado para la lista acumulativa de servicios
@@ -59,40 +38,44 @@ export default function ClientFeedLogic({
   // Estado para paginación
   const [offset, setOffset] = useState(itemsPerPage);
   const [hasMore, setHasMore] = useState(
-    initialServices.length === itemsPerPage
+    initialServices.length >= itemsPerPage
   );
   const [loadingMore, setLoadingMore] = useState(false);
 
-  const [showDetailModal, setShowDetailModal] =
-    useState<ServiceWithProfile | null>(null);
-
   const [loading] = useState(false);
 
-  // Detectar ID en la URL al cargar o al actualizar servicios
-  useEffect(() => {
-    // Obtenemos el hash sin el símbolo #
-    const hashId = window.location.hash.replace('#', '');
-
-    if (hashId && services.length > 0) {
-      // Buscamos el servicio correspondiente en la lista actual
-      const foundService = services.find((s) => s.id === hashId);
-      if (foundService) {
-        setShowDetailModal(foundService);
+  // [!code ++] INICIALIZACIÓN DIRECTA (Sin useEffect)
+  // Calculamos el estado inicial del modal basándonos en la prop del servidor
+  const [showDetailModal, setShowDetailModal] =
+    useState<ServiceWithProfile | null>(() => {
+      if (initialServiceId && initialServices.length > 0) {
+        return initialServices.find((s) => s.id === initialServiceId) || null;
       }
-    }
-  }, [services]);
+      return null;
+    });
 
-  // Funciones para manejar el modal y la URL
+  // [!code ++] Función auxiliar para actualizar la URL sin recargar
+  const updateUrlParam = (serviceId: string | null) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (serviceId) {
+      params.set('service', serviceId);
+    } else {
+      params.delete('service');
+    }
+
+    // push con scroll: false evita que la página salte arriba
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
+
   const handleOpenModal = (service: ServiceWithProfile) => {
     setShowDetailModal(service);
-    // Agrega el hash a la URL sin recargar
-    window.history.pushState(null, '', `#${service.id}`);
+    updateUrlParam(service.id);
   };
 
   const handleCloseModal = () => {
     setShowDetailModal(null);
-    // Limpia el hash manteniendo los otros parámetros de búsqueda
-    window.history.pushState(null, '', window.location.pathname + window.location.search);
+    updateUrlParam(null);
   };
 
   // Función para cargar la siguiente página
@@ -120,12 +103,10 @@ export default function ClientFeedLogic({
       const moreServices =
         (newServices as unknown as ServiceWithProfile[]) || [];
 
-      // Si trajo menos del límite, es que ya no hay más
       if (moreServices.length < itemsPerPage) {
         setHasMore(false);
       }
 
-      // Añadimos los nuevos al final de la lista existente
       setServices((prev) => [...prev, ...moreServices]);
       setOffset((prev) => prev + itemsPerPage);
     }
@@ -133,29 +114,11 @@ export default function ClientFeedLogic({
     setLoadingMore(false);
   };
 
-  /**
-   * Handles retry action by refreshing the feed page.
-   * Used when an error occurs and user wants to retry.
-   */
   const handleRetry = () => {
     router.refresh();
     router.push('/feed');
   };
-  /**
-   * Handles user contact action for a service.
-   *
-   * Process:
-   * 1. Records a click metric to track user engagement
-   * 2. Constructs a pre-filled WhatsApp message
-   * 3. Opens WhatsApp with the message and contact number
-   *
-   * The message template includes the service provider's name and service type
-   * to provide context for the conversation.
-   *
-   * @async
-   * @param {ServiceWithProfile} service - The service to contact for
-   * @throws {Error} If metrics recording fails (logged to console, doesn't block contact)
-   */
+
   const handleContact = async (service: ServiceWithProfile) => {
     supabase
       .from('metricas_clics')
@@ -172,10 +135,7 @@ export default function ClientFeedLogic({
       const cleanPhone = service.telefono.replace(/\D/g, '');
       const text = `Hola ${service.proveedor.nombre_completo}, vi que ofreces el servicio de ${service.nombre} en Guía Puntana. Tengo una consulta...`;
       const encodedText = encodeURIComponent(text);
-
-      // Es recomendable usar api.whatsapp.com en lugar de wa.me para mayor compatibilidad móvil
       const url = `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodedText}`;
-
       window.open(url, '_blank');
     } else {
       alert('Este profesional no tiene un número de contacto configurado.');
@@ -195,11 +155,10 @@ export default function ClientFeedLogic({
         activeCategoryName={activeCategoryName}
         searchQuery={searchQuery}
         onConnect={handleContact}
-        onViewDetail={setShowDetailModal}
+        onViewDetail={handleOpenModal} // Usamos la nueva función
         onRetry={handleRetry}
       />
 
-      {/* Botón de Cargar Más / Infinite Scroll Trigger */}
       {hasMore && (
         <div className="flex justify-center py-8">
           <button
@@ -215,7 +174,7 @@ export default function ClientFeedLogic({
       {showDetailModal && (
         <ServiceDetailModal
           service={showDetailModal}
-          onClose={() => setShowDetailModal(null)}
+          onClose={handleCloseModal} // Usamos la nueva función
           onContact={handleContact}
         />
       )}

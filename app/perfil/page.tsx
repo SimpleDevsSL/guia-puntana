@@ -278,10 +278,11 @@ export default function ProfilePage() {
               )}
 
               <div
-                className={`flex justify-center pt-8 ${!isGoogleUser
+                className={`flex justify-center pt-8 ${
+                  !isGoogleUser
                     ? 'border-t border-red-100 dark:border-red-900/30'
                     : ''
-                  }`}
+                }`}
               >
                 <button
                   onClick={handleDeleteAccount}
