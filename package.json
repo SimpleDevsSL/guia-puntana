@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "setup": "npm install && npm run format && npm run lint:fix && npm run build && npm run dev"
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^10.2.9",
