@@ -20,6 +20,7 @@ type BrowserType =
   | 'other';
 
 function detectBrowser(): BrowserType {
+  if (typeof window === 'undefined' || !navigator) return 'other';
   const ua = navigator.userAgent.toLowerCase();
 
   if (ua.includes('iphone') || ua.includes('ipad')) {
@@ -42,6 +43,7 @@ function detectBrowser(): BrowserType {
 }
 
 function isMobileDevice(): boolean {
+  if (typeof window === 'undefined' || !navigator) return false;
   const ua = navigator.userAgent.toLowerCase();
   return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
     ua
@@ -49,6 +51,7 @@ function isMobileDevice(): boolean {
 }
 
 function isAppInstalled(): boolean {
+  if (typeof window === 'undefined' || !navigator) return false;
   // Para iOS
   if (
     navigator.userAgent.includes('iphone') ||
