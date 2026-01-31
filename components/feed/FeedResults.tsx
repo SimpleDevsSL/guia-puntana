@@ -74,7 +74,7 @@ export default async function FeedResults({
     q: searchParams.q,
     l: searchParams.l,
     c: categoriaFiltro,
-    s: serviceId,
+    // s: serviceId, // ELIMINADO: No queremos que se remonte al abrir el modal, para no perder el scrollRef
   });
 
   return (
