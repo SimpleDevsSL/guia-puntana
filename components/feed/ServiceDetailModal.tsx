@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { ServiceWithProfile } from '../../app/lib/definitions';
-import { MapPin, BadgeCheck, MessageSquare, Phone, Globe } from 'lucide-react';
+import {
+  MapPin,
+  BadgeCheck,
+  MessageSquare,
+  Phone,
+  Globe,
+  Share2,
+  Check,
+} from 'lucide-react';
 import Link from 'next/link';
 import ReportService from './ReportService';
 import { useBodyScrollLock } from '@/utils/hooks/useBodyScrollLock';
@@ -26,6 +34,36 @@ const ServiceDetailModal: React.FC<Props> = ({
 }) => {
   // Bloquear el scroll del body cuando el modal está abierto
   useBodyScrollLock(true);
+
+  // Estado para saber si se copió el link (para mostrar el tic verde)
+  const [copied, setCopied] = useState(false);
+
+  // Función lógica de compartir
+  const handleShare = async () => {
+    const url = `${window.location.origin}/feed?service=${service.id}`;
+
+    if (navigator.share) {
+      // Opción A: Celulares (abre menú nativo de WhatsApp, Instagram, etc.)
+      try {
+        await navigator.share({
+          title: `Servicio de ${service.nombre} - Guía Puntana`,
+          text: `Te recomiendo este servicio...`,
+          url: url,
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      // Opción B: Computadoras (copia al portapapeles)
+      try {
+        await navigator.clipboard.writeText(url);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000); // Reset a los 2 seg
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
 
   return (
     <div
@@ -178,7 +216,7 @@ const ServiceDetailModal: React.FC<Props> = ({
           </div>
 
           {/* Acción Principal */}
-          <div className="mt-10">
+          <div className="mt-10 space-y-3">
             <button
               onClick={() => onContact(service)}
               className="flex w-full items-center justify-center gap-3 rounded-2xl bg-orange-600 py-4 text-lg font-bold text-white shadow-lg shadow-orange-600/20 transition-all hover:bg-orange-700"
@@ -186,9 +224,18 @@ const ServiceDetailModal: React.FC<Props> = ({
               <MessageSquare size={22} />
               Contactar por WhatsApp
             </button>
+
+            <button
+              onClick={handleShare}
+              className="flex w-full items-center justify-center gap-3 rounded-2xl bg-blue-600 py-4 text-lg font-bold text-white shadow-lg shadow-blue-600/20 transition-all hover:bg-blue-700"
+            >
+              {copied ? <Check size={22} /> : <Share2 size={22} />}
+              {copied ? 'Enlace Copiado' : 'Compartir Servicio'}
+            </button>
+
             <button
               onClick={onClose}
-              className="mt-4 w-full font-medium text-gray-500 hover:underline dark:text-gray-400"
+              className="w-full font-medium text-gray-500 hover:underline dark:text-gray-400"
             >
               Volver a la búsqueda
             </button>
