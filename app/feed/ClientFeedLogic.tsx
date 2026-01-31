@@ -94,7 +94,8 @@ export default function ClientFeedLogic({
 
     // Aplicar el lock del body INMEDIATAMENTE antes de cambiar la URL
     const scrollY = window.scrollY;
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    const scrollbarWidth =
+      window.innerWidth - document.documentElement.clientWidth;
     const bodyStyle = document.body.style;
 
     bodyStyle.setProperty('--scrollbar-width', `${scrollbarWidth}px`);
@@ -211,7 +212,7 @@ export default function ClientFeedLogic({
           service={showDetailModal}
           onClose={handleCloseModal} // Usamos la nueva función
           onContact={handleContact}
-          savedScrollPosition={scrollPositionRef.current}
+          savedScrollPosition={scrollPositionRef}
         />
       )}
     </>

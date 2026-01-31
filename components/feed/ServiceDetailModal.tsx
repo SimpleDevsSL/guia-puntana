@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, RefObject } from 'react';
 import Image from 'next/image';
 import { ServiceWithProfile } from '../../app/lib/definitions';
 import {
@@ -18,7 +18,7 @@ interface Props {
   service: ServiceWithProfile;
   onClose: () => void;
   onContact: (service: ServiceWithProfile) => void;
-  savedScrollPosition?: number;
+  savedScrollPosition?: number | RefObject<number>;
 }
 
 const getInitials = (name: string) => {

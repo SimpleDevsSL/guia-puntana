@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, RefObject } from 'react';
 
 // Contador global de modales abiertos
 let modalCount = 0;
@@ -17,9 +17,24 @@ let originalScrollY = 0;
  * @param isOpen - Boolean que indica si el modal está abierto
  * @param savedScrollPosition - Posición de scroll opcional a restaurar (si no se provee, usa la posición actual)
  */
-export function useBodyScrollLock(isOpen: boolean, savedScrollPosition?: number) {
+export function useBodyScrollLock(
+  isOpen: boolean,
+  savedScrollPosition?: number | RefObject<number>
+) {
   useEffect(() => {
     if (!isOpen) return;
+
+    // Resolver posición de scroll (puede ser número o ref)
+    let resolvedScrollPos: number | undefined;
+    if (
+      typeof savedScrollPosition === 'object' &&
+      savedScrollPosition !== null &&
+      'current' in savedScrollPosition
+    ) {
+      resolvedScrollPos = savedScrollPosition.current ?? undefined;
+    } else {
+      resolvedScrollPos = savedScrollPosition as number | undefined;
+    }
 
     // Incrementar el contador de modales
     modalCount++;
@@ -27,7 +42,7 @@ export function useBodyScrollLock(isOpen: boolean, savedScrollPosition?: number)
     // Solo aplicar el lock si es el primer modal Y no está ya aplicado
     if (modalCount === 1 && !document.body.style.position) {
       // Guardar el scroll actual (usar el proporcionado o el actual)
-      originalScrollY = savedScrollPosition ?? window.scrollY;
+      originalScrollY = resolvedScrollPos ?? window.scrollY;
 
       // Calcular el ancho de la scrollbar antes de ocultarla
       const scrollbarWidth =
@@ -35,10 +50,10 @@ export function useBodyScrollLock(isOpen: boolean, savedScrollPosition?: number)
 
       // Aplicar todos los estilos de una vez para evitar repaints
       const bodyStyle = document.body.style;
-      
+
       // Aplicar el ancho de la scrollbar como variable CSS
       bodyStyle.setProperty('--scrollbar-width', `${scrollbarWidth}px`);
-      
+
       // Aplicar todos los estilos necesarios ANTES de agregar la clase
       bodyStyle.position = 'fixed';
       bodyStyle.top = `-${originalScrollY}px`;
@@ -51,7 +66,7 @@ export function useBodyScrollLock(isOpen: boolean, savedScrollPosition?: number)
       document.body.classList.add('no-scroll');
     } else if (modalCount === 1) {
       // Si los estilos ya están aplicados, solo guardar la posición
-      originalScrollY = savedScrollPosition ?? window.scrollY;
+      originalScrollY = resolvedScrollPos ?? window.scrollY;
     }
 
     // Cleanup: restaurar el scroll cuando el modal se cierre
@@ -62,10 +77,10 @@ export function useBodyScrollLock(isOpen: boolean, savedScrollPosition?: number)
       // Solo remover el lock cuando no hay más modales abiertos
       if (modalCount === 0) {
         const bodyStyle = document.body.style;
-        
+
         // Remover la clase
         document.body.classList.remove('no-scroll');
-        
+
         // Remover todas las propiedades inline
         bodyStyle.removeProperty('--scrollbar-width');
         bodyStyle.removeProperty('position');
