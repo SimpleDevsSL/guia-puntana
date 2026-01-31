@@ -29,13 +29,7 @@ El propósito central es brindar visibilidad a los trabajadores locales sin cobr
     cd guia-puntana
     ```
 
-2.  **Instalar dependencias:**
-
-    ```bash
-    npm install
-    ```
-
-3.  **Configurar variables de entorno:**
+2.  **Configurar variables de entorno:**
     Crea un archivo `.env.local` con tus credenciales de Supabase:
 
     ```env
@@ -43,12 +37,64 @@ El propósito central es brindar visibilidad a los trabajadores locales sin cobr
     NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_key
     ```
 
-4.  **Correr el servidor de desarrollo:**
+3.  **Configuración automática (recomendado):**
+
     ```bash
+    npm run setup
+    ```
+
+    Este comando ejecuta automáticamente:
+    - Instalación de dependencias (`npm install`)
+    - Formateo de código (`npm run format`)
+    - Corrección de linting (`npm run lint:fix`)
+    - Build del proyecto (`npm run build`)
+    - Inicio del servidor de desarrollo (`npm run dev`)
+
+    **Nota:** Este es el método recomendado para configurar el proyecto por primera vez.
+
+4.  **Configuración manual (alternativa):**
+
+    Si prefieres ejecutar los comandos manualmente:
+
+    ```bash
+    # Instalar dependencias
+    npm install
+
+    # Formatear código
+    npm run format
+
+    # Corregir problemas de linting
+    npm run lint:fix
+
+    # Construir el proyecto
+    npm run build
+
+    # Correr el servidor de desarrollo
     npm run dev
     ```
+
     Abre http://localhost:3000 en tu navegador.
+
+## 📜 Scripts Disponibles
+
+- **`npm run dev`** - Inicia el servidor de desarrollo
+- **`npm run build`** - Construye la aplicación para producción
+- **`npm start`** - Inicia el servidor de producción
+- **`npm run lint`** - Ejecuta el linter
+- **`npm run lint:fix`** - Corrige automáticamente problemas de linting
+- **`npm run format`** - Formatea el código con Prettier
+- **`npm run setup`** - Configuración completa del proyecto (instala, formatea, corrige linting, construye e inicia)
+- **`npm run validate`** - Valida el proyecto (instala, formatea, corrige linting y construye)
 
 ## 📄 Licencia
 
-Este proyecto está bajo la **Licencia MIT**.
+Este proyecto está bajo la **Licencia GNU Affero General Public License v3.0 (AGPL-3.0)**.
+
+Esto significa que:
+
+- ✅ Puedes usar, modificar y distribuir este software libremente
+- ✅ Debes compartir el código fuente de cualquier versión modificada
+- ✅ Si ejecutas una versión modificada en un servidor, debes ofrecer el código fuente a los usuarios
+- ✅ Cualquier trabajo derivado debe usar la misma licencia AGPL-3.0
+
+Para más información, consulta el archivo [LICENSE](LICENSE) o visita [https://www.gnu.org/licenses/agpl-3.0.html](https://www.gnu.org/licenses/agpl-3.0.html).
