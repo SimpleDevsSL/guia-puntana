@@ -12,6 +12,7 @@
     @apply bg-gray-950 text-gray-100;
   }
 }
+
 body {
   transition:
     background-color 0.3s ease,
@@ -23,4 +24,58 @@ body.no-scroll {
   overflow: hidden;
   /* Compensa el ancho de la scrollbar para evitar el salto del layout */
   padding-right: var(--scrollbar-width, 0px);
+}
+
+/* PWA Native-like improvements */
+html {
+  /* Smooth scrolling para mejor experiencia */
+  scroll-behavior: smooth;
+  /* Previene el overscroll bounce en iOS */
+  overscroll-behavior-y: none;
+  /* Mejora el rendering de texto */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Previene el zoom en iOS cuando se hace focus en inputs */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  /* Previene el pull-to-refresh en mobile */
+  overscroll-behavior-y: contain;
+  /* Mejora el touch scrolling en iOS */
+  -webkit-overflow-scrolling: touch;
+  /* Previene el tap highlight en mobile */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Mejora la experiencia de touch en elementos interactivos */
+a,
+button,
+[role='button'] {
+  /* Optimiza el touch para elementos interactivos */
+  touch-action: manipulation;
+  /* Previene el delay del click en mobile */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Previene el comportamiento de selección de texto en elementos de UI */
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Mejora el scroll en contenedores */
+.smooth-scroll {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Safe area insets para dispositivos con notch */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
 }
