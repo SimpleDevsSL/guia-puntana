@@ -126,7 +126,6 @@ export default function InstallPrompt() {
 
       const { outcome } = await deferredPrompt.userChoice;
 
-
       // Limpiar
       setDeferredPrompt(null);
       setIsVisible(false);

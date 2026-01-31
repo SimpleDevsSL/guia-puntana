@@ -12,12 +12,10 @@ interface ResultsGridProps {
   onRetry: () => void;
 }
 
-
 interface EmptyStateProps {
   searchQuery: string;
   onRetry: () => void;
 }
-
 
 const EmptyState: React.FC<EmptyStateProps> = ({ searchQuery, onRetry }) => (
   <div className="col-span-full flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50/50 px-4 py-16 text-center dark:border-gray-800 dark:bg-gray-900/50">
@@ -60,7 +58,6 @@ const EmptyState: React.FC<EmptyStateProps> = ({ searchQuery, onRetry }) => (
     </div>
   </div>
 );
-
 
 const ResultsGrid: React.FC<ResultsGridProps> = ({
   loading,
