@@ -94,7 +94,7 @@ export function useProfileSettings() {
         setProfileData({
           nombre_completo: profile.nombre_completo || '',
           foto_url: profile.foto_url || '',
-          // 3. Guardamos las insignias en el estado (o array vacío por defecto)
+          // Guardamos las insignias en el estado (o array vacío por defecto)
           insignias: profile.insignias || [],
         });
         setRole(profile.rol);
