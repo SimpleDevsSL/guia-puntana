@@ -81,7 +81,6 @@ export default function Home() {
               herramienta definitiva para encontrar, contratar y trabajar.
             </p>
 
-            <DonateSection />
           </div>
         </section>
 
