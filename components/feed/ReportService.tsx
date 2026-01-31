@@ -27,7 +27,7 @@ const ReportService: React.FC<Props> = ({ service }) => {
   }
   async function handleReport(): Promise<void> {
     const report: Report = { motivo: reason, servicios_id: service.id };
-    const { data, error } = await supabase.from('reportes').insert([report]);
+    const { error } = await supabase.from('reportes').insert([report]);
     if (error) {
       // Manejo de errores comentado para que el cliente final no vea detalles técnicos, descomentar para debuggear!
       // console.error('Error reporting service:', error);
