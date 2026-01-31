@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-// Importamos la nueva función
+
 import { getCachedCategories, getAllProvidersForSitemap } from './lib/data';
 
 export const revalidate = 86400;
@@ -8,13 +8,13 @@ const BASE_URL =
   process.env.NEXT_PUBLIC_BASE_URL || 'https://guia-puntana.vercel.app';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // 1. Obtener datos en paralelo para que sea más rápido
+  // Obtener datos en paralelo para que sea más rápido
   const [categories, providers] = await Promise.all([
     getCachedCategories(),
     getAllProvidersForSitemap(),
   ]);
 
-  // 2. URLs de Categorías (Prioridad Alta - 0.8)
+  // URLs de Categorías (Prioridad Alta - 0.8)
   const categoryUrls: MetadataRoute.Sitemap = categories.map((category) => ({
     url: `${BASE_URL}/categoria/${category.slug}`,
     lastModified: new Date(),
@@ -22,7 +22,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  // 3. URLs de Proveedores (Prioridad Media/Alta - 0.7)
+  // URLs de Proveedores (Prioridad Media/Alta - 0.7)
   const providerUrls: MetadataRoute.Sitemap = providers.map((provider) => ({
     url: `${BASE_URL}/proveedor/${provider.id}`,
     // Si tienes fecha de actualización, úsala; si no, la fecha actual
@@ -33,7 +33,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  // 4. Rutas estáticas clave
+  // Rutas estáticas clave
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: BASE_URL,
@@ -55,6 +55,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // Retornamos todo combinado
+
   return [...staticRoutes, ...categoryUrls, ...providerUrls];
 }

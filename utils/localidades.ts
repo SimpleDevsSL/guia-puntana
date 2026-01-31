@@ -31,7 +31,7 @@ export const filterLocalidades = (searchTerm: string): string[] => {
  */
 export const getLocalidades = async (): Promise<string[]> => {
   // Implementación actual con lista estática
-  // En el futuro, puede ser reemplazado por:
+  // TODO: Reemplazar con una API externa (ej. Nominatim)
   // const response = await fetch('https://nominatim.openstreetmap.org/search?...');
   return LOCALIDADES_SAN_LUIS;
 };

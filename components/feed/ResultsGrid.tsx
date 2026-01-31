@@ -12,13 +12,13 @@ interface ResultsGridProps {
   onRetry: () => void;
 }
 
-// 1. Definimos las Props que necesita EmptyState
+
 interface EmptyStateProps {
   searchQuery: string;
   onRetry: () => void;
 }
 
-// 2. Movemos el componente AFUERA de ResultsGrid
+
 const EmptyState: React.FC<EmptyStateProps> = ({ searchQuery, onRetry }) => (
   <div className="col-span-full flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50/50 px-4 py-16 text-center dark:border-gray-800 dark:bg-gray-900/50">
     <div className="mb-4 rounded-full bg-gray-100 p-4 dark:bg-gray-800">
@@ -61,7 +61,7 @@ const EmptyState: React.FC<EmptyStateProps> = ({ searchQuery, onRetry }) => (
   </div>
 );
 
-// 3. Componente Principal
+
 const ResultsGrid: React.FC<ResultsGridProps> = ({
   loading,
   services,
@@ -117,7 +117,7 @@ const ResultsGrid: React.FC<ResultsGridProps> = ({
             />
           ))}
           {services.length === 0 && (
-            // 4. Usamos el componente pasándole las props
+            // Usamos el componente pasándole las props
             <EmptyState searchQuery={searchQuery} onRetry={onRetry} />
           )}
         </div>

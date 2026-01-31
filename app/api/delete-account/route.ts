@@ -3,10 +3,10 @@ import { createClient as createAdminClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
-  // 1. Crear el cliente de Supabase con la sesión del usuario
+  // Crear el cliente de Supabase con la sesión del usuario
   const supabase = await createClient();
 
-  // 2. Obtener el usuario autenticado desde la sesión (no del body)
+  // Obtener el usuario autenticado desde la sesión (no del body)
   const {
     data: { user },
     error: authError,
@@ -18,7 +18,7 @@ export async function POST(request: Request) {
 
   const { userId } = await request.json();
 
-  // 3. VALIDACIÓN CRÍTICA: Comparar el ID del usuario con el que se quiere borrar
+  // VALIDACIÓN CRÍTICA: Comparar el ID del usuario con el que se quiere borrar
   if (user.id !== userId) {
     return NextResponse.json(
       { error: 'Prohibido: No puedes borrar otras cuentas' },
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     );
   }
 
-  // 4. Solo si es el dueño, usamos la Service Role Key para borrar de Auth
+  // Solo si es el dueño, usamos la Service Role Key para borrar de Auth
   const supabaseAdmin = createAdminClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!

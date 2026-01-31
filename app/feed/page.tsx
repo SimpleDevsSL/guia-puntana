@@ -31,7 +31,7 @@ export async function generateMetadata({
 export default async function FeedPage({ searchParams }: PageProps) {
   const params = await searchParams;
 
-  // 1. Obtener categorías CACHEADAS
+  // Obtener categorías CACHEADAS
   const categories = await getCachedCategories();
 
   // Encontrar la categoría seleccionada basándonos en el NOMBRE (params.cat)
