@@ -25,7 +25,7 @@ El propósito central es brindar visibilidad a los trabajadores locales sin cobr
 1.  **Clonar el repositorio:**
 
     ```bash
-    git clone [https://github.com/simpledevssl/guia-puntana.git](https://github.com/simpledevssl/guia-puntana.git)
+    git clone https://github.com/simpledevssl/guia-puntana.git
     cd guia-puntana
     ```
 

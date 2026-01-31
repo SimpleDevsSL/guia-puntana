@@ -241,7 +241,6 @@ export default async function ProviderPage({
             searchLocation={urlParams.l || ''}
             categoryId={urlParams.cat || null}
             itemsPerPage={itemsPerPage}
-            initialServiceId={urlParams.service || null} // [!code ++] Pasamos la propiedad faltante
           />
         </div>
       </main>

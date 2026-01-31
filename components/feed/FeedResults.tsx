@@ -86,7 +86,6 @@ export default async function FeedResults({
       searchLocation={searchParams.l || ''}
       categoryId={categoriaFiltro}
       itemsPerPage={ITEMS_PER_PAGE}
-      initialServiceId={serviceId} // [!code ++] Pasamos el ID al cliente
     />
   );
 }

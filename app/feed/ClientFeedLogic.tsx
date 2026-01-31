@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useState } from 'react'; // [!code --] Ya no necesitamos useEffect
+import React, { useState, useMemo } from 'react';
 import { ServiceWithProfile } from '../lib/definitions';
 import ResultsGrid from '@/components/feed/ResultsGrid';
 import ServiceDetailModal from '@/components/feed/ServiceDetailModal';
 import ActiveFilters from '@/components/feed/ActiveFilters';
-import { useRouter, useSearchParams } from 'next/navigation'; // [!code ++] Importar useSearchParams
+import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
 
 interface ClientFeedLogicProps {
@@ -15,7 +15,6 @@ interface ClientFeedLogicProps {
   searchLocation: string;
   categoryId: string | null;
   itemsPerPage: number;
-  initialServiceId: string | null; // [!code ++] Nueva prop
 }
 
 export default function ClientFeedLogic({
@@ -25,7 +24,6 @@ export default function ClientFeedLogic({
   searchLocation,
   categoryId,
   itemsPerPage,
-  initialServiceId, // [!code ++]
 }: ClientFeedLogicProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -44,17 +42,18 @@ export default function ClientFeedLogic({
 
   const [loading] = useState(false);
 
-  // [!code ++] INICIALIZACIÓN DIRECTA (Sin useEffect)
-  // Calculamos el estado inicial del modal basándonos en la prop del servidor
-  const [showDetailModal, setShowDetailModal] =
-    useState<ServiceWithProfile | null>(() => {
-      if (initialServiceId && initialServices.length > 0) {
-        return initialServices.find((s) => s.id === initialServiceId) || null;
-      }
-      return null;
-    });
+  // Derivar el estado del modal desde searchParams (evita setState en useEffect)
+  const showDetailModal = useMemo(() => {
+    const serviceIdFromUrl = searchParams.get('service');
 
-  // [!code ++] Función auxiliar para actualizar la URL sin recargar
+    if (serviceIdFromUrl) {
+      return services.find((s) => s.id === serviceIdFromUrl) || null;
+    }
+
+    return null;
+  }, [searchParams, services]);
+
+  // Función auxiliar para actualizar la URL sin recargar
   const updateUrlParam = (serviceId: string | null) => {
     const params = new URLSearchParams(searchParams.toString());
 
@@ -69,12 +68,10 @@ export default function ClientFeedLogic({
   };
 
   const handleOpenModal = (service: ServiceWithProfile) => {
-    setShowDetailModal(service);
     updateUrlParam(service.id);
   };
 
   const handleCloseModal = () => {
-    setShowDetailModal(null);
     updateUrlParam(null);
   };
 
