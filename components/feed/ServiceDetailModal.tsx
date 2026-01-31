@@ -18,6 +18,7 @@ interface Props {
   service: ServiceWithProfile;
   onClose: () => void;
   onContact: (service: ServiceWithProfile) => void;
+  savedScrollPosition?: number;
 }
 
 const getInitials = (name: string) => {
@@ -31,9 +32,10 @@ const ServiceDetailModal: React.FC<Props> = ({
   service,
   onClose,
   onContact,
+  savedScrollPosition,
 }) => {
   // Bloquear el scroll del body cuando el modal está abierto
-  useBodyScrollLock(true);
+  useBodyScrollLock(true, savedScrollPosition);
 
   // Estado para saber si se copió el link (para mostrar el tic verde)
   const [copied, setCopied] = useState(false);

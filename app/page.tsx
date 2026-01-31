@@ -80,7 +80,7 @@ export default function Home() {
               Desde plomeros en Juana Koslay hasta diseñadores en Merlo. La
               herramienta definitiva para encontrar, contratar y trabajar.
             </p>
-
+            <DonateSection />
           </div>
         </section>
 

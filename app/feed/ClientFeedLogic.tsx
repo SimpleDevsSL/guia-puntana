@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { ServiceWithProfile } from '../lib/definitions';
 import ResultsGrid from '@/components/feed/ResultsGrid';
 import ServiceDetailModal from '@/components/feed/ServiceDetailModal';
@@ -42,16 +42,37 @@ export default function ClientFeedLogic({
 
   const [loading] = useState(false);
 
+  // Ref para guardar la posición de scroll antes de abrir el modal
+  const scrollPositionRef = useRef<number>(0);
+
   // Derivar el estado del modal desde searchParams (evita setState en useEffect)
   const showDetailModal = useMemo(() => {
     const serviceIdFromUrl = searchParams.get('service');
 
     if (serviceIdFromUrl) {
-      return services.find((s) => s.id === serviceIdFromUrl) || null;
+      // Buscar primero en los servicios cargados, luego en los iniciales (por si vino del servidor recién)
+      return (
+        services.find((s) => s.id === serviceIdFromUrl) ||
+        initialServices.find((s) => s.id === serviceIdFromUrl) ||
+        null
+      );
     }
 
     return null;
-  }, [searchParams, services]);
+  }, [searchParams, services, initialServices]);
+
+  // Restaurar la posición de scroll cuando se cierra el modal
+  useEffect(() => {
+    if (!showDetailModal && scrollPositionRef.current > 0) {
+      // Usar requestAnimationFrame para asegurar que el DOM esté listo
+      requestAnimationFrame(() => {
+        window.scrollTo({
+          top: scrollPositionRef.current,
+          behavior: 'instant' as ScrollBehavior,
+        });
+      });
+    }
+  }, [showDetailModal]);
 
   // Función auxiliar para actualizar la URL sin recargar
   const updateUrlParam = (serviceId: string | null) => {
@@ -68,6 +89,23 @@ export default function ClientFeedLogic({
   };
 
   const handleOpenModal = (service: ServiceWithProfile) => {
+    // Guardar la posición de scroll ANTES de abrir el modal
+    scrollPositionRef.current = window.scrollY;
+
+    // Aplicar el lock del body INMEDIATAMENTE antes de cambiar la URL
+    const scrollY = window.scrollY;
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    const bodyStyle = document.body.style;
+
+    bodyStyle.setProperty('--scrollbar-width', `${scrollbarWidth}px`);
+    bodyStyle.position = 'fixed';
+    bodyStyle.top = `-${scrollY}px`;
+    bodyStyle.left = '0';
+    bodyStyle.right = '0';
+    bodyStyle.overflow = 'hidden';
+    bodyStyle.width = '100%';
+
+    // Ahora sí, cambiar la URL
     updateUrlParam(service.id);
   };
 
@@ -173,6 +211,7 @@ export default function ClientFeedLogic({
           service={showDetailModal}
           onClose={handleCloseModal} // Usamos la nueva función
           onContact={handleContact}
+          savedScrollPosition={scrollPositionRef.current}
         />
       )}
     </>
