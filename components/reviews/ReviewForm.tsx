@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { createClient } from '@/utils/supabase/client';
-import { Star } from 'lucide-react';
+import { Star, AlertCircle } from 'lucide-react';
 
 interface ReviewFormProps {
   servicioId: string;
@@ -14,52 +14,68 @@ export default function ReviewForm({ servicioId, onSuccess }: ReviewFormProps) {
   const [hover, setHover] = useState(0);
   const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(false);
+  const [checking, setChecking] = useState(true); // Estado para la carga inicial
+  const [hasReviewed, setHasReviewed] = useState(false); // Control de reseña única
+  
   const supabase = createClient();
+
+  // Función para verificar si ya existe una reseña
+  const checkExistingReview = useCallback(async () => {
+    setChecking(true);
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (user) {
+      // Buscamos el perfil
+      const { data: profile } = await supabase
+        .from('perfiles')
+        .select('id')
+        .eq('usuario_id', user.id)
+        .single();
+
+      if (profile) {
+        // Buscamos si ya hay una reseña de este perfil para este servicio
+        const { data } = await supabase
+          .from('resenas')
+          .select('id')
+          .eq('servicio_id', servicioId)
+          .eq('autor_id', profile.id)
+          .maybeSingle();
+
+        if (data) setHasReviewed(true);
+      }
+    }
+    setChecking(false);
+  }, [servicioId, supabase]);
+
+  useEffect(() => {
+    checkExistingReview();
+  }, [checkExistingReview]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (rating === 0) return alert('Por favor selecciona una calificación');
+    if (hasReviewed) return alert('Ya has publicado una reseña para este servicio.');
 
     setLoading(true);
 
-    // PASO 1: Obtener usuario de Auth
     console.log('--- INICIO DEBUG ---');
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      console.error('Error Paso 1: No hay usuario de Auth', authError);
       setLoading(false);
       return alert('Debes iniciar sesión');
     }
-    console.log('Paso 1 OK. Auth User ID:', user.id);
 
-    // PASO 2: Buscar el Perfil Público
-    // Buscamos la fila en 'perfiles' donde usuario_id coincida con el que acabamos de obtener
     const { data: profile, error: profileError } = await supabase
       .from('perfiles')
-      .select('id, nombre_completo') // Traemos nombre también para verificar
+      .select('id')
       .eq('usuario_id', user.id)
       .single();
 
-    if (profileError) {
-      console.error('Error Paso 2: Falló la búsqueda del perfil', profileError);
-    }
-
-    console.log('Paso 2 Resultado. Perfil encontrado:', profile);
-
-    if (!profile) {
+    if (profileError || !profile) {
       setLoading(false);
-      console.error(
-        'CRITICO: El usuario existe en Auth pero NO se recuperó el perfil.'
-      );
       return alert('Error: El sistema no encuentra tu perfil de usuario.');
     }
-
-    // PASO 3: Intentar Guardar
-    console.log('Paso 3: Intentando insertar reseña con autor_id:', profile.id);
 
     const { error } = await supabase.from('resenas').insert({
       servicio_id: servicioId,
@@ -71,16 +87,33 @@ export default function ReviewForm({ servicioId, onSuccess }: ReviewFormProps) {
     setLoading(false);
 
     if (error) {
-      console.error('Error Paso 3 (Final): Supabase rechazó el insert', error);
       alert('Error al guardar: ' + error.message);
     } else {
-      console.log('¡ÉXITO! Reseña guardada.');
+      setHasReviewed(true); 
       setComment('');
       setRating(0);
       onSuccess();
     }
-    console.log('--- FIN DEBUG ---');
   };
+
+  if (checking) {
+    return (
+      <div className="p-4 text-center animate-pulse text-gray-500">
+        Verificando disponibilidad...
+      </div>
+    );
+  }
+
+  if (hasReviewed) {
+    return (
+      <div className="flex items-center gap-3 rounded-xl border border-amber-100 bg-amber-50 p-4 dark:border-amber-900/30 dark:bg-amber-900/10">
+        <AlertCircle className="text-amber-600 dark:text-amber-500" size={20} />
+        <p className="text-sm font-medium text-amber-800 dark:text-amber-200">
+          Ya calificaste este servicio. Solo se permite una reseña por usuario.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <form
@@ -91,7 +124,6 @@ export default function ReviewForm({ servicioId, onSuccess }: ReviewFormProps) {
         Deja tu opinión
       </h3>
 
-      {/* Estrellitas */}
       <div className="mb-3 flex gap-1">
         {[1, 2, 3, 4, 5].map((star) => (
           <button
@@ -114,11 +146,10 @@ export default function ReviewForm({ servicioId, onSuccess }: ReviewFormProps) {
         ))}
       </div>
 
-      {/* Comentario campo */}
       <textarea
         className="w-full rounded-lg border border-gray-200 p-3 outline-none focus:ring-2 focus:ring-orange-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
         rows={3}
-        placeholder="¿Qué te pareció el servicio? (Ej: Muy puntual y amable)"
+        placeholder="¿Qué te pareció el servicio?"
         value={comment}
         onChange={(e) => setComment(e.target.value)}
         required
