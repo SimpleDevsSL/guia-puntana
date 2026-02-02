@@ -1,4 +1,10 @@
-export const Logo = ({ className, ...props }) => {
+import React from 'react';
+
+interface LogoProps extends React.SVGProps<SVGSVGElement> {
+  className?: string;
+}
+
+export const Logo: React.FC<LogoProps> = ({ className, ...props }) => {
   return (
     <svg
       viewBox="0 0 148.1 140.9"

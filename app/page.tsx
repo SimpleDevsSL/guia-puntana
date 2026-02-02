@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Header } from '@/components/feed/Header';
 import { Footer } from '@/components/Footer';
+import { DonateSection } from '@/components/DonateSection';
 
 export default function Home() {
   const baseUrl = 'https://guia-puntana.vercel.app';
@@ -79,15 +80,7 @@ export default function Home() {
               Desde plomeros en Juana Koslay hasta diseñadores en Merlo. La
               herramienta definitiva para encontrar, contratar y trabajar.
             </p>
-
-            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Link
-                href="/feed"
-                className="w-full transform rounded-xl bg-orange-600 px-8 py-4 text-lg font-bold text-white transition-all hover:-translate-y-1 hover:bg-orange-700 hover:shadow-xl hover:shadow-orange-500/25 sm:w-auto"
-              >
-                Comenzar ahora
-              </Link>
-            </div>
+            <DonateSection />
           </div>
         </section>
 

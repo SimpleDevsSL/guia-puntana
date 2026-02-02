@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { Header } from '@/components/feed/Header';
+import VerificationUpload from '@/components/profile/VerificationUpload';
 import { useProfileSettings } from './useProfileSettings';
 import {
   ArrowLeft,
@@ -145,6 +146,14 @@ export default function ProfilePage() {
                 {saving ? 'Guardando...' : 'Guardar Información Básica'}
               </button>
             </section>
+
+            {/* Verificación de Identidad - Solo para Proveedores */}
+            {role === 'proveedor' && userData?.id && (
+              <VerificationUpload
+                userId={userData.id}
+                insignias={profileData.insignias}
+              />
+            )}
 
             {role === 'user' && (
               <section className="mb-8 mt-8 rounded-2xl border border-orange-200 bg-gradient-to-r from-orange-50 to-white p-6 dark:border-orange-900/50 dark:from-orange-900/10 dark:to-gray-900">

@@ -128,7 +128,39 @@ export default function AboutPage() {
 
         <section>
           <h2 className="mb-3 text-xl font-semibold">
-            6. Moderación y Eliminación de Contenido
+            6. Sistema de Verificación e Insignias
+          </h2>
+          <p>
+            Guía Puntana puede otorgar insignias de &quot;Identidad
+            Verificada&quot; o similares basándose en la documentación
+            proporcionada voluntariamente por el usuario (ej. DNI, matrícula).
+          </p>
+          <p className="mt-2">
+            <strong>6.1. Alcance:</strong> La insignia indica únicamente que, al
+            momento de la revisión, el usuario presentó un documento que
+            coincidía con sus datos de perfil.{' '}
+            <strong>No constituye una garantía</strong> de solvencia moral,
+            habilidad profesional, antecedentes penales limpios ni calidad del
+            servicio.
+          </p>
+          <p className="mt-2">
+            <strong>6.2. Privacidad de Documentos:</strong> Los documentos de
+            identidad subidos para verificación son utilizados exclusivamente
+            por el equipo de administración para este fin, se almacenan de forma
+            privada y no son accesibles al público.
+          </p>
+          <p className="mt-2">
+            <strong>6.3. Descargo:</strong> SimpleDevs no asume responsabilidad
+            por actos ilícitos, mala praxis o incumplimientos cometidos por
+            usuarios que posean una insignia de verificación. El cliente final
+            sigue siendo el único responsable de evaluar la idoneidad del
+            profesional antes de contratarlo.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="mb-3 text-xl font-semibold">
+            7. Moderación y Eliminación de Contenido
           </h2>
           <p>
             Nos reservamos el derecho de revisar, moderar, suspender o eliminar
@@ -144,7 +176,7 @@ export default function AboutPage() {
 
         <section>
           <h2 className="mb-3 text-xl font-semibold">
-            7. Disponibilidad del Servicio
+            8. Disponibilidad del Servicio
           </h2>
           <p>
             Si bien nos esforzamos por mantener la plataforma disponible, no
@@ -155,7 +187,7 @@ export default function AboutPage() {
         </section>
 
         <section>
-          <h2 className="mb-3 text-xl font-semibold">8. Modificaciones</h2>
+          <h2 className="mb-3 text-xl font-semibold">9. Modificaciones</h2>
           <p>
             Nos reservamos el derecho de modificar estos Términos y Condiciones
             en cualquier momento. Las modificaciones entrarán en vigor
@@ -166,7 +198,7 @@ export default function AboutPage() {
         </section>
 
         <section>
-          <h2 className="mb-3 text-xl font-semibold">9. Indemnización</h2>
+          <h2 className="mb-3 text-xl font-semibold">10. Indemnización</h2>
           <p>
             Los usuarios acuerdan indemnizar y mantener indemne a Guía Puntana,
             sus desarrolladores y colaboradores, frente a cualquier reclamación,
@@ -177,7 +209,7 @@ export default function AboutPage() {
 
         <section>
           <h2 className="mb-3 text-xl font-semibold">
-            10. Jurisdicción y Ley Aplicable
+            11. Jurisdicción y Ley Aplicable
           </h2>
           <p>
             Estos Términos y Condiciones se rigen por las leyes de la República
@@ -187,7 +219,7 @@ export default function AboutPage() {
         </section>
 
         <section>
-          <h2 className="mb-3 text-xl font-semibold">11. Contacto</h2>
+          <h2 className="mb-3 text-xl font-semibold">12. Contacto</h2>
           <p>
             Para consultas, reportes o sugerencias relacionadas con estos
             Términos y Condiciones o el funcionamiento de la plataforma, puede

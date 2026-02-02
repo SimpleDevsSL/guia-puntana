@@ -13,7 +13,7 @@ interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-// 1. GENERATE STATIC PARAMS: Usamos el slug de la DB
+// GENERATE STATIC PARAMS: Usamos el slug de la DB
 export async function generateStaticParams() {
   const categories = await getCachedCategories();
   // Ahora usamos el slug real de la base de datos
@@ -22,7 +22,7 @@ export async function generateStaticParams() {
   }));
 }
 
-// 2. METADATA: Buscamos por slug
+// METADATA: Buscamos por slug
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
@@ -45,7 +45,7 @@ export async function generateMetadata({
   };
 }
 
-// 3. PÁGINA PRINCIPAL
+// PÁGINA PRINCIPAL
 export default async function CategoryPage({
   params,
   searchParams,
@@ -65,6 +65,9 @@ export default async function CategoryPage({
     if (Array.isArray(param)) return param[0];
     return param;
   };
+
+  // Extraemos el serviceId de los parámetros
+  const serviceId = getStringParam(resolvedSearchParams.service) || null;
 
   const feedParams = {
     q: getStringParam(resolvedSearchParams.q),
@@ -86,6 +89,7 @@ export default async function CategoryPage({
               searchParams={feedParams}
               activeCategoryName={currentCategory.nombre}
               categoryId={currentCategory.id}
+              serviceId={serviceId} // Pasamos la propiedad faltante
             />
           </Suspense>
         </div>

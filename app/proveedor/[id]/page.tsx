@@ -17,13 +17,14 @@ interface PageProps {
     q?: string;
     l?: string;
     cat?: string;
+    service?: string; // [!code ++] Agregamos el parámetro service
   }>;
 }
 
-// 1. Agregar esta configuración para revalidar cada 1 hora (ISR)
+// Agregar esta configuración para revalidar cada 1 hora (ISR)
 export const revalidate = 3600;
 
-// 2. Generar los parámetros estáticos (Prerenderizar los 50 o 100 proveedores más importantes)
+// Generar los parámetros estáticos (Prerenderizar los 50 o 100 proveedores más importantes)
 export async function generateStaticParams() {
   const supabaseStatic = createSupabaseClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -74,7 +75,7 @@ export default async function ProviderPage({
   const urlParams = await searchParams;
   const supabase = await createClient();
 
-  // 1. Obtener datos del Perfil del Proveedor
+  // Obtener datos del Perfil del Proveedor
   const { data: profile, error: profileError } = await supabase
     .from('perfiles')
     .select('id, nombre_completo, foto_url, insignias, rol')
@@ -85,7 +86,7 @@ export default async function ProviderPage({
     return notFound();
   }
 
-  // 2. Obtener categorías
+  // Obtener categorías
   const { data: categoriesData } = await supabase
     .from('categorias')
     .select('id, nombre')
@@ -100,7 +101,7 @@ export default async function ProviderPage({
     categories.push(otra);
   }
 
-  // 3. Construir query de Servicios
+  // Construir query de Servicios
   let query = supabase
     .from('servicios')
     .select(
@@ -234,12 +235,12 @@ export default async function ProviderPage({
           />
 
           <ClientFeedLogic
-            initialServices={services} // RENOMBRADO: services -> initialServices
+            initialServices={services}
             activeCategoryName={activeCatName}
             searchQuery={urlParams.q || ''}
             searchLocation={urlParams.l || ''}
-            categoryId={urlParams.cat || null} // NUEVO PROP
-            itemsPerPage={itemsPerPage} // NUEVO PROP (Configurado para desactivar Load More)
+            categoryId={urlParams.cat || null}
+            itemsPerPage={itemsPerPage}
           />
         </div>
       </main>

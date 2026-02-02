@@ -55,6 +55,7 @@ export function useProfileSettings() {
   const [profileData, setProfileData] = useState({
     nombre_completo: '',
     foto_url: '',
+    insignias: [] as string[],
   });
 
   // Estados para imagen
@@ -85,7 +86,7 @@ export function useProfileSettings() {
 
       const { data: profile } = await supabase
         .from('perfiles')
-        .select('nombre_completo, foto_url, rol')
+        .select('nombre_completo, foto_url, rol, insignias')
         .eq('usuario_id', user.id)
         .single();
 
@@ -93,6 +94,8 @@ export function useProfileSettings() {
         setProfileData({
           nombre_completo: profile.nombre_completo || '',
           foto_url: profile.foto_url || '',
+          // Guardamos las insignias en el estado (o array vacío por defecto)
+          insignias: profile.insignias || [],
         });
         setRole(profile.rol);
       }

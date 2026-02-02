@@ -3,10 +3,12 @@
 import React, { useEffect, useState } from 'react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { Logo } from '@/components/ui/Logo';
+import { DonateModal } from '@/components/DonateModal';
 import Link from 'next/link';
 import { createClient } from '@/utils/supabase/client';
 import { User } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
+import { Menu, X, User as UserIcon, LogOut, Plus, Heart } from 'lucide-react';
 
 /**
  * Header component for the main feed page.
@@ -17,12 +19,14 @@ import { useRouter } from 'next/navigation';
  * - Conditional navigation based on authentication state
  * - User menu (profile, my services for providers, logout)
  * - Loading skeleton while authentication state is being determined
+ * - Mobile hamburger menu for better navigation
  *
  * Features:
  * - Responsive design (mobile and desktop)
  * - Dark mode support
  * - Real-time auth state subscription
  * - Role-based UI rendering (provider-specific actions)
+ * - Improved mobile navigation with hamburger menu
  *
  * @component
  * @returns {React.ReactElement} A sticky header with navigation
@@ -37,6 +41,8 @@ export const Header: React.FC = () => {
   const [userRole, setUserRole] = useState<string | null>(null);
   // Loading state while fetching initial auth data
   const [isLoading, setIsLoading] = useState(true);
+  const [isDonateModalOpen, setIsDonateModalOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const supabase = createClient();
   const router = useRouter();
@@ -98,6 +104,7 @@ export const Header: React.FC = () => {
     try {
       await supabase.auth.signOut();
       setUser(null);
+      setIsMobileMenuOpen(false);
       router.refresh();
       router.replace('/');
     } catch (error) {
@@ -121,86 +128,58 @@ export const Header: React.FC = () => {
           </Link>
         </div>
 
-        {/* Right side: Theme toggle and auth actions */}
-        <div className="flex items-center gap-2 sm:gap-4">
+        {/* Desktop Navigation */}
+        <div className="hidden items-center gap-3 md:flex">
           <ThemeToggle />
+
+          {/* Donate Button - Desktop */}
+          <button
+            onClick={() => setIsDonateModalOpen(true)}
+            className={`${buttonStyle} gap-2 px-4 py-2`}
+            title="Apoyar el proyecto"
+          >
+            <Heart className="h-4 w-4" />
+            <span>Donar</span>
+          </button>
 
           {/* Conditional rendering based on loading state */}
           {isLoading ? (
-            <div className="flex items-center gap-2 sm:gap-3">
-              <div className="h-9 w-24 animate-pulse rounded-full bg-gray-200 dark:bg-gray-800 sm:w-32"></div>
-              <div className="h-9 w-9 animate-pulse rounded-full bg-gray-200 dark:bg-gray-800"></div>
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-32 animate-pulse rounded-full bg-gray-200 dark:bg-gray-800"></div>
             </div>
           ) : user ? (
-            <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-3">
               {/* Provider-only action: Create new service */}
               {userRole === 'proveedor' && (
                 <Link
                   href="/servicios/nuevo"
-                  className={`${buttonStyle} p-2 sm:px-4 sm:py-2`}
+                  className={`${buttonStyle} gap-2 px-4 py-2`}
                   title="Nuevo Servicio"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="hidden md:inline">Mis Servicios</span>
+                  <Plus className="h-5 w-5" />
+                  <span>Mis Servicios</span>
                 </Link>
               )}
 
               {/* Profile link */}
               <Link
                 href="/perfil"
-                className={`${buttonStyle} p-3 sm:px-5 sm:py-2`}
+                className={`${buttonStyle} gap-2 px-4 py-2`}
                 title="Ver mi perfil"
                 aria-label="Ver mi perfil"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="h-5 w-5"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                  />
-                </svg>
-                <span className="hidden sm:inline">Ver mi perfil</span>
+                <UserIcon className="h-5 w-5" />
+                <span>Perfil</span>
               </Link>
 
               {/* Logout button */}
               <button
                 onClick={handleLogout}
-                className={`${buttonStyle} p-2 font-bold sm:px-4 sm:py-2`}
+                className={`${buttonStyle} gap-2 px-4 py-2`}
                 title="Cerrar Sesión"
               >
-                <span className="hidden sm:inline">Cerrar Sesión</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="h-6 w-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75"
-                  />
-                </svg>
+                <LogOut className="h-5 w-5" />
+                <span>Salir</span>
               </button>
             </div>
           ) : (
@@ -209,7 +188,94 @@ export const Header: React.FC = () => {
             </Link>
           )}
         </div>
+
+        {/* Mobile Navigation */}
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="rounded-full p-2 text-gray-900 transition-colors hover:bg-gray-100 dark:text-white dark:hover:bg-gray-800"
+            aria-label="Menú"
+          >
+            {isMobileMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile Menu Dropdown */}
+      {isMobileMenuOpen && (
+        <div className="border-t border-gray-100 bg-white/95 backdrop-blur-md dark:border-gray-800 dark:bg-gray-950/95 md:hidden">
+          <div className="mx-auto max-w-7xl space-y-2 px-4 py-4">
+            {/* Donate Button - Mobile */}
+            <button
+              onClick={() => {
+                setIsDonateModalOpen(true);
+                setIsMobileMenuOpen(false);
+              }}
+              className={`${buttonStyle} w-full gap-2 px-4 py-3`}
+            >
+              <Heart className="h-5 w-5" />
+              <span>Donar</span>
+            </button>
+
+            {isLoading ? (
+              <div className="h-12 w-full animate-pulse rounded-full bg-gray-200 dark:bg-gray-800"></div>
+            ) : user ? (
+              <>
+                {/* Provider-only action: Create new service */}
+                {userRole === 'proveedor' && (
+                  <Link
+                    href="/servicios/nuevo"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`${buttonStyle} w-full gap-2 px-4 py-3`}
+                  >
+                    <Plus className="h-5 w-5" />
+                    <span>Mis Servicios</span>
+                  </Link>
+                )}
+
+                {/* Profile link */}
+                <Link
+                  href="/perfil"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`${buttonStyle} w-full gap-2 px-4 py-3`}
+                >
+                  <UserIcon className="h-5 w-5" />
+                  <span>Ver mi perfil</span>
+                </Link>
+
+                {/* Logout button */}
+                <button
+                  onClick={handleLogout}
+                  className={`${buttonStyle} w-full gap-2 px-4 py-3`}
+                >
+                  <LogOut className="h-5 w-5" />
+                  <span>Cerrar Sesión</span>
+                </button>
+              </>
+            ) : (
+              <Link
+                href="/login"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`${buttonStyle} w-full px-6 py-3`}
+              >
+                Ingresar
+              </Link>
+            )}
+          </div>
+        </div>
+      )}
+
+      <DonateModal
+        isOpen={isDonateModalOpen}
+        onClose={() => setIsDonateModalOpen(false)}
+      />
     </header>
   );
 };

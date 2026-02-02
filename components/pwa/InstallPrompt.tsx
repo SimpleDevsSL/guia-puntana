@@ -20,6 +20,7 @@ type BrowserType =
   | 'other';
 
 function detectBrowser(): BrowserType {
+  if (typeof window === 'undefined' || !navigator) return 'other';
   const ua = navigator.userAgent.toLowerCase();
 
   if (ua.includes('iphone') || ua.includes('ipad')) {
@@ -42,6 +43,7 @@ function detectBrowser(): BrowserType {
 }
 
 function isMobileDevice(): boolean {
+  if (typeof window === 'undefined' || !navigator) return false;
   const ua = navigator.userAgent.toLowerCase();
   return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
     ua
@@ -49,6 +51,7 @@ function isMobileDevice(): boolean {
 }
 
 function isAppInstalled(): boolean {
+  if (typeof window === 'undefined' || !navigator) return false;
   // Para iOS
   if (
     navigator.userAgent.includes('iphone') ||
@@ -85,11 +88,11 @@ export default function InstallPrompt() {
 
     const handler = (e: Event) => {
       const promptEvent = e as BeforeInstallPromptEvent;
-      // 1. Prevenir que el navegador muestre su prompt nativo
+      // Prevenir que el navegador muestre su prompt nativo
       e.preventDefault();
-      // 2. Guardar el evento para dispararlo después
+      // Guardar el evento para dispararlo después
       setDeferredPrompt(promptEvent);
-      // 3. Mostrar nuestro botón personalizado
+      // Mostrar nuestro botón personalizado
       setIsVisible(true);
     };
 
@@ -118,13 +121,10 @@ export default function InstallPrompt() {
 
   const handleInstallClick = async () => {
     if (deferredPrompt) {
-      // 4. Mostrar el prompt nativo para Chromium
+      // Mostrar el prompt nativo para Chromium
       deferredPrompt.prompt();
 
       const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === 'accepted') {
-        console.log('Usuario aceptó instalar');
-      }
 
       // Limpiar
       setDeferredPrompt(null);

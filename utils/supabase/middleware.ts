@@ -80,7 +80,7 @@ export async function updateSession(request: NextRequest) {
       .eq('usuario_id', user.id)
       .single();
 
-    // 1. Sesión iniciada pero SIN perfil creado
+    // Sesión iniciada pero SIN perfil creado
     if (!profile) {
       // Forzamos a completar perfil a menos que ya esté en esa ruta
       if (!path.startsWith('/completar-perfil')) {
@@ -89,7 +89,7 @@ export async function updateSession(request: NextRequest) {
       return supabaseResponse;
     }
 
-    // 2. Sesión iniciada y CON perfil completo
+    // Sesión iniciada y CON perfil completo
     if (profile) {
       // No debe poder volver a completar perfil o login
       if (path.startsWith('/completar-perfil') || path.startsWith('/login')) {

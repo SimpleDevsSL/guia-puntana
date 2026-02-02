@@ -10,6 +10,7 @@ CREATE TABLE public.categorias (
   created_by uuid,
   updated_at timestamp with time zone NOT NULL DEFAULT now(),
   updated_by uuid,
+  slug text NOT NULL UNIQUE,
   CONSTRAINT categorias_pkey PRIMARY KEY (id),
   CONSTRAINT categorias_created_by_fkey FOREIGN KEY (created_by) REFERENCES auth.users(id),
   CONSTRAINT categorias_updated_by_fkey FOREIGN KEY (updated_by) REFERENCES auth.users(id)
@@ -46,6 +47,14 @@ CREATE TABLE public.perfiles (
   CONSTRAINT perfiles_created_by_fkey FOREIGN KEY (created_by) REFERENCES auth.users(id),
   CONSTRAINT perfiles_updated_by_fkey FOREIGN KEY (updated_by) REFERENCES auth.users(id)
 );
+CREATE TABLE public.reportes (
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  servicios_id uuid NOT NULL,
+  motivo character varying NOT NULL,
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  CONSTRAINT reportes_pkey PRIMARY KEY (id),
+  CONSTRAINT reportes_servicio_fkey FOREIGN KEY (servicios_id) REFERENCES public.servicios(id)
+);
 CREATE TABLE public.resenas (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   servicio_id uuid NOT NULL,
@@ -58,10 +67,10 @@ CREATE TABLE public.resenas (
   updated_at timestamp with time zone NOT NULL DEFAULT now(),
   updated_by uuid,
   CONSTRAINT resenas_pkey PRIMARY KEY (id),
-  CONSTRAINT resenas_autor_id_fkey FOREIGN KEY (autor_id) REFERENCES public.perfiles(id),
   CONSTRAINT resenas_created_by_fkey FOREIGN KEY (created_by) REFERENCES auth.users(id),
   CONSTRAINT resenas_updated_by_fkey FOREIGN KEY (updated_by) REFERENCES auth.users(id),
-  CONSTRAINT resenas_servicio_id_fkey FOREIGN KEY (servicio_id) REFERENCES public.servicios(id)
+  CONSTRAINT resenas_servicio_id_fkey FOREIGN KEY (servicio_id) REFERENCES public.servicios(id),
+  CONSTRAINT resenas_autor_id_fkey FOREIGN KEY (autor_id) REFERENCES public.perfiles(id)
 );
 CREATE TABLE public.servicios (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
@@ -103,4 +112,16 @@ CREATE TABLE public.solicitudes_presupuesto (
   CONSTRAINT solicitudes_presupuesto_created_by_fkey FOREIGN KEY (created_by) REFERENCES auth.users(id),
   CONSTRAINT solicitudes_presupuesto_updated_by_fkey FOREIGN KEY (updated_by) REFERENCES auth.users(id),
   CONSTRAINT solicitudes_presupuesto_cliente_id_fkey FOREIGN KEY (cliente_id) REFERENCES public.perfiles(id)
+);
+CREATE TABLE public.solicitudes_verificacion (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  usuario_id uuid NOT NULL,
+  tipo USER-DEFINED NOT NULL,
+  estado USER-DEFINED DEFAULT 'pendiente'::estado_verificacion,
+  fotos_urls ARRAY NOT NULL,
+  comentarios_admin text,
+  created_at timestamp with time zone DEFAULT now(),
+  updated_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT solicitudes_verificacion_pkey PRIMARY KEY (id),
+  CONSTRAINT solicitudes_verificacion_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES auth.users(id)
 );
