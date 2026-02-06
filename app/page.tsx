@@ -4,7 +4,7 @@ import { Footer } from '@/components/Footer';
 import { DonateSection } from '@/components/DonateSection';
 
 export default function Home() {
-  const baseUrl = 'https://guia-puntana.vercel.app';
+  const baseUrl = 'https://www.guiapuntana.com.ar';
 
   const jsonLd = {
     '@context': 'https://schema.org',

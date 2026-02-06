@@ -5,7 +5,7 @@ import { getCachedCategories, getAllProvidersForSitemap } from './lib/data';
 export const revalidate = 86400;
 
 const BASE_URL =
-  process.env.NEXT_PUBLIC_BASE_URL || 'https://guia-puntana.vercel.app';
+  process.env.NEXT_PUBLIC_BASE_URL || 'https://www.guiapuntana.com.ar';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Obtener datos en paralelo para que sea más rápido

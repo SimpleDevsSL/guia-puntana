@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 // URL base segura (usa variable de entorno o fallback a producción)
 const BASE_URL =
-  process.env.NEXT_PUBLIC_BASE_URL || 'https://guia-puntana.vercel.app';
+  process.env.NEXT_PUBLIC_BASE_URL || 'https://www.guiapuntana.com.ar';
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
