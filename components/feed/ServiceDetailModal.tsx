@@ -285,8 +285,6 @@ const ServiceDetailModal: React.FC<Props> = ({
               />
             </div>
 
-            
-
             <button
               onClick={onClose}
               className="w-full py-2 text-sm font-medium text-gray-500 hover:underline dark:text-gray-400 md:text-base"

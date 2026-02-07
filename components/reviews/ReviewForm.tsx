@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react'; // Borramos useCallback
 import { createClient } from '@/utils/supabase/client';
 import { Star, AlertCircle } from 'lucide-react';
 
 interface ReviewFormProps {
   servicioId: string;
-  onSuccess: () => void; // Recargar lista de reseñas
+  onSuccess: () => void;
 }
 
 export default function ReviewForm({ servicioId, onSuccess }: ReviewFormProps) {
@@ -14,52 +14,59 @@ export default function ReviewForm({ servicioId, onSuccess }: ReviewFormProps) {
   const [hover, setHover] = useState(0);
   const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(false);
-  const [checking, setChecking] = useState(true); // Estado para la carga inicial
-  const [hasReviewed, setHasReviewed] = useState(false); // Control de reseña única
-  
+  const [checking, setChecking] = useState(true);
+  const [hasReviewed, setHasReviewed] = useState(false);
+
   const supabase = createClient();
 
-  // Función para verificar si ya existe una reseña
-  const checkExistingReview = useCallback(async () => {
-    setChecking(true);
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (user) {
-      // Buscamos el perfil
-      const { data: profile } = await supabase
-        .from('perfiles')
-        .select('id')
-        .eq('usuario_id', user.id)
-        .single();
-
-      if (profile) {
-        // Buscamos si ya hay una reseña de este perfil para este servicio
-        const { data } = await supabase
-          .from('resenas')
-          .select('id')
-          .eq('servicio_id', servicioId)
-          .eq('autor_id', profile.id)
-          .maybeSingle();
-
-        if (data) setHasReviewed(true);
-      }
-    }
-    setChecking(false);
-  }, [servicioId, supabase]);
-
   useEffect(() => {
+    const checkExistingReview = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (user) {
+        // 1. Buscamos el perfil
+        const { data: profile } = await supabase
+          .from('perfiles')
+          .select('id')
+          .eq('usuario_id', user.id)
+          .single();
+
+        if (profile) {
+          // 2. Buscamos si ya hay reseña
+          const { data } = await supabase
+            .from('resenas')
+            .select('id')
+            .eq('servicio_id', servicioId)
+            .eq('autor_id', profile.id)
+            .maybeSingle();
+
+          if (data) {
+            setHasReviewed(true);
+          }
+        }
+      }
+
+      // Finalizamos la carga
+      setChecking(false);
+    };
+
     checkExistingReview();
-  }, [checkExistingReview]);
+  }, [servicioId, supabase]); // Dependencias limpias
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (rating === 0) return alert('Por favor selecciona una calificación');
-    if (hasReviewed) return alert('Ya has publicado una reseña para este servicio.');
+    if (hasReviewed)
+      return alert('Ya has publicado una reseña para este servicio.');
 
     setLoading(true);
 
-    console.log('--- INICIO DEBUG ---');
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
 
     if (authError || !user) {
       setLoading(false);
@@ -89,7 +96,7 @@ export default function ReviewForm({ servicioId, onSuccess }: ReviewFormProps) {
     if (error) {
       alert('Error al guardar: ' + error.message);
     } else {
-      setHasReviewed(true); 
+      setHasReviewed(true);
       setComment('');
       setRating(0);
       onSuccess();
@@ -98,7 +105,7 @@ export default function ReviewForm({ servicioId, onSuccess }: ReviewFormProps) {
 
   if (checking) {
     return (
-      <div className="p-4 text-center animate-pulse text-gray-500">
+      <div className="animate-pulse p-4 text-center text-sm text-gray-500">
         Verificando disponibilidad...
       </div>
     );

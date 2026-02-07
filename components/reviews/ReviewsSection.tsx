@@ -33,14 +33,16 @@ export default function ReviewsSection({ servicioId }: { servicioId: string }) {
 
       const { data, error } = await supabase
         .from('resenas')
-        .select(`
+        .select(
+          `
             id,
             calificacion,
             comentario,
             perfiles (
               nombre_completo
             )
-        `)
+        `
+        )
         .eq('servicio_id', servicioId)
         .order('created_at', { ascending: false });
 
