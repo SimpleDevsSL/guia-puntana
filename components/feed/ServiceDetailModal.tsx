@@ -43,6 +43,7 @@ const ServiceDetailModal: React.FC<Props> = ({
 
   // Estado para saber si se copió el link (para mostrar el tic verde)
   const [copied, setCopied] = useState(false);
+  const [reviewsRefreshKey, setReviewsRefreshKey] = useState(0);
 
   // Función lógica de compartir
   const handleShare = async () => {
@@ -281,6 +282,7 @@ const ServiceDetailModal: React.FC<Props> = ({
                 onSuccess={() => {
                   alert('¡Reseña guardada con éxito!');
                   console.log('Reseña guardada');
+                  setReviewsRefreshKey((prev) => prev + 1);
                 }}
               />
             </div>
@@ -296,7 +298,7 @@ const ServiceDetailModal: React.FC<Props> = ({
       </div>
       <hr className="my-10 border-gray-100 dark:border-gray-800" />
 
-      <ReviewsSection servicioId={service.id} />
+      <ReviewsSection servicioId={service.id} refreshKey={reviewsRefreshKey} />
     </div>
   );
 };

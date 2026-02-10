@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
-import ReviewForm from './ReviewForm';
-
 interface Resena {
   id: string;
   calificacion: number;
@@ -21,11 +19,16 @@ interface ResenaDB {
   } | null;
 }
 
-export default function ReviewsSection({ servicioId }: { servicioId: string }) {
+export default function ReviewsSection({
+  servicioId,
+  refreshKey = 0,
+}: {
+  servicioId: string;
+  refreshKey?: number;
+}) {
   const supabase = createClient();
   const [resenas, setResenas] = useState<Resena[]>([]);
   const [loading, setLoading] = useState(true);
-  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     const fetchResenas = async () => {
@@ -69,15 +72,9 @@ export default function ReviewsSection({ servicioId }: { servicioId: string }) {
     fetchResenas();
   }, [servicioId, supabase, refreshKey]);
 
-  const handleRefresh = () => {
-    setRefreshKey((prev) => prev + 1);
-  };
-
   return (
     <section className="space-y-4">
       <h2 className="text-lg font-bold">Reseñas</h2>
-
-      <ReviewForm servicioId={servicioId} onSuccess={handleRefresh} />
 
       {loading && <p className="text-sm text-gray-500">Cargando reseñas...</p>}
 
