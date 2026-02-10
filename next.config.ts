@@ -191,6 +191,21 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'guia-puntana.vercel.app',
+          },
+        ],
+        destination: 'https://www.guiapuntana.com.ar/:path*',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default withPWA(nextConfig);
