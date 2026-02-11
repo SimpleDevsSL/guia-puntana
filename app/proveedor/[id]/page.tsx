@@ -136,7 +136,7 @@ export default async function ProviderPage({
     categories.find((c) => c.id === urlParams.cat)?.nombre ||
     'Servicios del Proveedor';
 
-  const baseUrl = 'https://guia-puntana.vercel.app';
+  const baseUrl = 'https://www.guiapuntana.com.ar';
 
   const jsonLd = {
     '@context': 'https://schema.org',

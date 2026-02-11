@@ -39,7 +39,7 @@ export async function generateMetadata({
     description: `Encuentra los mejores ${category.nombre} en San Luis.`,
     openGraph: {
       title: `${category.nombre} en San Luis - Profesionales y Servicios | Guía Puntana`,
-      url: `https://guia-puntana.vercel.app/categoria/${category.slug}`,
+      url: `https://www.guiapuntana.com.ar/categoria/${category.slug}`,
       // ... resto de OG tags
     },
   };
