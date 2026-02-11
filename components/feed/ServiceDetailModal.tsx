@@ -11,6 +11,10 @@ import {
   Check,
 } from 'lucide-react';
 import Link from 'next/link';
+
+//Formulario de reseñas
+import ReviewForm from '@/components/reviews/ReviewForm';
+import ReviewsSection from '../reviews/ReviewsSection';
 import ReportService from './ReportService';
 import { useBodyScrollLock } from '@/utils/hooks/useBodyScrollLock';
 
@@ -39,6 +43,7 @@ const ServiceDetailModal: React.FC<Props> = ({
 
   // Estado para saber si se copió el link (para mostrar el tic verde)
   const [copied, setCopied] = useState(false);
+  const [reviewsRefreshKey, setReviewsRefreshKey] = useState(0);
 
   // Función lógica de compartir
   const handleShare = async () => {
@@ -253,7 +258,6 @@ const ServiceDetailModal: React.FC<Props> = ({
               <MessageSquare size={20} className="md:h-[22px] md:w-[22px]" />
               Contactar por WhatsApp
             </button>
-
             <button
               onClick={handleShare}
               className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 text-base font-bold text-white shadow-lg shadow-blue-600/20 transition-all hover:bg-blue-700 active:scale-[0.98] md:gap-3 md:rounded-2xl md:py-4 md:text-lg"
@@ -265,6 +269,23 @@ const ServiceDetailModal: React.FC<Props> = ({
               )}
               {copied ? 'Enlace Copiado' : 'Compartir Servicio'}
             </button>
+          </div>
+          {/* --- Formulario (prueba) --- */}
+          <div className="mt-10 border-t border-gray-100 pt-8 dark:border-gray-800">
+            <h3 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">
+              Deja tu Reseña
+            </h3>
+
+            <div className="mt-8">
+              <ReviewForm
+                servicioId={service.id}
+                onSuccess={() => {
+                  alert('¡Reseña guardada con éxito!');
+                  console.log('Reseña guardada');
+                  setReviewsRefreshKey((prev) => prev + 1);
+                }}
+              />
+            </div>
 
             <button
               onClick={onClose}
@@ -275,6 +296,9 @@ const ServiceDetailModal: React.FC<Props> = ({
           </div>
         </div>
       </div>
+      <hr className="my-10 border-gray-100 dark:border-gray-800" />
+
+      <ReviewsSection servicioId={service.id} refreshKey={reviewsRefreshKey} />
     </div>
   );
 };
