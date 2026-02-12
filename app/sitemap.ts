@@ -4,8 +4,10 @@ import { getCachedCategories, getAllProvidersForSitemap } from './lib/data';
 
 export const revalidate = 86400;
 
-const BASE_URL =
-  process.env.NEXT_PUBLIC_BASE_URL || 'https://www.guiapuntana.com.ar';
+// Normalizar BASE_URL para evitar doble slash si la env var lo trae
+const BASE_URL = (
+  process.env.NEXT_PUBLIC_BASE_URL || 'https://www.guiapuntana.com.ar'
+).replace(/\/$/, '');
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Obtener datos en paralelo para que sea más rápido
@@ -15,23 +17,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]);
 
   // URLs de Categorías (Prioridad Alta - 0.8)
-  const categoryUrls: MetadataRoute.Sitemap = categories.map((category) => ({
-    url: `${BASE_URL}/categoria/${category.slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly',
-    priority: 0.8,
-  }));
+  const categoryUrls: MetadataRoute.Sitemap = categories
+    .filter((category) => category.slug && category.slug !== '$') // Filtrar slugs inválidos o vacíos
+    .map((category) => ({
+      url: `${BASE_URL}/categoria/${category.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    }));
 
   // URLs de Proveedores (Prioridad Media/Alta - 0.7)
-  const providerUrls: MetadataRoute.Sitemap = providers.map((provider) => ({
-    url: `${BASE_URL}/proveedor/${provider.id}`,
-    // Si tienes fecha de actualización, úsala; si no, la fecha actual
-    lastModified: provider.updated_at
-      ? new Date(provider.updated_at)
-      : new Date(),
-    changeFrequency: 'weekly', // Los perfiles no cambian a diario usualmente
-    priority: 0.7,
-  }));
+  const providerUrls: MetadataRoute.Sitemap = providers
+    .filter((provider) => provider.id && provider.id !== '$') // Filtrar IDs inválidos
+    .map((provider) => ({
+      url: `${BASE_URL}/proveedor/${provider.id}`,
+      // Si tienes fecha de actualización, úsala; si no, la fecha actual
+      lastModified: provider.updated_at
+        ? new Date(provider.updated_at)
+        : new Date(),
+      changeFrequency: 'weekly', // Los perfiles no cambian a diario usualmente
+      priority: 0.7,
+    }));
 
   // Rutas estáticas clave
   const staticRoutes: MetadataRoute.Sitemap = [
