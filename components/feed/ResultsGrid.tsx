@@ -1,5 +1,5 @@
 import React from 'react';
-import ProfessionalCard from './ProfessionalCard';
+import ServiceCard from './ServiceCard';
 import { ServiceWithProfile } from '../../app/lib/definitions';
 
 interface ResultsGridProps {
@@ -106,7 +106,7 @@ const ResultsGrid: React.FC<ResultsGridProps> = ({
       ) : (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {services.map((service) => (
-            <ProfessionalCard
+            <ServiceCard
               key={service.id}
               service={service}
               onConnect={onConnect}

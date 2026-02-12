@@ -19,11 +19,7 @@ const getInitials = (name: string) => {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 };
 
-const ProfessionalCard: React.FC<Props> = ({
-  service,
-  onConnect,
-  onViewDetail,
-}) => {
+const ServiceCard: React.FC<Props> = ({ service, onConnect, onViewDetail }) => {
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:shadow-md dark:border-gray-800 dark:bg-gray-900">
       <div className="absolute right-3 top-3 z-10">
@@ -126,4 +122,4 @@ const ProfessionalCard: React.FC<Props> = ({
     </article>
   );
 };
-export default ProfessionalCard;
+export default ServiceCard;
