@@ -271,7 +271,7 @@ const ServiceDetailModal: React.FC<Props> = ({
             </button>
           </div>
           {/* --- Formulario (prueba) --- */}
-          <div className="hidden md:block mt-10 border-t border-gray-100 pt-8 dark:border-gray-800">
+          <div className="mt-10 hidden border-t border-gray-100 pt-8 dark:border-gray-800 md:block">
             <h3 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">
               Deja tu Reseña
             </h3>
@@ -299,7 +299,10 @@ const ServiceDetailModal: React.FC<Props> = ({
       <div className="hidden md:block">
         <hr className="my-10 border-gray-100 dark:border-gray-800" />
 
-        <ReviewsSection servicioId={service.id} refreshKey={reviewsRefreshKey} />
+        <ReviewsSection
+          servicioId={service.id}
+          refreshKey={reviewsRefreshKey}
+        />
       </div>
     </div>
   );

@@ -95,10 +95,11 @@ export const DonateModal: React.FC<DonateModalProps> = ({
             </code>
             <button
               onClick={handleCopy}
-              className={`ml-2 inline-flex items-center justify-center rounded-md px-2.5 py-1.5 text-xs font-medium transition-all md:px-3 md:py-2 md:text-sm ${copied
+              className={`ml-2 inline-flex items-center justify-center rounded-md px-2.5 py-1.5 text-xs font-medium transition-all md:px-3 md:py-2 md:text-sm ${
+                copied
                   ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
                   : 'bg-orange-600 text-white hover:bg-orange-700 active:scale-95'
-                }`}
+              }`}
             >
               {copied ? (
                 <>
