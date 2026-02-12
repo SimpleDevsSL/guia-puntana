@@ -305,15 +305,14 @@ const ServiceDetailModal: React.FC<Props> = ({
               Volver a la búsqueda
             </button>
           </div>
-        </div>
-      </div>
-      <div>
-        <hr className="my-10 border-gray-100 dark:border-gray-800" />
 
-        <ReviewsSection
-          servicioId={service.id}
-          refreshKey={reviewsRefreshKey}
-        />
+          <hr className="my-10 border-gray-100 dark:border-gray-800" />
+
+          <ReviewsSection
+            servicioId={service.id}
+            refreshKey={reviewsRefreshKey}
+          />
+        </div>
       </div>
     </div>
   );
