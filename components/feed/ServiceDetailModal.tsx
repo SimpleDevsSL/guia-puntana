@@ -79,13 +79,13 @@ const ServiceDetailModal: React.FC<Props> = ({
       onClick={onClose}
     >
       <div
-        className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto overscroll-contain rounded-2xl border bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-900 md:rounded-3xl"
+        className="relative flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-900 md:rounded-3xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Botón de cerrar */}
         <button
           onClick={onClose}
-          className="absolute right-3 top-3 z-10 rounded-full bg-white p-2 text-gray-400 shadow-lg transition-colors hover:bg-gray-100 hover:text-gray-600 dark:bg-gray-800 dark:text-gray-500 dark:hover:bg-gray-700 dark:hover:text-gray-300 md:right-4 md:top-4"
+          className="absolute right-3 top-3 z-20 rounded-full bg-white p-2 text-gray-400 shadow-lg transition-colors hover:bg-gray-100 hover:text-gray-600 dark:bg-gray-800 dark:text-gray-500 dark:hover:bg-gray-700 dark:hover:text-gray-300 md:right-4 md:top-4"
           aria-label="Cerrar modal"
         >
           <svg
@@ -103,7 +103,7 @@ const ServiceDetailModal: React.FC<Props> = ({
           </svg>
         </button>
 
-        <div className="p-4 md:p-8">
+        <div className="custom-scrollbar overflow-y-auto overscroll-contain p-4 md:p-8">
           {/* Encabezado con Foto y Nombre */}
           <div className="mb-4 flex flex-col items-center gap-3 md:mb-8 md:flex-row md:items-start md:gap-6">
             <Link href={`/proveedor/${service.proveedor.id}`}>
