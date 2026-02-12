@@ -17,6 +17,7 @@ import ReviewForm from '@/components/reviews/ReviewForm';
 import ReviewsSection from '../reviews/ReviewsSection';
 import ReportService from './ReportService';
 import { useBodyScrollLock } from '@/utils/hooks/useBodyScrollLock';
+import ServiceRating from '../reviews/ServiceRating';
 
 interface Props {
   service: ServiceWithProfile;
@@ -38,19 +39,15 @@ const ServiceDetailModal: React.FC<Props> = ({
   onContact,
   savedScrollPosition,
 }) => {
-  // Bloquear el scroll del body cuando el modal está abierto
   useBodyScrollLock(true, savedScrollPosition);
 
-  // Estado para saber si se copió el link (para mostrar el tic verde)
   const [copied, setCopied] = useState(false);
   const [reviewsRefreshKey, setReviewsRefreshKey] = useState(0);
 
-  // Función lógica de compartir
   const handleShare = async () => {
     const url = `${window.location.origin}/feed?service=${service.id}`;
 
     if (navigator.share) {
-      // Opción A: Celulares (abre menú nativo de WhatsApp, Instagram, etc.)
       try {
         await navigator.share({
           title: `Servicio de ${service.nombre} - Guía Puntana`,
@@ -61,11 +58,10 @@ const ServiceDetailModal: React.FC<Props> = ({
         console.error(err);
       }
     } else {
-      // Opción B: Computadoras (copia al portapapeles)
       try {
         await navigator.clipboard.writeText(url);
         setCopied(true);
-        setTimeout(() => setCopied(false), 2000); // Reset a los 2 seg
+        setTimeout(() => setCopied(false), 2000);
       } catch (err) {
         console.error(err);
       }
@@ -78,13 +74,13 @@ const ServiceDetailModal: React.FC<Props> = ({
       onClick={onClose}
     >
       <div
-        className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto overscroll-contain rounded-2xl border bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-900 md:rounded-3xl"
+        className="relative flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-900 md:rounded-3xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Botón de cerrar */}
         <button
           onClick={onClose}
-          className="absolute right-3 top-3 z-10 rounded-full bg-white p-2 text-gray-400 shadow-lg transition-colors hover:bg-gray-100 hover:text-gray-600 dark:bg-gray-800 dark:text-gray-500 dark:hover:bg-gray-700 dark:hover:text-gray-300 md:right-4 md:top-4"
+          className="absolute right-3 top-3 z-20 rounded-full bg-white p-2 text-gray-400 shadow-lg transition-colors hover:bg-gray-100 hover:text-gray-600 dark:bg-gray-800 dark:text-gray-500 dark:hover:bg-gray-700 dark:hover:text-gray-300 md:right-4 md:top-4"
           aria-label="Cerrar modal"
         >
           <svg
@@ -102,7 +98,8 @@ const ServiceDetailModal: React.FC<Props> = ({
           </svg>
         </button>
 
-        <div className="p-4 md:p-8">
+        {/* ↓ Todo el contenido dentro de este único div scrollable ↓ */}
+        <div className="custom-scrollbar w-full flex-1 overflow-y-auto overscroll-contain p-4 md:p-8">
           {/* Encabezado con Foto y Nombre */}
           <div className="mb-4 flex flex-col items-center gap-3 md:mb-8 md:flex-row md:items-start md:gap-6">
             <Link href={`/proveedor/${service.proveedor.id}`}>
@@ -147,6 +144,16 @@ const ServiceDetailModal: React.FC<Props> = ({
                     {badge}
                   </span>
                 ))}
+
+                {service.proveedor?.insignias &&
+                  service.proveedor.insignias.length > 0 && (
+                    <div className="mx-1 h-4 w-px bg-gray-300 dark:bg-gray-700"></div>
+                  )}
+                <ServiceRating
+                  serviceId={service.id}
+                  className="bg-transparent px-0 shadow-none"
+                  size={16}
+                />
               </div>
             </div>
           </div>
@@ -270,8 +277,9 @@ const ServiceDetailModal: React.FC<Props> = ({
               {copied ? 'Enlace Copiado' : 'Compartir Servicio'}
             </button>
           </div>
-          {/* --- Formulario (prueba) --- */}
-          <div className="mt-10 hidden border-t border-gray-100 pt-8 dark:border-gray-800 md:block">
+
+          {/* Formulario de reseña */}
+          <div className="mt-10 border-t border-gray-100 pt-8 dark:border-gray-800">
             <h3 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">
               Deja tu Reseña
             </h3>
@@ -294,16 +302,18 @@ const ServiceDetailModal: React.FC<Props> = ({
               Volver a la búsqueda
             </button>
           </div>
-        </div>
-      </div>
-      <div className="hidden md:block">
-        <hr className="my-10 border-gray-100 dark:border-gray-800" />
 
-        <ReviewsSection
-          servicioId={service.id}
-          refreshKey={reviewsRefreshKey}
-        />
+          <hr className="my-10 border-gray-100 dark:border-gray-800" />
+
+          {/* ↓ ReviewsSection adentro del div scrollable, al final ↓ */}
+          <ReviewsSection
+            servicioId={service.id}
+            refreshKey={reviewsRefreshKey}
+          />
+        </div>
+        {/* ← cierra el div scrollable */}
       </div>
+      {/* ← cierra el modal */}
     </div>
   );
 };
