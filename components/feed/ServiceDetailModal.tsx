@@ -103,7 +103,7 @@ const ServiceDetailModal: React.FC<Props> = ({
           </svg>
         </button>
 
-        <div className="custom-scrollbar overflow-y-auto overscroll-contain p-4 md:p-8">
+        <div className="custom-scrollbar w-full flex-1 overflow-y-auto overscroll-contain p-4 md:p-8">
           {/* Encabezado con Foto y Nombre */}
           <div className="mb-4 flex flex-col items-center gap-3 md:mb-8 md:flex-row md:items-start md:gap-6">
             <Link href={`/proveedor/${service.proveedor.id}`}>
