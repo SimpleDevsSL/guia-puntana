@@ -124,7 +124,7 @@ export default function InstallPrompt() {
       // Mostrar el prompt nativo para Chromium
       deferredPrompt.prompt();
 
-      const { outcome } = await deferredPrompt.userChoice;
+      const {} = await deferredPrompt.userChoice;
 
       // Limpiar
       setDeferredPrompt(null);

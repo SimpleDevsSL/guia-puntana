@@ -100,7 +100,6 @@ const ServiceDetailModal: React.FC<Props> = ({
 
         {/* ↓ Todo el contenido dentro de este único div scrollable ↓ */}
         <div className="custom-scrollbar w-full flex-1 overflow-y-auto overscroll-contain p-4 md:p-8">
-
           {/* Encabezado con Foto y Nombre */}
           <div className="mb-4 flex flex-col items-center gap-3 md:mb-8 md:flex-row md:items-start md:gap-6">
             <Link href={`/proveedor/${service.proveedor.id}`}>
@@ -146,9 +145,10 @@ const ServiceDetailModal: React.FC<Props> = ({
                   </span>
                 ))}
 
-                {service.proveedor?.insignias && service.proveedor.insignias.length > 0 && (
-                  <div className="mx-1 h-4 w-px bg-gray-300 dark:bg-gray-700"></div>
-                )}
+                {service.proveedor?.insignias &&
+                  service.proveedor.insignias.length > 0 && (
+                    <div className="mx-1 h-4 w-px bg-gray-300 dark:bg-gray-700"></div>
+                  )}
                 <ServiceRating
                   serviceId={service.id}
                   className="bg-transparent px-0 shadow-none"
@@ -310,9 +310,10 @@ const ServiceDetailModal: React.FC<Props> = ({
             servicioId={service.id}
             refreshKey={reviewsRefreshKey}
           />
-
-        </div>{/* ← cierra el div scrollable */}
-      </div>{/* ← cierra el modal */}
+        </div>
+        {/* ← cierra el div scrollable */}
+      </div>
+      {/* ← cierra el modal */}
     </div>
   );
 };

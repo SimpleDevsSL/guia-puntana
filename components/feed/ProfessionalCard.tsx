@@ -27,7 +27,12 @@ const ProfessionalCard: React.FC<Props> = ({
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:shadow-md dark:border-gray-800 dark:bg-gray-900">
       <div className="absolute right-3 top-3 z-10">
-        <ServiceRating serviceId={service.id} showCount={false} size={14} className="border border-gray-100 dark:border-gray-700" />
+        <ServiceRating
+          serviceId={service.id}
+          showCount={false}
+          size={14}
+          className="border border-gray-100 dark:border-gray-700"
+        />
       </div>
       <div className="flex flex-grow flex-col p-5">
         <div className="mb-4 flex items-start justify-between">
