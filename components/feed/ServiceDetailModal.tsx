@@ -17,6 +17,7 @@ import ReviewForm from '@/components/reviews/ReviewForm';
 import ReviewsSection from '../reviews/ReviewsSection';
 import ReportService from './ReportService';
 import { useBodyScrollLock } from '@/utils/hooks/useBodyScrollLock';
+import ServiceRating from '../reviews/ServiceRating';
 
 interface Props {
   service: ServiceWithProfile;
@@ -147,6 +148,16 @@ const ServiceDetailModal: React.FC<Props> = ({
                     {badge}
                   </span>
                 ))}
+
+                {/* Rating Separator and Component */}
+                {service.proveedor?.insignias && service.proveedor.insignias.length > 0 && (
+                  <div className="mx-1 h-4 w-px bg-gray-300 dark:bg-gray-700"></div>
+                )}
+                <ServiceRating
+                  serviceId={service.id}
+                  className="bg-transparent px-0 shadow-none"
+                  size={16}
+                />
               </div>
             </div>
           </div>
@@ -271,7 +282,7 @@ const ServiceDetailModal: React.FC<Props> = ({
             </button>
           </div>
           {/* --- Formulario (prueba) --- */}
-          <div className="mt-10 hidden border-t border-gray-100 pt-8 dark:border-gray-800 md:block">
+          <div className="mt-10 border-t border-gray-100 pt-8 dark:border-gray-800">
             <h3 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">
               Deja tu Reseña
             </h3>
@@ -296,7 +307,7 @@ const ServiceDetailModal: React.FC<Props> = ({
           </div>
         </div>
       </div>
-      <div className="hidden md:block">
+      <div>
         <hr className="my-10 border-gray-100 dark:border-gray-800" />
 
         <ReviewsSection
