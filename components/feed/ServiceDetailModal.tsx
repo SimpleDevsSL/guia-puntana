@@ -39,19 +39,15 @@ const ServiceDetailModal: React.FC<Props> = ({
   onContact,
   savedScrollPosition,
 }) => {
-  // Bloquear el scroll del body cuando el modal está abierto
   useBodyScrollLock(true, savedScrollPosition);
 
-  // Estado para saber si se copió el link (para mostrar el tic verde)
   const [copied, setCopied] = useState(false);
   const [reviewsRefreshKey, setReviewsRefreshKey] = useState(0);
 
-  // Función lógica de compartir
   const handleShare = async () => {
     const url = `${window.location.origin}/feed?service=${service.id}`;
 
     if (navigator.share) {
-      // Opción A: Celulares (abre menú nativo de WhatsApp, Instagram, etc.)
       try {
         await navigator.share({
           title: `Servicio de ${service.nombre} - Guía Puntana`,
@@ -62,11 +58,10 @@ const ServiceDetailModal: React.FC<Props> = ({
         console.error(err);
       }
     } else {
-      // Opción B: Computadoras (copia al portapapeles)
       try {
         await navigator.clipboard.writeText(url);
         setCopied(true);
-        setTimeout(() => setCopied(false), 2000); // Reset a los 2 seg
+        setTimeout(() => setCopied(false), 2000);
       } catch (err) {
         console.error(err);
       }
@@ -103,7 +98,9 @@ const ServiceDetailModal: React.FC<Props> = ({
           </svg>
         </button>
 
+        {/* ↓ Todo el contenido dentro de este único div scrollable ↓ */}
         <div className="custom-scrollbar w-full flex-1 overflow-y-auto overscroll-contain p-4 md:p-8">
+
           {/* Encabezado con Foto y Nombre */}
           <div className="mb-4 flex flex-col items-center gap-3 md:mb-8 md:flex-row md:items-start md:gap-6">
             <Link href={`/proveedor/${service.proveedor.id}`}>
@@ -149,7 +146,6 @@ const ServiceDetailModal: React.FC<Props> = ({
                   </span>
                 ))}
 
-                {/* Rating Separator and Component */}
                 {service.proveedor?.insignias && service.proveedor.insignias.length > 0 && (
                   <div className="mx-1 h-4 w-px bg-gray-300 dark:bg-gray-700"></div>
                 )}
@@ -281,7 +277,8 @@ const ServiceDetailModal: React.FC<Props> = ({
               {copied ? 'Enlace Copiado' : 'Compartir Servicio'}
             </button>
           </div>
-          {/* --- Formulario (prueba) --- */}
+
+          {/* Formulario de reseña */}
           <div className="mt-10 border-t border-gray-100 pt-8 dark:border-gray-800">
             <h3 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">
               Deja tu Reseña
@@ -308,12 +305,14 @@ const ServiceDetailModal: React.FC<Props> = ({
 
           <hr className="my-10 border-gray-100 dark:border-gray-800" />
 
+          {/* ↓ ReviewsSection adentro del div scrollable, al final ↓ */}
           <ReviewsSection
             servicioId={service.id}
             refreshKey={reviewsRefreshKey}
           />
-        </div>
-      </div>
+
+        </div>{/* ← cierra el div scrollable */}
+      </div>{/* ← cierra el modal */}
     </div>
   );
 };
