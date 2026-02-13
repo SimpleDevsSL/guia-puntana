@@ -294,13 +294,6 @@ const ServiceDetailModal: React.FC<Props> = ({
                 }}
               />
             </div>
-
-            <button
-              onClick={onClose}
-              className="w-full py-2 text-sm font-medium text-gray-500 hover:underline dark:text-gray-400 md:text-base"
-            >
-              Volver a la búsqueda
-            </button>
           </div>
 
           <hr className="my-10 border-gray-100 dark:border-gray-800" />
@@ -310,6 +303,15 @@ const ServiceDetailModal: React.FC<Props> = ({
             servicioId={service.id}
             refreshKey={reviewsRefreshKey}
           />
+
+          <div className="mt-8 pb-4">
+            <button
+              onClick={onClose}
+              className="w-full py-2 text-sm font-medium text-gray-500 hover:underline dark:text-gray-400 md:text-base"
+            >
+              Volver al feed
+            </button>
+          </div>
         </div>
         {/* ← cierra el div scrollable */}
       </div>
