@@ -22,17 +22,9 @@ const getInitials = (name: string) => {
 const ServiceCard: React.FC<Props> = ({ service, onConnect, onViewDetail }) => {
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:shadow-md dark:border-gray-800 dark:bg-gray-900">
-      <div className="absolute right-3 top-3 z-10">
-        <ServiceRating
-          serviceId={service.id}
-          showCount={false}
-          size={14}
-          className="border border-gray-100 dark:border-gray-700"
-        />
-      </div>
       <div className="flex flex-grow flex-col p-5">
-        <div className="mb-4 flex items-start justify-between">
-          <div className="flex items-center gap-3">
+        <div className="mb-4 flex items-start justify-between gap-3">
+          <div className="flex min-w-0 flex-1 items-center gap-3">
             <div className="relative">
               {/* Avatar clickeable -> Va al perfil */}
               <Link href={`/proveedor/${service.proveedor.id}`}>
@@ -55,7 +47,7 @@ const ServiceCard: React.FC<Props> = ({ service, onConnect, onViewDetail }) => {
               {/* Nombre del Servicio -> Abre el modal de detalles */}
               <h3
                 onClick={() => onViewDetail(service)}
-                className="cursor-pointer text-lg font-bold leading-tight text-gray-900 transition-colors hover:text-orange-700 dark:text-white"
+                className="cursor-pointer break-words text-lg font-bold leading-tight text-gray-900 transition-colors hover:text-orange-700 dark:text-white"
               >
                 {service.nombre}
               </h3>
@@ -72,6 +64,12 @@ const ServiceCard: React.FC<Props> = ({ service, onConnect, onViewDetail }) => {
               </p>
             </div>
           </div>
+          <ServiceRating
+            serviceId={service.id}
+            showCount={false}
+            size={14}
+            className="flex-shrink-0 border border-gray-100 dark:border-gray-700"
+          />
         </div>
 
         {/* Descripción también clickeable (opcional, mejora UX) */}
