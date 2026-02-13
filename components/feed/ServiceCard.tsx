@@ -22,10 +22,9 @@ const getInitials = (name: string) => {
 const ServiceCard: React.FC<Props> = ({ service, onConnect, onViewDetail }) => {
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:shadow-md dark:border-gray-800 dark:bg-gray-900">
-
       <div className="flex flex-grow flex-col p-5">
         <div className="mb-4 flex items-start justify-between gap-3">
-          <div className="flex items-center gap-3 flex-1 min-w-0">
+          <div className="flex min-w-0 flex-1 items-center gap-3">
             <div className="relative">
               {/* Avatar clickeable -> Va al perfil */}
               <Link href={`/proveedor/${service.proveedor.id}`}>
@@ -69,7 +68,7 @@ const ServiceCard: React.FC<Props> = ({ service, onConnect, onViewDetail }) => {
             serviceId={service.id}
             showCount={false}
             size={14}
-            className="border border-gray-100 dark:border-gray-700 flex-shrink-0"
+            className="flex-shrink-0 border border-gray-100 dark:border-gray-700"
           />
         </div>
 
