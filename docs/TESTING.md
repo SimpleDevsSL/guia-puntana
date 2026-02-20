@@ -31,11 +31,11 @@
   ╱___________________╲
 ```
 
-| Tipo | Velocidad | Aislamiento | ¿Qué testea? |
-|------|-----------|-------------|---------------|
-| **Unitaria** | ⚡ Muy rápida | Total | Una función/módulo aislado |
-| **Integración** | 🔄 Media | Parcial | Varios módulos interactuando |
-| **E2E** | 🐢 Lenta | Ninguno | El sistema completo como un usuario |
+| Tipo            | Velocidad     | Aislamiento | ¿Qué testea?                        |
+| --------------- | ------------- | ----------- | ----------------------------------- |
+| **Unitaria**    | ⚡ Muy rápida | Total       | Una función/módulo aislado          |
+| **Integración** | 🔄 Media      | Parcial     | Varios módulos interactuando        |
+| **E2E**         | 🐢 Lenta      | Ninguno     | El sistema completo como un usuario |
 
 **Regla de oro**: Muchas pruebas unitarias, algunas de integración, pocas E2E.
 
@@ -112,12 +112,12 @@ Una prueba de integración verifica que **varios módulos funcionen correctament
 
 El middleware `updateSession` (`utils/supabase/middleware.ts`), que integra:
 
-| Sistema | Rol |
-|---------|-----|
-| 🍪 Cookies de Next.js | Transportar la sesión |
-| 🔐 Supabase Auth | Verificar si hay usuario autenticado |
-| 📦 Supabase DB | Consultar si el perfil está completo |
-| 🚦 Next.js Router | Decidir a dónde redirigir |
+| Sistema               | Rol                                  |
+| --------------------- | ------------------------------------ |
+| 🍪 Cookies de Next.js | Transportar la sesión                |
+| 🔐 Supabase Auth      | Verificar si hay usuario autenticado |
+| 📦 Supabase DB        | Consultar si el perfil está completo |
+| 🚦 Next.js Router     | Decidir a dónde redirigir            |
 
 ### 📁 Archivo: `__tests__/integration/middleware.test.ts`
 
@@ -170,16 +170,16 @@ mockGetUser.mockResolvedValue({ data: { user: { id: '123' } } }); // Con usuario
 
 ### Matriz de decisión del middleware:
 
-| Estado del Usuario | Ruta | Resultado Esperado |
-|:--|:--|:--|
-| ❌ Sin sesión | `/feed` | ✅ Accede (público) |
-| ❌ Sin sesión | `/perfil` | 🔀 Redirige → `/login` |
-| ❌ Sin sesión | `/completar-perfil` | 🔀 Redirige → `/login` |
-| 🔐 Con sesión, SIN perfil | `/feed` | 🔀 Redirige → `/completar-perfil` |
-| 🔐 Con sesión, SIN perfil | `/completar-perfil` | ✅ Accede (es la ruta correcta) |
-| ✅ Con sesión, CON perfil | `/` | 🔀 Redirige → `/feed` |
-| ✅ Con sesión, CON perfil | `/login` | 🔀 Redirige → `/feed` |
-| ✅ Con sesión, CON perfil | `/completar-perfil` | 🔀 Redirige → `/feed` |
+| Estado del Usuario        | Ruta                | Resultado Esperado                |
+| :------------------------ | :------------------ | :-------------------------------- |
+| ❌ Sin sesión             | `/feed`             | ✅ Accede (público)               |
+| ❌ Sin sesión             | `/perfil`           | 🔀 Redirige → `/login`            |
+| ❌ Sin sesión             | `/completar-perfil` | 🔀 Redirige → `/login`            |
+| 🔐 Con sesión, SIN perfil | `/feed`             | 🔀 Redirige → `/completar-perfil` |
+| 🔐 Con sesión, SIN perfil | `/completar-perfil` | ✅ Accede (es la ruta correcta)   |
+| ✅ Con sesión, CON perfil | `/`                 | 🔀 Redirige → `/feed`             |
+| ✅ Con sesión, CON perfil | `/login`            | 🔀 Redirige → `/feed`             |
+| ✅ Con sesión, CON perfil | `/completar-perfil` | 🔀 Redirige → `/feed`             |
 
 ### ¿Cuándo escribir una prueba de integración?
 
@@ -347,21 +347,21 @@ guia-puntana/
 
 ### Convención de nombres
 
-| Tipo | Patrón | Ejemplo |
-|------|--------|---------|
-| Unitarios | `*.test.ts` | `localidades.test.ts` |
-| Integración | `*.test.ts` | `middleware.test.ts` |
-| E2E | `*.spec.ts` | `landing-navigation.spec.ts` |
+| Tipo        | Patrón      | Ejemplo                      |
+| ----------- | ----------- | ---------------------------- |
+| Unitarios   | `*.test.ts` | `localidades.test.ts`        |
+| Integración | `*.test.ts` | `middleware.test.ts`         |
+| E2E         | `*.spec.ts` | `landing-navigation.spec.ts` |
 
 ---
 
 ## 📦 Dependencias Instaladas
 
-| Paquete | Tipo | Para qué |
-|---------|------|----------|
-| `vitest` | devDep | Framework de testing (unitarios + integración) |
-| `jsdom` | devDep | Simula el DOM del navegador para Vitest |
-| `@playwright/test` | devDep | Framework de testing E2E |
+| Paquete            | Tipo   | Para qué                                       |
+| ------------------ | ------ | ---------------------------------------------- |
+| `vitest`           | devDep | Framework de testing (unitarios + integración) |
+| `jsdom`            | devDep | Simula el DOM del navegador para Vitest        |
+| `@playwright/test` | devDep | Framework de testing E2E                       |
 
 ### ¿Por qué Vitest y no Jest?
 
@@ -433,16 +433,19 @@ mockSelectProfile.mockResolvedValue({ data: { id: 'perfil-456' } });
 ## 📚 Recursos para Aprender Más
 
 ### Vitest (Unitarios + Integración)
+
 - [Documentación oficial de Vitest](https://vitest.dev/)
 - [API de expect](https://vitest.dev/api/expect.html)
 - [Mocking con Vitest](https://vitest.dev/guide/mocking.html)
 
 ### Playwright (E2E)
+
 - [Documentación oficial de Playwright](https://playwright.dev/)
 - [Locators (cómo buscar elementos)](https://playwright.dev/docs/locators)
 - [Best Practices](https://playwright.dev/docs/best-practices)
 
 ### General
+
 - [Testing Trophy de Kent C. Dodds](https://kentcdodds.com/blog/the-testing-trophy-and-testing-classifications)
 - [Patrón AAA (Arrange, Act, Assert)](https://automationpanda.com/2020/07/07/arrange-act-assert-a-pattern-for-writing-good-tests/)
 

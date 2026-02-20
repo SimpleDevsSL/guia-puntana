@@ -73,8 +73,8 @@ describe('Middleware updateSession — Integración de Auth + Rutas', () => {
     vi.clearAllMocks();
 
     // Importamos el módulo fresco en cada test
-    const module = await import('@/utils/supabase/middleware');
-    updateSession = module.updateSession;
+    const modulo = await import('@/utils/supabase/middleware');
+    updateSession = modulo.updateSession;
   });
 
   // ─── CASO A: Usuario NO Autenticado ─────────────────────────
