@@ -96,23 +96,6 @@ CREATE TABLE public.servicios (
   CONSTRAINT servicios_proveedor_id_fkey FOREIGN KEY (proveedor_id) REFERENCES public.perfiles(id),
   CONSTRAINT servicios_updated_by_fkey FOREIGN KEY (updated_by) REFERENCES auth.users(id)
 );
-CREATE TABLE public.solicitudes_presupuesto (
-  id uuid NOT NULL DEFAULT gen_random_uuid(),
-  cliente_id uuid NOT NULL,
-  categoria_id uuid NOT NULL,
-  mensaje text,
-  estado USER-DEFINED DEFAULT 'PENDIENTE'::estado_solicitud_enum,
-  es_activo boolean DEFAULT true,
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  created_by uuid,
-  updated_at timestamp with time zone NOT NULL DEFAULT now(),
-  updated_by uuid,
-  CONSTRAINT solicitudes_presupuesto_pkey PRIMARY KEY (id),
-  CONSTRAINT solicitudes_presupuesto_categoria_id_fkey FOREIGN KEY (categoria_id) REFERENCES public.categorias(id),
-  CONSTRAINT solicitudes_presupuesto_created_by_fkey FOREIGN KEY (created_by) REFERENCES auth.users(id),
-  CONSTRAINT solicitudes_presupuesto_updated_by_fkey FOREIGN KEY (updated_by) REFERENCES auth.users(id),
-  CONSTRAINT solicitudes_presupuesto_cliente_id_fkey FOREIGN KEY (cliente_id) REFERENCES public.perfiles(id)
-);
 CREATE TABLE public.solicitudes_verificacion (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   usuario_id uuid NOT NULL,
