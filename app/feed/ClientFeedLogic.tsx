@@ -119,7 +119,7 @@ export default function ClientFeedLogic({
     setLoadingMore(true);
 
     const { data: newServices, error } = await supabase.rpc(
-      'buscar_servicios',
+      'buscar_servicios_metricas',
       {
         query_text: searchQuery,
         categoria_filtro: categoryId,

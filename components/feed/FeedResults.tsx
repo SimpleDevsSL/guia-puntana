@@ -26,13 +26,16 @@ export default async function FeedResults({
   const categoriaFiltro = categoryId || null;
 
   // 1. Carga inicial estándar
-  const { data: servicesData, error } = await supabase.rpc('buscar_servicios', {
-    query_text: searchParams.q || '',
-    categoria_filtro: categoriaFiltro,
-    loc_filtro: searchParams.l || null,
-    limit_val: ITEMS_PER_PAGE,
-    offset_val: 0,
-  }).select(`
+  const { data: servicesData, error } = await supabase.rpc(
+    'buscar_servicios_metricas',
+    {
+      query_text: searchParams.q || '',
+      categoria_filtro: categoriaFiltro,
+      loc_filtro: searchParams.l || null,
+      limit_val: ITEMS_PER_PAGE,
+      offset_val: 0,
+    }
+  ).select(`
       id, nombre, descripcion, localidad, barrio, direccion, telefono, redes,
       categoria:categorias(id, nombre),
       proveedor:perfiles(id, nombre_completo, foto_url, insignias)
@@ -74,7 +77,6 @@ export default async function FeedResults({
     q: searchParams.q,
     l: searchParams.l,
     c: categoriaFiltro,
-    // s: serviceId, // ELIMINADO: No queremos que se remonte al abrir el modal, para no perder el scrollRef
   });
 
   return (
