@@ -6,8 +6,8 @@ export const Logo = ({ className }: { className?: string }) => {
       className={className}
       style={{
         backgroundColor: 'currentColor',
-        WebkitMask: 'url(/icon.svg) center/contain no-repeat',
-        mask: 'url(/icon.svg) center/contain no-repeat',
+        WebkitMask: 'url(/logo-oscuro.svg) center/contain no-repeat', // Actualizado
+        mask: 'url(/logo-oscuro.svg) center/contain no-repeat', // Actualizado
       }}
     />
   );
